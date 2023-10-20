@@ -46,6 +46,7 @@ A ~60s recorded run of your game from start to finish (you may record from Unity
 Fill up the table below based on the **features** that you want us to grade you with. You may implement more features than what you can afford as your feature points, so you can select the features that we can grade. Feature prerequisite rule should apply.
 
 You are free to transform the table below into short paragraphs if you’d like. The goal is to ensure that we **can find** and **confirm** each node implementation.
+(in the event I am only allowed to choose up to 90 points worth of nodes, I would elect to forfeit the 1st 3 (nodes 27, 18, 37))
 
 | Node ID | Color | Short Description of Implementation | Feature Point Cost | Marks to earn |
 | ------- | ----- | ----------------------------------- | ------------------ | ------------- |
@@ -75,6 +76,8 @@ You are free to transform the table below into short paragraphs if you’d like.
 ### Feature Tree Visual Representation
 
 Download the feature tree image and indicate the nodes that you have implemented. Display an image of your completed feature tree here, highlight or circle the **nodes** that you have implemented as a visual aid for us when we grade your submission
+
+![midterm-tree](https://github.com/50033-game-design-and-development/50033-midterm-partb-milselarch/assets/11241733/3c57de1e-69fd-4854-b805-bba88b7f8793)
 
 ### Feature Analysis
 
