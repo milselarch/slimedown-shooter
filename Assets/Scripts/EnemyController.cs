@@ -26,8 +26,8 @@ public class EnemyController: MonoBehaviour
 
     private Rigidbody2D enemyBody;
     private GameObject player;
-    private float lastJump = 0.0f;
-    private float lastAttack = 0.0f;
+    private float lastJump = -10.0f;
+    private float lastAttack = -10.0f;
 	private bool dead = false;
 	private int health = 0;
 
@@ -55,7 +55,11 @@ public class EnemyController: MonoBehaviour
 
 	// inflict damage to the enemy
 	public void Damage() {
-		if (health == 0) { return; }
+		if (health == 0) {
+			Destroy(gameObject);
+			return;
+		}
+		
 		if (health > 0) { health -= 1; } 
 		
 		gameScore.Increment();
@@ -89,7 +93,9 @@ public class EnemyController: MonoBehaviour
 
 	private void OnCollisionEnter2D(Collision2D other)
 	{
-		if (other.gameObject.CompareTag("Player")) {
+		if (
+			(other.gameObject.CompareTag("Player"))
+		) {
 			if (health == 0)
 			{
 				Destroy(gameObject);

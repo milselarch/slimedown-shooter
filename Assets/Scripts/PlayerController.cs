@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour {
     public float chargeForce = 5.0f;
     public Animator playerAnimator;
     
+    // track and manage player's health and game score
     public IntVariable health;
     public IntVariable gameScore;
 
@@ -116,7 +117,7 @@ public class PlayerController : MonoBehaviour {
         if (rb != null) {
             // Apply a rightward impulse force to wsthe object
             rb.AddForce(direction * impulseForce, ForceMode2D.Impulse);
-            health.Decrement(1, 0);
+            health.Decrement(2, 0);
             playerHealthUpdate.Invoke();
         }
     }
@@ -186,6 +187,12 @@ public class PlayerController : MonoBehaviour {
         playerAnimator.SetFloat("speed", velocity);
     }
 
+    public void DrainHealth(int amount) {
+        // drain player health by 1
+        health.Decrement(amount, 0);
+        playerHealthUpdate.Invoke();
+    }
+
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Enemy"))
@@ -201,7 +208,7 @@ public class PlayerController : MonoBehaviour {
                 playerHealthUpdate.Invoke();
             } else if (enemyHealth == 0) {
                 // increase health after collecting dead slime
-                health.Increment(10, 100);
+                health.Increment(14, 100);
                 gameScore.Increment();
                 playerHealthUpdate.Invoke();
                 scoreUpdate.Invoke();
