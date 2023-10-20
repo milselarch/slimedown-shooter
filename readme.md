@@ -1,25 +1,41 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/Xmv1pZ8x)
 # README.md
 
-**TITLE OF YOUR GAME (if any)**
+**LIFE AND DEATH BY SLIMES**
 
-| Name       |     |
+| Name       | ***REMOVED*** |
 | ---------- | --- |
-| Student ID |     |
+| Student ID | ***REMOVED*** |
 
 ## Basic Game Description
 
 Genre, main objective, provide screenshot of your scene if you are proud of it
+
+This game is a top down action game (mainly a shooter)
+The main objective is to kill waves of slimes that spawn in and collect the slime particles they leave behind to regain health
+The catch is that you also consume health when shooting them, getting attacked by slimes, or when charging them (health has becoem a resource)
+![Screenshot from 2023-10-21 06-40-03](https://github.com/50033-game-design-and-development/50033-midterm-partb-milselarch/assets/11241733/a65542ee-675f-40b1-9dfd-fdc86971c445)
 
 ### Game Executable
 
 **State system requirements: Windows, macOS, etc**
 
 Provide a **link** to download your game executable
+[linux x86_64 executable](https://github.com/50033-game-design-and-development/50033-midterm-partb-milselarch/releases/download/v1.0.0/linux-executable.x86_64)
 
 ### How to Play
 
 Simple procedure on how to navigate in your game
+
+Use WASD to move.
+click in the direction you want to shoot slimes at
+when slimes die they leave behind a slime particle. walk up to the slime particle to collect it and recharge your health
+press space to launch a charge attack in the direction the player is facing (does 2 damage to slimes, they have 4 health each)
+shooting and charging slimes cost health
+
+After clearing 1 wave of slimes, a new wave will spawn. Each wave has 1 more slime than the previous
+theres a time limit for each level (above the wave number) - when you run out of time you will start taking damage every 3 seconds.
+You lose when you run out of health
 
 ### Gameplay Video
 
