@@ -38,7 +38,7 @@ public class FireballController : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy")) {
             // destroy self
             Destroy(gameObject);
-			collision.gameObject.GetComponent<EnemyController>().damage();
+			collision.gameObject.GetComponent<EnemyController>().Damage();
         }
     }
 }

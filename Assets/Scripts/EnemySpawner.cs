@@ -25,12 +25,15 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
+        waveCounter.SetValue(0);
         _startPosition = transform.position;
         StartCoroutine(SpawnAttackWave());
     }
 
     public void OnEnemyKilled() {
         _enemiesKilled += 1;
+        
+        /*
         if ((_enemiesKilled == _spawned) && !_spawning) {
             Debug.Log("WAVE IS OVER");
             StartCoroutine(SpawnAttackWave());
@@ -40,6 +43,24 @@ public class EnemySpawner : MonoBehaviour
         {
             Debug.Log("WAVE KILLED " + _enemiesKilled);
             Debug.Log("WAVE SPAWNED " + _spawned);
+        }*/
+
+        bool hasLivingEnemies = false;
+        
+        foreach (Transform child in transform)
+        {
+            bool alive = child.GetComponent<EnemyController>().IsAlive();
+            if (alive)
+            {
+                hasLivingEnemies = true;
+                break;
+            }
+        }
+        
+        if (!hasLivingEnemies && !_spawning) {
+            Debug.Log("WAVE IS OVER");
+            StartCoroutine(SpawnAttackWave());
+            waveUpdate.Invoke();
         }
     }
 
@@ -54,12 +75,11 @@ public class EnemySpawner : MonoBehaviour
         }
         
         _spawning = true;
-        _lastSpawnedWave += 1;
-        waveCounter.SetValue(_lastSpawnedWave);
         _enemiesKilled = 0;
+        waveCounter.Increment();
         _spawned = 0;
         
-        while (_spawned < (this._lastSpawnedWave + 10))
+        while (_spawned < waveCounter.Value)
         {
             float offsetX = 2 * Random.Range(0.0f, spawnRadius) - spawnRadius;
             float offsetY = 2 * Random.Range(0.0f, spawnRadius) - spawnRadius;
@@ -71,10 +91,12 @@ public class EnemySpawner : MonoBehaviour
 
             bool spawnable = InTilemap(spawnPosition);
             if (spawnable) {
-                GameObject x = Instantiate(
+                GameObject enemy = Instantiate(
                     enemyPrefab, spawnPosition,
                     Quaternion.identity
                 );
+
+                enemy.transform.SetParent(transform, true);
                 _spawned += 1;
             }
 

@@ -195,7 +195,7 @@ public class PlayerController : MonoBehaviour {
             
             if (_charging) {
                 // charging the enemy increases player health by 1
-                other.gameObject.GetComponent<EnemyController>().damage();
+                other.gameObject.GetComponent<EnemyController>().Damage();
                 gameScore.Increment();
                 health.Increment(1, 100);
                 playerHealthUpdate.Invoke();

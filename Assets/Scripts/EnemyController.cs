@@ -54,7 +54,7 @@ public class EnemyController: MonoBehaviour
     }
 
 	// inflict damage to the enemy
-	public void damage() {
+	public void Damage() {
 		if (health == 0) { return; }
 		if (health > 0) { health -= 1; } 
 		
@@ -79,11 +79,11 @@ public class EnemyController: MonoBehaviour
 	}
 
 	void UpdateCollider() {
-		BoxCollider2D collider = gameObject.GetComponent<BoxCollider2D>();
-        if (collider) {
+		BoxCollider2D col = gameObject.GetComponent<BoxCollider2D>();
+        if (col) {
 			// adjust bounding box to fit new sprite scale accordingly
-			collider.size = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.size;
-       		collider.offset = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.center;
+			col.size = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.size;
+			col.offset = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.center;
 		}
 	}
 
@@ -97,9 +97,22 @@ public class EnemyController: MonoBehaviour
 		}
 	}
 
+	public void AttemptSelfDestruct()
+	{
+		if (health == 0)
+		{
+			Destroy(gameObject);
+		}
+	}
+
 	public int GetEnemyHealth()
 	{
 		return this.health;
+	}
+
+	public bool IsAlive()
+	{
+		return this.health > 0;
 	}
 
     void FixedUpdate()
