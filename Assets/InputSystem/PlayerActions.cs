@@ -44,6 +44,24 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MousePress"",
+                    ""type"": ""Value"",
+                    ""id"": ""9d75509a-286f-4e85-8d75-561497d7a55f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ChargeAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""1b578742-ed7b-4dbb-a0bf-8ac41e77753c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -112,6 +130,28 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""action"": ""moveVertical"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5aaa8a88-a03e-4f64-9f61-f6889e3a9398"",
+                    ""path"": ""<Mouse>/press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""playerControlScheme"",
+                    ""action"": ""MousePress"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1d2c1b27-62ad-490e-821d-1ae51b36d106"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""playerControlScheme"",
+                    ""action"": ""ChargeAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -127,6 +167,22 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""isOR"": false
                 }
             ]
+        },
+        {
+            ""name"": ""playerControlScheme"",
+            ""bindingGroup"": ""playerControlScheme"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Mouse>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
         }
     ]
 }");
@@ -134,6 +190,8 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         m_gameplay = asset.FindActionMap("gameplay", throwIfNotFound: true);
         m_gameplay_moveHorizontal = m_gameplay.FindAction("moveHorizontal", throwIfNotFound: true);
         m_gameplay_moveVertical = m_gameplay.FindAction("moveVertical", throwIfNotFound: true);
+        m_gameplay_MousePress = m_gameplay.FindAction("MousePress", throwIfNotFound: true);
+        m_gameplay_ChargeAttack = m_gameplay.FindAction("ChargeAttack", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -197,12 +255,16 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
     private readonly InputAction m_gameplay_moveHorizontal;
     private readonly InputAction m_gameplay_moveVertical;
+    private readonly InputAction m_gameplay_MousePress;
+    private readonly InputAction m_gameplay_ChargeAttack;
     public struct GameplayActions
     {
         private @PlayerActions m_Wrapper;
         public GameplayActions(@PlayerActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @moveHorizontal => m_Wrapper.m_gameplay_moveHorizontal;
         public InputAction @moveVertical => m_Wrapper.m_gameplay_moveVertical;
+        public InputAction @MousePress => m_Wrapper.m_gameplay_MousePress;
+        public InputAction @ChargeAttack => m_Wrapper.m_gameplay_ChargeAttack;
         public InputActionMap Get() { return m_Wrapper.m_gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -218,6 +280,12 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @moveVertical.started += instance.OnMoveVertical;
             @moveVertical.performed += instance.OnMoveVertical;
             @moveVertical.canceled += instance.OnMoveVertical;
+            @MousePress.started += instance.OnMousePress;
+            @MousePress.performed += instance.OnMousePress;
+            @MousePress.canceled += instance.OnMousePress;
+            @ChargeAttack.started += instance.OnChargeAttack;
+            @ChargeAttack.performed += instance.OnChargeAttack;
+            @ChargeAttack.canceled += instance.OnChargeAttack;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -228,6 +296,12 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @moveVertical.started -= instance.OnMoveVertical;
             @moveVertical.performed -= instance.OnMoveVertical;
             @moveVertical.canceled -= instance.OnMoveVertical;
+            @MousePress.started -= instance.OnMousePress;
+            @MousePress.performed -= instance.OnMousePress;
+            @MousePress.canceled -= instance.OnMousePress;
+            @ChargeAttack.started -= instance.OnChargeAttack;
+            @ChargeAttack.performed -= instance.OnChargeAttack;
+            @ChargeAttack.canceled -= instance.OnChargeAttack;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -254,9 +328,20 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_controlSchemeSchemeIndex];
         }
     }
+    private int m_playerControlSchemeSchemeIndex = -1;
+    public InputControlScheme playerControlSchemeScheme
+    {
+        get
+        {
+            if (m_playerControlSchemeSchemeIndex == -1) m_playerControlSchemeSchemeIndex = asset.FindControlSchemeIndex("playerControlScheme");
+            return asset.controlSchemes[m_playerControlSchemeSchemeIndex];
+        }
+    }
     public interface IGameplayActions
     {
         void OnMoveHorizontal(InputAction.CallbackContext context);
         void OnMoveVertical(InputAction.CallbackContext context);
+        void OnMousePress(InputAction.CallbackContext context);
+        void OnChargeAttack(InputAction.CallbackContext context);
     }
 }
