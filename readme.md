@@ -49,23 +49,28 @@ You are free to transform the table below into short paragraphs if you’d like.
 
 | Node ID | Color | Short Description of Implementation | Feature Point Cost | Marks to earn |
 | ------- | ----- | ----------------------------------- | ------------------ | ------------- |
-|         |       |                                     |                    |               |
-|         |       |                                     |                    |               |
-|         |       |                                     |                    |               |
-|         |       |                                     |                    |               |
-|         |       |                                     |                    |               |
-|         |       |                                     |                    |               |
-|         |       |                                     |                    |               |
-|         |       |                                     |                    |               |
-|         |       |                                     |                    |               |
-|         |       |                                     |                    |               |
-|         |       |                                     |                    |               |
-|         |       |                                     |                    |               |
-|         |       |                                     |                    |               |
+|     27   |  white     |       Made sure text menuUI and game UI are readable and accessible                  |            1        |        3       |
+|     18   |  white     |       Added PlayerController.cs to manage player logic and resources                   |            1        |        3       |
+|     37   |  white     |       PascalCase for methods and camelCase for vars, args are observed                      |            1        |        3       |
+|     5   |  white     |           Attached camera controller to player extended it to cover 2 axes                          |            1        |        3       |
+|     7    |  white     |     arranged tilemap, game island collider, a house that has collision                                |           1         |      3         |
+|     19    |  white     |    designed, created enemy prefab                                 |              1      |           3    |
+|    22     | white      |    enemy slime animator with idle, bouncing, charging clips                                 |              1      |        3       |
+|    21     |  white     |  slime enemy has internal health system (4 hp) and can take and deal damage from player                                   |   1                 |      3         |
+|   17      |   white    |  added idle, moving, charge animation to player                                   |           1         |       3        |
+|   23      |  white     |    created 2D canvas with health and score and wave number and timer                                 |           1         |      3        |
+|    33     |   white    |  created health scriptable object that is shared betweem UI, player, and enemy scripts                                  |         1           |        3       |
+|  36       |  white     |        use conventional commit convention                             |        1            |       3        |
+|      24   | white      |    UI shows character health and score, updated in real time                                 |             1       |    3          |
+|  40       |  orange      |   slimes spawn in waves and each wave starts after you clear the last one                                  |           2         |        10       |
+|    44     |  orange      |    basic combat system, player can shoot and charge attack, slimes can charge attack, combat costs health (as in launching the attack drains your health also)         |     2               |  10             |
+|    45     |     orange  |  movement, charge attack, aim and shoot all use InputSystem                                   |            2        |   10            |
+|     74    |  pink     |     used scriptable object game architecture for communicating health, score changes, and when enemies are killed                                |          3          |            15   |
+|    59     |   pink    |     create a timer where player health wil be drained after the timer runs out (resets at the start of each new wave)                                |                3    |         15      |
 
-**Total Feature Point spent:**
+**Total Feature Point spent: 25**
 
-**Maximum Marks to earn:**
+**Maximum Marks to earn: 99**
 
 ### Feature Tree Visual Representation
 
