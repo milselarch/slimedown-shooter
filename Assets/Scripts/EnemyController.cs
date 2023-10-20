@@ -90,12 +90,13 @@ public class EnemyController: MonoBehaviour
 			if (health == 0)
 			{
 				Destroy(gameObject);
-				playerHealth.ApplyChange(1, 100);
-				gameScore.Increment();
-				playerHealthUpdate.Invoke();
-				scoreUpdate.Invoke();
 			}
 		}
+	}
+
+	public int GetEnemyHealth()
+	{
+		return this.health;
 	}
 
     void FixedUpdate()

@@ -23,6 +23,18 @@ public class IntVariable: Variable<int> {
     {
         this.ApplyChange(1);
     }
+    
+    public void Increment(int amount, int ceiling)
+    {
+        int newValue = Math.Min(ceiling, this.Value + amount);
+        this.SetValue(newValue);
+    }
+
+    public void Decrement(int amount, int floor)
+    {
+        int newValue = Math.Max(floor, this.Value - amount);
+        this.SetValue(newValue);
+    }
 
     public void ApplyChange(int amount)
     {

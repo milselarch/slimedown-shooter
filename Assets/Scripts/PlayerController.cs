@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour {
     
     public IntVariable gameScore;
     public IntVariable health;
+    public UnityEvent scoreUpdate;
     public UnityEvent playerHealthUpdate;
 
 	// whether or not player is allowed to fire projectile
@@ -114,7 +115,7 @@ public class PlayerController : MonoBehaviour {
         if (rb != null) {
             // Apply a rightward impulse force to wsthe object
             rb.AddForce(direction * impulseForce, ForceMode2D.Impulse);
-            health.ApplyChange(-1, 100);
+            health.Decrement(1, 0);
             playerHealthUpdate.Invoke();
         }
     }
@@ -136,7 +137,7 @@ public class PlayerController : MonoBehaviour {
             
             _playerBody.AddForce(movement, ForceMode2D.Impulse);
             playerAnimator.SetTrigger("charging");
-            health.ApplyChange(-1, 100);
+            health.Decrement(1, 0);
             playerHealthUpdate.Invoke();
             _charging = true;
         }
@@ -188,16 +189,24 @@ public class PlayerController : MonoBehaviour {
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            if (_charging)
-            {
+            int enemyHealth = other.gameObject
+                .GetComponent<EnemyController>().GetEnemyHealth();
+            
+            if (_charging) {
+                // charging the enemy increases player health by 1
                 other.gameObject.GetComponent<EnemyController>().damage();
                 gameScore.Increment();
-                health.ApplyChange(1, 100);
+                health.Increment(1, 100);
                 playerHealthUpdate.Invoke();
-            }
-            else
-            {
-                health.ApplyChange(-1, 100);
+            } else if (enemyHealth == 0) {
+                // increase health after collecting dead slime
+                health.Increment(5, 100);
+                gameScore.Increment();
+                playerHealthUpdate.Invoke();
+                scoreUpdate.Invoke();
+            } else {
+                // slime deals 5 damage to player
+                health.Decrement(5, 0);
                 playerHealthUpdate.Invoke();
             }
         }

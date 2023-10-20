@@ -15,7 +15,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         gameScore.SetValue(0);
-        health.SetValue(10);
+        health.SetValue(100);
         UpdateUI();
     }
 
