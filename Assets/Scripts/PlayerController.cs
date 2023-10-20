@@ -16,6 +16,10 @@ public class PlayerController : MonoBehaviour {
     public GameObject attackPrefab;
     public float chargeForce = 5.0f;
     public Animator playerAnimator;
+    
+    public IntVariable gameScore;
+    public IntVariable health;
+    public UnityEvent playerHealthUpdate;
 
 	// whether or not player is allowed to fire projectile
 	// private bool canFire = false;
@@ -28,6 +32,7 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody2D _playerBody;
     private float _lastCharge = 0.0f;
     private bool _charging = false;
+    private bool _dead = false;
 
     // Start is called before the first frame update
     void Start() {
@@ -40,16 +45,27 @@ public class PlayerController : MonoBehaviour {
         GameRestart();
     }
 
+    public void OnHealthUpdate()
+    {
+        if (health.Value <= 0)
+        {
+            _dead = true;
+        }   
+    }
+
     void GameRestart()
     {
         // reset sprite direction
         _faceRight = true;
         _playerSprite.flipX = false;
         _charging = false;
+        _dead = false;
     }
 
     void FixedUpdate()
     {
+        if (_dead) { return; }
+        
         // this.canFire = true;
         float xMovement = 0.0f;
         float yMovement = 0.0f;
@@ -69,6 +85,8 @@ public class PlayerController : MonoBehaviour {
     
     public void OnMouseClick(InputAction.CallbackContext context)
     {
+        if (_dead) { return; }
+
         // Check if the mouse button was pressed
         if (!context.started) { return; }
         // if (!this.canFire) {}
@@ -96,6 +114,8 @@ public class PlayerController : MonoBehaviour {
         if (rb != null) {
             // Apply a rightward impulse force to wsthe object
             rb.AddForce(direction * impulseForce, ForceMode2D.Impulse);
+            health.ApplyChange(-1, 100);
+            playerHealthUpdate.Invoke();
         }
     }
 
@@ -103,6 +123,7 @@ public class PlayerController : MonoBehaviour {
     {
         if (!context.started) { return; }
         if (_charging) { return; }
+        if (_dead) { return; }
 
         float timestamp = Time.time;
         if (timestamp - _lastCharge > chargeWaitDuration)
@@ -115,6 +136,8 @@ public class PlayerController : MonoBehaviour {
             
             _playerBody.AddForce(movement, ForceMode2D.Impulse);
             playerAnimator.SetTrigger("charging");
+            health.ApplyChange(-1, 100);
+            playerHealthUpdate.Invoke();
             _charging = true;
         }
     }
@@ -159,5 +182,24 @@ public class PlayerController : MonoBehaviour {
     void Update() {
         float velocity = Mathf.Abs(_playerBody.velocity.magnitude);
         playerAnimator.SetFloat("speed", velocity);
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            if (_charging)
+            {
+                other.gameObject.GetComponent<EnemyController>().damage();
+                gameScore.Increment();
+                health.ApplyChange(1, 100);
+                playerHealthUpdate.Invoke();
+            }
+            else
+            {
+                health.ApplyChange(-1, 100);
+                playerHealthUpdate.Invoke();
+            }
+        }
     }
 }

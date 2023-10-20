@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using System;
 
 public class EnemyController: MonoBehaviour
@@ -15,6 +16,11 @@ public class EnemyController: MonoBehaviour
 	public float smallestScale = 0.75f;
 	public int maxHealth = 4;
     
+	public IntVariable playerHealth;
+	public IntVariable gameScore;
+	public UnityEvent scoreUpdate;
+	public UnityEvent playerHealthUpdate;
+
     public Animator enemyAnimator;
 
     private Rigidbody2D enemyBody;
@@ -36,12 +42,12 @@ public class EnemyController: MonoBehaviour
     {
 		this.health = this.maxHealth;
         enemyAnimator.SetBool("dead", false);
-        lastJump = getTimestamp();
+        lastJump = GetTimestamp();
         lastAttack = lastJump;
 		dead = false;
     }
 
-    float getTimestamp()
+    float GetTimestamp()
     {
         return Time.time;
     }
@@ -50,11 +56,14 @@ public class EnemyController: MonoBehaviour
 	public void damage() {
 		if (health == 0) { return; }
 		if (health > 0) { health -= 1; } 
+		
+		gameScore.Increment();
+		scoreUpdate.Invoke();
 
 		if (health == 0) {
 			enemyAnimator.SetBool("dead", true);
 			transform.localScale = Vector3.one;
-			updateCollider();
+			UpdateCollider();
 			dead = true;
 		}
 		
@@ -63,23 +72,37 @@ public class EnemyController: MonoBehaviour
 			(1.0f - smallestScale) * ((float) health) / maxHealth
 		);
 		transform.localScale = Vector3.one * newScale;
-		updateCollider();
+		UpdateCollider();
 	}
 
-	void updateCollider() {
+	void UpdateCollider() {
 		BoxCollider2D collider = gameObject.GetComponent<BoxCollider2D>();
         if (collider) {
 			// adjust bounding box to fit new sprite scale accordingly
 			collider.size = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.size;
        		collider.offset = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.center;
 		}
-	} 
+	}
+
+	private void OnCollisionEnter2D(Collision2D other)
+	{
+		if (other.gameObject.CompareTag("Player")) {
+			if (health == 0)
+			{
+				Destroy(gameObject);
+				playerHealth.ApplyChange(1, 100);
+				gameScore.Increment();
+				playerHealthUpdate.Invoke();
+				scoreUpdate.Invoke();
+			}
+		}
+	}
 
     void FixedUpdate()
     {
 		if (dead) { return; }
 
-        float timestampNow = getTimestamp();
+        float timestampNow = GetTimestamp();
         float jumpDurationPassed = timestampNow - lastJump;
         float attackDurationPassed = timestampNow - lastAttack;
 
