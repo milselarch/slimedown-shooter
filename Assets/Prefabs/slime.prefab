@@ -122,6 +122,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpForce: 7
   jumpInterval: 1
+  attackForce: 11
+  attackInterval: 2
+  attackDistance: 4
+  enemyAnimator: {fileID: 3189041440374100140}
 --- !u!50 &5790352721469925192
 Rigidbody2D:
   serializedVersion: 4
