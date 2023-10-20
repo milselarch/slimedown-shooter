@@ -53,14 +53,21 @@ public class EnemyController: MonoBehaviour
         return Time.time;
     }
 
+    public void Damage()
+    {
+	    this.Damage(1);
+    }
+    
 	// inflict damage to the enemy
-	public void Damage() {
+	public void Damage(int damage) {
 		if (health == 0) {
 			Destroy(gameObject);
 			return;
 		}
-		
-		if (health > 0) { health -= 1; } 
+
+		if (health > 0) {
+			health = Math.Max(health - damage, 0);
+		} 
 		
 		gameScore.Increment();
 		scoreUpdate.Invoke();

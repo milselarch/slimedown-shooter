@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class UIManager : MonoBehaviour
 {
@@ -11,11 +13,14 @@ public class UIManager : MonoBehaviour
     public IntVariable waveCounter;
     // timestamp for start of attack wave
     public IntVariable waveTimestamp;
+    public CanvasGroup gameOverCanvas;
 
     public TextMeshProUGUI gameScoreText;
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI waveText;
     public TextMeshProUGUI countdownText;
+
+    [FormerlySerializedAs("gameOverCanvas")] public GameObject gameOverScreen;
 
     private bool _destroyed = false;
     
@@ -26,7 +31,32 @@ public class UIManager : MonoBehaviour
         health.SetValue(100);
         UpdateUI();
 
+        gameOverScreen.SetActive(false);
         StartCoroutine(TimerUpdateLoop());
+    }
+
+    public void OnPlayerHealthUpdate()
+    {
+        if (health.Value == 0)
+        {
+            gameOverScreen.SetActive(true);
+        }
+    }
+
+    public void ReturnToMainMenu()
+    {
+        StartCoroutine(Fade());
+    }
+    
+    IEnumerator Fade()
+    {
+        for (float alpha = 1f; alpha >= -0.05f; alpha -= 0.05f) {
+            gameOverCanvas.alpha = alpha;
+            yield return new WaitForSecondsRealtime(0.1f);
+        }
+
+        // once done, go to next scene
+        SceneManager.LoadSceneAsync("Menu", LoadSceneMode.Single);
     }
     
     private void OnDestroy()

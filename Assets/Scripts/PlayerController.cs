@@ -202,10 +202,23 @@ public class PlayerController : MonoBehaviour {
             
             if (_charging) {
                 // charging the enemy increases player health by 1
-                other.gameObject.GetComponent<EnemyController>().Damage();
+                other.gameObject.GetComponent<EnemyController>().Damage(2);
                 gameScore.Increment();
                 health.Increment(1, 100);
+                
+                int newEnemyHealth = other.gameObject
+                    .GetComponent<EnemyController>().GetEnemyHealth();
+
+                if (newEnemyHealth == 0) {
+                    // if charging killed the slime automatically
+                    // destroy its sprite also
+                    other.gameObject
+                        .GetComponent<EnemyController>().AttemptSelfDestruct();
+                    health.Increment(14, 100);
+                }
+                
                 playerHealthUpdate.Invoke();
+
             } else if (enemyHealth == 0) {
                 // increase health after collecting dead slime
                 health.Increment(14, 100);
