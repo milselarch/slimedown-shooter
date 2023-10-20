@@ -16,10 +16,11 @@ public class EnemyController: MonoBehaviour
 	public float smallestScale = 0.75f;
 	public int maxHealth = 4;
     
-	public IntVariable playerHealth;
 	public IntVariable gameScore;
+	// public IntVariable playerHealth;
 	public UnityEvent scoreUpdate;
-	public UnityEvent playerHealthUpdate;
+	// public UnityEvent playerHealthUpdate;
+	public UnityEvent onEnemyKill;
 
     public Animator enemyAnimator;
 
@@ -63,6 +64,8 @@ public class EnemyController: MonoBehaviour
 		if (health == 0) {
 			enemyAnimator.SetBool("dead", true);
 			transform.localScale = Vector3.one;
+			
+			onEnemyKill.Invoke();
 			UpdateCollider();
 			dead = true;
 		}

@@ -17,8 +17,9 @@ public class PlayerController : MonoBehaviour {
     public float chargeForce = 5.0f;
     public Animator playerAnimator;
     
-    public IntVariable gameScore;
     public IntVariable health;
+    public IntVariable gameScore;
+
     public UnityEvent scoreUpdate;
     public UnityEvent playerHealthUpdate;
 
@@ -200,7 +201,7 @@ public class PlayerController : MonoBehaviour {
                 playerHealthUpdate.Invoke();
             } else if (enemyHealth == 0) {
                 // increase health after collecting dead slime
-                health.Increment(5, 100);
+                health.Increment(10, 100);
                 gameScore.Increment();
                 playerHealthUpdate.Invoke();
                 scoreUpdate.Invoke();
