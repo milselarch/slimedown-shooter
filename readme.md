@@ -20,7 +20,7 @@ The catch is that you also consume health when shooting them, getting attacked b
 
 ### Game Executable
 
-**State system requirements: Windows, macOS, etc**
+**State system requirements: Linux x86_64 (was developed on ubuntu 20.04)**
 
 Provide a **link** to download your game executable
 [linux x86_64 executable](https://github.com/50033-game-design-and-development/50033-midterm-partb-milselarch/releases/download/v1.0.0/linux-executable.x86_64)
