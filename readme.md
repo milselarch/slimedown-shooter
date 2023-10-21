@@ -1,7 +1,7 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/Xmv1pZ8x)
 # README.md
 
-**LIFE AND DEATH BY SLIMES**
+**SLIMEDOWN SHOOTER**
 
 | Name       | ***REMOVED*** |
 | ---------- | --- |
@@ -10,6 +10,8 @@
 ## Basic Game Description
 
 Genre, main objective, provide screenshot of your scene if you are proud of it
+
+Your life depends on slimes, and so does your death...   
 
 This game is a top down action game (mainly a shooter)
 The main objective is to kill waves of slimes that spawn in and collect the slime particles they leave behind to regain health
@@ -90,10 +92,36 @@ For **each** of your **orange**, **pink** and **purple** nodes, explain clearly 
   - **It improves code maintenance** overall
 - Consult our lecture slides for inspiration and samples on how to concisely **analyse** a game.
 
+orange rules:        
+40 - I added slime wave spawning because I thought its very natural to have. slimes are not very intimidating by themselves, what makes them dangerous in most games is the fact that theres a lot of them, and so this felt like an elegant rule. By having the number of enemies spawned increase each wave it naturally makes the game harder over time as well     
+44 - user experience is improved massively by slimes and the player being able to attack one another because that forms the central conflict and mechanic of the game, otherwise there wouldn't even be a game at all     
+45 - InputSystem helps with code maintainance as porting the game to a different device will not require any code changes most likely as far as handling player input data is concerned    
+
+pink rules:         
+74 - used scriptable game object architecture mostly for game maintainance reasons. It's very nice to use events to communicate between player and enemy prefab instantiations, or player to UI      
+59 - I added a timer for each slime attack wave. The players health will start to drain after the time runs out. This disincentivises the player from just running around the slimes and slowly picking them off one by one as he know has to engage in them more aggressibely in order to defeat them without dying himself. Adds a sense of urgancy to the game in my opinion.    
+
 ## Notes
 
 Any other notes you would like to add here
+Not sure why the font isnt working in the exported game, but its functional regardless
+Used a tilemap for the game background, and a collision tilemap to set the boundaries of the world
+was originally planning to do node 69 (AI navigation) but the problem I faced was that that module is specific with 3D models only
 
 ## Asset Used & Credits
 
 It’s nice to give **credits** to the creator of the assets (if info is available).
+tilemap:
+dirt, water, and islands were taken from the cozy farms global spritesheet      
+all variants of flowers were from cozy farm tiles folder       
+slime sprites were taken from cozy farm enemies (green slime folder)            
+house in middle of map is from cozy farms buildings sprite sheet    
+
+player sprite are from pixel-adventure-1, main characters / virtual guy sprite sheet     
+fireball that player shoots out has its sprite from gothicvania church files/gothicvania church files/SPRITES/fx/fireball
+finally sound effect when fireball is shot out is from everyday-stuff-sfx/shapeforms-audio-effects/Sci Fi Weapons Cyberpunk Arsenal Preview/AUDIO/EXPLDsgn_Implode_15.wav
+
+
+
+
+
