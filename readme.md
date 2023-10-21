@@ -41,7 +41,8 @@ You lose when you run out of health
 
 ### Gameplay Video
 
-A ~60s recorded run of your game from start to finish (you may record from Unity editor, show your Game window clearly). You may provide a **working link, or a gif embedded directly here.**
+A ~60s recorded run of your game from start to finish (you may record from Unity editor, show your Game window clearly). You may provide a **working link, or a gif embedded directly here.**    
+[https://www.youtube.com/watch?v=efx0LmTTMKo](https://www.youtube.com/watch?v=efx0LmTTMKo)
 
 ## Features Implementation
 
