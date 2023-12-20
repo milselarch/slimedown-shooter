@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.h8man.2d.navmeshplus": "file:/home/milselarch/projects/SUTD/50-033GG/NavMeshPlus-master",
     "com.unity.ai.navigation": "1.1.5",
     "com.unity.collab-proxy": "2.0.7",
     "com.unity.feature.2d": "2.0.0",
