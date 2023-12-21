@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 using System;
+using JetBrains.Annotations;
 
 public class EnemyController: MonoBehaviour {
     public float jumpForce = 7.0f;
@@ -34,19 +35,18 @@ public class EnemyController: MonoBehaviour {
 	private int health = 0;
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
 	    Agent = GetComponent<NavMeshAgent>();
 	    Agent.updateRotation = false;
 	    Agent.updateUpAxis = false;
+	    Agent.isStopped = true;
 	    
         enemyBody = GetComponent<Rigidbody2D>();
         player = GameObject.FindGameObjectWithTag("Player");
 		GameRestart();
     }
 
-    public void GameRestart()
-    {
+    public void GameRestart() {
 		this.health = this.maxHealth;
         enemyAnimator.SetBool("dead", false);
         lastJump = GetTimestamp();
@@ -54,13 +54,11 @@ public class EnemyController: MonoBehaviour {
 		dead = false;
     }
 
-    float GetTimestamp()
-    {
+    float GetTimestamp() {
         return Time.time;
     }
 
-    public void Damage()
-    {
+    public void Damage() {
 	    this.Damage(1);
     }
     
@@ -104,8 +102,7 @@ public class EnemyController: MonoBehaviour {
 		}
 	}
 
-	private void OnCollisionEnter2D(Collision2D other)
-	{
+	private void OnCollisionEnter2D(Collision2D other) {
 		if (
 			(other.gameObject.CompareTag("Player"))
 		) {
@@ -116,33 +113,42 @@ public class EnemyController: MonoBehaviour {
 		}
 	}
 
-	public void AttemptSelfDestruct()
-	{
-		if (health == 0)
-		{
+	public void AttemptSelfDestruct() {
+		if (health == 0) {
 			Destroy(gameObject);
 		}
 	}
 
-	public int GetEnemyHealth()
-	{
+	public int GetEnemyHealth() {
 		return this.health;
 	}
 
-	public bool IsAlive()
-	{
+	public bool IsAlive() {
 		return this.health > 0;
 	}
 
-    void FixedUpdate()
-    {
+    void FixedUpdate() {
 		if (dead) { return; }
 
+		var playerController = player.GetComponent<PlayerController>();
+		Vector2 playerPosition = playerController.getPosition2D();
+
+		Vector3 playerVectorDist;
+		NavMeshPath path = new NavMeshPath();
+		var hasNavMeshPath = Agent.CalculatePath(playerPosition, path);
+		
+		if (hasNavMeshPath && (path.corners.Length > 1)) {
+			// use NavMeshPlus AI to calculate movement direction
+			playerVectorDist = path.corners[1] - transform.position;
+		} else {
+			// use vector from enemy to player to calculate movement direction
+			playerVectorDist = player.transform.position - transform.position;
+		}
+		
         float timestampNow = GetTimestamp();
         float jumpDurationPassed = timestampNow - lastJump;
         float attackDurationPassed = timestampNow - lastAttack;
 
-        Vector3 playerVectorDist = player.transform.position - transform.position;
         Vector3 playerDirection = playerVectorDist.normalized;
         float playerDistance = playerVectorDist.magnitude;
         // Debug.Log("PLAYER_DISTANCE= " + playerDistance);
@@ -150,6 +156,8 @@ public class EnemyController: MonoBehaviour {
         if (playerDistance < this.attackDistance) {
             if (attackDurationPassed > attackInterval) {
 				// jump-attack towards the player
+				// TODO: only use jump-attack if the player is
+				// in the line of sight of the enemy slime
                 lastAttack = timestampNow;
                 enemyBody.AddForce(playerDirection * attackForce, ForceMode2D.Impulse);
                 enemyAnimator.SetTrigger("attack");
@@ -163,8 +171,7 @@ public class EnemyController: MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
+    void Update() {
+	    
     }
 }
