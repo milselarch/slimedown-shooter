@@ -48,16 +48,18 @@ public class PlayerController : MonoBehaviour {
         GameRestart();
     }
 
-    public void OnHealthUpdate()
-    {
-        if (health.Value <= 0)
-        {
+    public void OnHealthUpdate() {
+        if (health.Value <= 0) {
             _dead = true;
         }   
     }
 
-    void GameRestart()
-    {
+    public Vector2 getPosition2D() {
+        Vector3 position = this.transform.position;
+        return new Vector2(position.x, position.y);
+    }
+
+    void GameRestart() {
         // reset sprite direction
         _faceRight = true;
         _playerSprite.flipX = false;
@@ -65,20 +67,17 @@ public class PlayerController : MonoBehaviour {
         _dead = false;
     }
 
-    void FixedUpdate()
-    {
+    void FixedUpdate() {
         if (_dead) { return; }
         
         // this.canFire = true;
         float xMovement = 0.0f;
         float yMovement = 0.0f;
         
-        if (Math.Abs(_playerBody.velocity.x) < maxSpeed)
-        {
+        if (Math.Abs(_playerBody.velocity.x) < maxSpeed) {
             xMovement = this.speed * this._horizontalDirection;
         } 
-        if (Math.Abs(_playerBody.velocity.y) < maxSpeed)
-        {
+        if (Math.Abs(_playerBody.velocity.y) < maxSpeed) {
             yMovement = this.speed * this._verticalDirection;
         }
         
@@ -86,8 +85,7 @@ public class PlayerController : MonoBehaviour {
         _playerBody.AddForce(movement);
     }
     
-    public void OnMouseClick(InputAction.CallbackContext context)
-    {
+    public void OnMouseClick(InputAction.CallbackContext context) {
         if (_dead) { return; }
 
         // Check if the mouse button was pressed
@@ -122,15 +120,13 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    public void OnChargeAttack(InputAction.CallbackContext context)
-    {
+    public void OnChargeAttack(InputAction.CallbackContext context) {
         if (!context.started) { return; }
         if (_charging) { return; }
         if (_dead) { return; }
 
         float timestamp = Time.time;
-        if (timestamp - _lastCharge > chargeWaitDuration)
-        {
+        if (timestamp - _lastCharge > chargeWaitDuration) {
             _lastCharge = chargeWaitDuration;
             int direction = this._faceRight ? 1 : -1;
             Vector2 movement = new Vector2(
@@ -145,38 +141,31 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    public void EndCharge()
-    {
+    public void EndCharge() {
         _charging = false;
     }
 
-    public void OnHorizontalMoveAction(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
+    public void OnHorizontalMoveAction(InputAction.CallbackContext context) {
+        if (context.started) {
             int faceRight = context.ReadValue<float>() > 0 ? 1 : -1;
-            if (faceRight != 0)
-            {
+            if (faceRight != 0) {
                 this._faceRight = faceRight == 1;
                 _playerSprite.flipX = !this._faceRight;
             }
             _horizontalDirection = faceRight;
         }
-        if (context.canceled)
-        {
+        if (context.canceled) {
             _horizontalDirection = 0;
         }
     }
     
     public void OnVerticalMoveAction(InputAction.CallbackContext context)
     {
-        if (context.started)
-        {
+        if (context.started) {
             int faceTop = context.ReadValue<float>() > 0 ? 1 : -1;
             _verticalDirection = faceTop;
         }
-        if (context.canceled)
-        {
+        if (context.canceled) {
             _verticalDirection = 0;
         }
     }
@@ -193,10 +182,8 @@ public class PlayerController : MonoBehaviour {
         playerHealthUpdate.Invoke();
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.CompareTag("Enemy"))
-        {
+    private void OnCollisionEnter2D(Collision2D other) {
+        if (other.gameObject.CompareTag("Enemy")) {
             int enemyHealth = other.gameObject
                 .GetComponent<EnemyController>().GetEnemyHealth();
             
