@@ -106,8 +106,7 @@ public class EnemyController: MonoBehaviour {
 		if (
 			(other.gameObject.CompareTag("Player"))
 		) {
-			if (health == 0)
-			{
+			if (health == 0) {
 				Destroy(gameObject);
 			}
 		}
@@ -133,31 +132,30 @@ public class EnemyController: MonoBehaviour {
 		var playerController = player.GetComponent<PlayerController>();
 		Vector2 playerPosition = playerController.getPosition2D();
 
-		Vector3 playerVectorDist;
 		NavMeshPath path = new NavMeshPath();
-		var hasNavMeshPath = Agent.CalculatePath(playerPosition, path);
-		
+		bool hasNavMeshPath = Agent.CalculatePath(playerPosition, path);
+		Vector3 playerVectorDist = player.transform.position - transform.position;
+		Vector3 movementDirection = playerVectorDist;
+			
 		if (hasNavMeshPath && (path.corners.Length > 1)) {
 			// use NavMeshPlus AI to calculate movement direction
-			playerVectorDist = path.corners[1] - transform.position;
-		} else {
-			// use vector from enemy to player to calculate movement direction
-			playerVectorDist = player.transform.position - transform.position;
+			movementDirection = path.corners[1] - transform.position;
 		}
 		
         float timestampNow = GetTimestamp();
         float jumpDurationPassed = timestampNow - lastJump;
         float attackDurationPassed = timestampNow - lastAttack;
+        float alignemnt = Vector3.Dot(
+	        playerVectorDist.normalized, movementDirection.normalized
+	    );
 
-        Vector3 playerDirection = playerVectorDist.normalized;
-        float playerDistance = playerVectorDist.magnitude;
+	    bool hasLineOfSight = alignemnt >= 0.99;
+        Vector3 playerDirection = movementDirection.normalized;
+        float playerDistance = movementDirection.magnitude;
         // Debug.Log("PLAYER_DISTANCE= " + playerDistance);
 
-        if (playerDistance < this.attackDistance) {
+        if (hasLineOfSight && (playerDistance < this.attackDistance)) {
             if (attackDurationPassed > attackInterval) {
-				// jump-attack towards the player
-				// TODO: only use jump-attack if the player is
-				// in the line of sight of the enemy slime
                 lastAttack = timestampNow;
                 enemyBody.AddForce(playerDirection * attackForce, ForceMode2D.Impulse);
                 enemyAnimator.SetTrigger("attack");
