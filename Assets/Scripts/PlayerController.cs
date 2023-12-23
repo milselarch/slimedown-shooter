@@ -128,12 +128,17 @@ public class PlayerController : MonoBehaviour {
         float timestamp = Time.time;
         if (timestamp - _lastCharge > chargeWaitDuration) {
             _lastCharge = chargeWaitDuration;
-            int direction = this._faceRight ? 1 : -1;
-            Vector2 movement = new Vector2(
-                direction * chargeForce, 0.0f
-            );
+            int faceDirection = this._faceRight ? 1 : -1;
             
-            _playerBody.AddForce(movement, ForceMode2D.Impulse);
+            Vector2 chargeDirection;
+            if (_playerBody.velocity.magnitude > 0) {
+                chargeDirection = _playerBody.velocity.normalized;
+            } else {
+                chargeDirection = new Vector2(faceDirection, 0.0f);
+            }
+
+            chargeDirection.x = Math.Abs(chargeDirection.x) * faceDirection;
+            _playerBody.AddForce(chargeForce * chargeDirection, ForceMode2D.Impulse);
             playerAnimator.SetTrigger("charging");
             health.Decrement(1, 0);
             playerHealthUpdate.Invoke();
