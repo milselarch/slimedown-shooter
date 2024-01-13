@@ -9,6 +9,7 @@ public class MenuManager: MonoBehaviour {
     public GameObject highscoreText;
     public IntVariable gameScore;
 
+    public Slider progressBar;
     public GameObject menuUI;
     public GameObject loadingUI;
     public Image image;  // Assign the Image component from the Unity Editor
@@ -33,41 +34,28 @@ public class MenuManager: MonoBehaviour {
     public void loadLevel() {
         menuUI.SetActive(false);
         loadingUI.SetActive(true);
+        
         this.loadGame = true;
-        StartCoroutine(loadFade());
+        StartCoroutine(launchLoadSequence());
         Debug.Log("TEST");
     }
 
-    IEnumerator loadFade() {
-        int frames = 300;
-
-        for (int k=0; k<frames; k++) {
-            float alpha = ((float) k / frames);
-            Debug.Log("ALPHA: " + alpha);
-
-            for (int i=0; i<loadingUI.transform.childCount; i++) {
-                GameObject child = loadingUI.transform.GetChild(i).gameObject;
-                
-                var childImage = child.GetComponent<Image>();
-                if (childImage != null) {
-                    Color newColor = childImage.color;  // Get the current color
-                    newColor.a = alpha;  // Set the desired alpha value
-                    childImage.color = newColor;  // Assign the new color with modified alpha
-                }
-
-                var uiText = child.GetComponent<TextMeshPro>();
-                if (uiText != null) {
-                    uiText.faceColor = new Color32(255, 255, 255, (byte) (alpha * 255));
-                }
-            }
-
-            if (!this.loadGame) { break; }
+    IEnumerator launchLoadSequence()
+    {
+        if (!this.loadGame)
+        {
             yield return null;
         }
 
-        yield return null;
-        if (this.loadGame) {
-            SceneManager.LoadSceneAsync("SampleScene", LoadSceneMode.Single);
+        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(
+            "SampleScene", LoadSceneMode.Single
+        );
+
+        while (!loadOperation.isDone)
+        {
+            float progress = Mathf.Clamp01(loadOperation.progress / .9f);
+            progressBar.value = progress;
+            yield return null;
         }
     }
 
