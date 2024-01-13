@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
     [FormerlySerializedAs("gameOverCanvas")] public GameObject gameOverScreen;
 
     private bool _destroyed = false;
+	private bool exiting = false;
     
     // Start is called before the first frame update
     void Start()
@@ -43,12 +44,14 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ReturnToMainMenu()
-    {
-        StartCoroutine(Fade());
+    public void ReturnToMainMenu() {
+        if (!this.exiting) {
+            this.exiting = true;
+            StartCoroutine(FadeAndExit());
+        }
     }
     
-    IEnumerator Fade()
+    IEnumerator FadeAndExit()
     {
         for (float alpha = 1f; alpha >= -0.05f; alpha -= 0.05f) {
             gameOverCanvas.alpha = alpha;
