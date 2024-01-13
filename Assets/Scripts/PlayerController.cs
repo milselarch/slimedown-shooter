@@ -137,6 +137,7 @@ public class PlayerController : MonoBehaviour {
                 chargeDirection = new Vector2(faceDirection, 0.0f);
             }
 
+            _playerBody.velocity = Vector2.zero;
             chargeDirection.x = Math.Abs(chargeDirection.x) * faceDirection;
             _playerBody.AddForce(chargeForce * chargeDirection, ForceMode2D.Impulse);
             playerAnimator.SetTrigger("charging");
