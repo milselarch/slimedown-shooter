@@ -13,17 +13,17 @@ public class UISpriteAnimation : MonoBehaviour {
     private Coroutine _coroutineAnim;
     private bool _isDone;
     
-    public void Func_PlayUIAnim() {
+    public void StartAnimation() {
         _isDone = false;
-        StartCoroutine(Func_PlayAnimUI());
+        StartCoroutine(PlayAnimation());
     }
 
-    public void Func_StopUIAnim() {
+    public void StopAnimation() {
         _isDone = true;
-        StopCoroutine(Func_PlayAnimUI());
+        StopCoroutine(PlayAnimation());
     }
-    
-    IEnumerator Func_PlayAnimUI() {
+
+    private IEnumerator PlayAnimation() {
         yield return new WaitForSeconds(speed);
         if (_indexSprite >= spriteArray.Length) {
             _indexSprite = 0;
@@ -32,7 +32,7 @@ public class UISpriteAnimation : MonoBehaviour {
         image.sprite = spriteArray[_indexSprite];
         _indexSprite += 1;
         if (_isDone == false) {
-            _coroutineAnim = StartCoroutine(Func_PlayAnimUI());
+            _coroutineAnim = StartCoroutine(PlayAnimation());
         }
     }
 }

@@ -8,6 +8,9 @@ using UnityEngine.InputSystem;
 using TMPro;
 
 public class PlayerController : MonoBehaviour {
+    private static readonly int CHARGING = Animator.StringToHash("charging");
+    private static readonly int SPEED = Animator.StringToHash("speed");
+
     public float maxSpeed = 20;
     public float impulseForce = 5.0f;
     public float speed = 10;
@@ -54,7 +57,7 @@ public class PlayerController : MonoBehaviour {
         }   
     }
 
-    public Vector2 getPosition2D() {
+    public Vector2 GetPosition2D() {
         Vector3 position = this.transform.position;
         return new Vector2(position.x, position.y);
     }
@@ -71,8 +74,8 @@ public class PlayerController : MonoBehaviour {
         if (_dead) { return; }
         
         // this.canFire = true;
-        float xMovement = 0.0f;
-        float yMovement = 0.0f;
+        var xMovement = 0.0f;
+        var yMovement = 0.0f;
         
         if (Math.Abs(_playerBody.velocity.x) < maxSpeed) {
             xMovement = this.speed * this._horizontalDirection;
@@ -93,31 +96,31 @@ public class PlayerController : MonoBehaviour {
         // if (!this.canFire) {}
     
         // Get the position of the mouse click relative to the center of the screen
-        Vector2 mousePosition = Mouse.current.position.ReadValue();
-        Vector2 center = new Vector2(Screen.width / 2f, Screen.height / 2f);
-        Vector2 mouseOffset = mousePosition - center;
+        var mousePosition = Mouse.current.position.ReadValue();
+        var center = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        var mouseOffset = mousePosition - center;
 
         // Log the mouse click position relative to the center
         Debug.Log("Mouse click offset from center: " + mouseOffset);
-        Vector2 direction = mouseOffset.normalized;
-        Vector3 direction3 = new Vector3(
+        var direction = mouseOffset.normalized;
+        var direction3 = new Vector3(
             direction.x, direction.y, 0.0f
         );
 
-        GameObject x = Instantiate(
+        var x = Instantiate(
             attackPrefab, 
             transform.position + direction3 * fireBallOffset, 
             Quaternion.identity
         );
         // Get the Rigidbody component of the instantiated object
-        Rigidbody2D rb = x.GetComponent<Rigidbody2D>();
+        var rb = x.GetComponent<Rigidbody2D>();
         // Check if the Rigidbody component exists
-        if (rb != null) {
-            // Apply a rightward impulse force to wsthe object
-            rb.AddForce(direction * impulseForce, ForceMode2D.Impulse);
-            health.Decrement(2, 0);
-            playerHealthUpdate.Invoke();
-        }
+        if (rb == null) { return; }
+
+        // Apply a rightward impulse force to the object
+        rb.AddForce(direction * impulseForce, ForceMode2D.Impulse);
+        health.Decrement(2, 0);
+        playerHealthUpdate.Invoke();
     }
 
     public void OnChargeAttack(InputAction.CallbackContext context) {
@@ -125,26 +128,25 @@ public class PlayerController : MonoBehaviour {
         if (_charging) { return; }
         if (_dead) { return; }
 
-        float timestamp = Time.time;
-        if (timestamp - _lastCharge > chargeWaitDuration) {
-            _lastCharge = chargeWaitDuration;
-            int faceDirection = this._faceRight ? 1 : -1;
-            
-            Vector2 chargeDirection;
-            if (_playerBody.velocity.magnitude > 0) {
-                chargeDirection = _playerBody.velocity.normalized;
-            } else {
-                chargeDirection = new Vector2(faceDirection, 0.0f);
-            }
+        var timestamp = Time.time;
+        var timeSinceLastCharge = timestamp - _lastCharge;
+        var chargeCooldownComplete = timeSinceLastCharge > chargeWaitDuration;
+        if (!chargeCooldownComplete) { return; }
 
-            _playerBody.velocity = Vector2.zero;
-            chargeDirection.x = Math.Abs(chargeDirection.x) * faceDirection;
-            _playerBody.AddForce(chargeForce * chargeDirection, ForceMode2D.Impulse);
-            playerAnimator.SetTrigger("charging");
-            health.Decrement(1, 0);
-            playerHealthUpdate.Invoke();
-            _charging = true;
-        }
+        _lastCharge = chargeWaitDuration;
+        var faceDirection = this._faceRight ? 1 : -1;
+
+        var chargeDirection = _playerBody.velocity.magnitude > 0 ? 
+            _playerBody.velocity.normalized : 
+            new Vector2(faceDirection, 0.0f);
+
+        _playerBody.velocity = Vector2.zero;
+        chargeDirection.x = Math.Abs(chargeDirection.x) * faceDirection;
+        _playerBody.AddForce(chargeForce * chargeDirection, ForceMode2D.Impulse);
+        playerAnimator.SetTrigger(CHARGING);
+        health.Decrement(1, 0);
+        playerHealthUpdate.Invoke();
+        _charging = true;
     }
 
     public void EndCharge() {
@@ -153,11 +155,9 @@ public class PlayerController : MonoBehaviour {
 
     public void OnHorizontalMoveAction(InputAction.CallbackContext context) {
         if (context.started) {
-            int faceRight = context.ReadValue<float>() > 0 ? 1 : -1;
-            if (faceRight != 0) {
-                this._faceRight = faceRight == 1;
-                _playerSprite.flipX = !this._faceRight;
-            }
+            var faceRight = context.ReadValue<float>() > 0 ? 1 : -1;
+            this._faceRight = faceRight == 1;
+            _playerSprite.flipX = !this._faceRight;
             _horizontalDirection = faceRight;
         }
         if (context.canceled) {
@@ -179,7 +179,7 @@ public class PlayerController : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         float velocity = Mathf.Abs(_playerBody.velocity.magnitude);
-        playerAnimator.SetFloat("speed", velocity);
+        playerAnimator.SetFloat(SPEED, velocity);
     }
 
     public void DrainHealth(int amount) {
@@ -189,40 +189,42 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
-        if (other.gameObject.CompareTag("Enemy")) {
-            int enemyHealth = other.gameObject
-                .GetComponent<EnemyController>().GetEnemyHealth();
+        if (!other.gameObject.CompareTag("Enemy")) {
+            return;
+        }
+
+        var enemyHealth = other.gameObject
+            .GetComponent<EnemyController>().GetEnemyHealth();
             
-            if (_charging) {
-                // charging the enemy increases player health by 1
-                other.gameObject.GetComponent<EnemyController>().Damage(2);
-                gameScore.Increment();
-                health.Increment(1, 100);
+        if (_charging) {
+            // charging the enemy increases player health by 1
+            other.gameObject.GetComponent<EnemyController>().Damage(2);
+            gameScore.Increment();
+            health.Increment(1, 100);
                 
-                int newEnemyHealth = other.gameObject
-                    .GetComponent<EnemyController>().GetEnemyHealth();
+            var newEnemyHealth = other.gameObject
+                .GetComponent<EnemyController>().GetEnemyHealth();
 
-                if (newEnemyHealth == 0) {
-                    // if charging killed the slime automatically
-                    // destroy its sprite also
-                    other.gameObject
-                        .GetComponent<EnemyController>().AttemptSelfDestruct();
-                    health.Increment(14, 100);
-                }
-                
-                playerHealthUpdate.Invoke();
-
-            } else if (enemyHealth == 0) {
-                // increase health after collecting dead slime
+            if (newEnemyHealth == 0) {
+                // if charging killed the slime automatically
+                // destroy its sprite also
+                other.gameObject
+                    .GetComponent<EnemyController>().AttemptSelfDestruct();
                 health.Increment(14, 100);
-                gameScore.Increment();
-                playerHealthUpdate.Invoke();
-                scoreUpdate.Invoke();
-            } else {
-                // slime deals 5 damage to player
-                health.Decrement(5, 0);
-                playerHealthUpdate.Invoke();
             }
+                
+            playerHealthUpdate.Invoke();
+
+        } else if (enemyHealth == 0) {
+            // increase health after collecting dead slime
+            health.Increment(14, 100);
+            gameScore.Increment();
+            playerHealthUpdate.Invoke();
+            scoreUpdate.Invoke();
+        } else {
+            // slime deals 5 damage to player
+            health.Decrement(5, 0);
+            playerHealthUpdate.Invoke();
         }
     }
 }

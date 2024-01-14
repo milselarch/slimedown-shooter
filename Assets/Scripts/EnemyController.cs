@@ -129,7 +129,7 @@ public class EnemyController: MonoBehaviour {
 		if (dead) { return; }
 
 		var playerController = player.GetComponent<PlayerController>();
-		Vector2 playerPosition = playerController.getPosition2D();
+		Vector2 playerPosition = playerController.GetPosition2D();
 
 		NavMeshPath path = new NavMeshPath();
 		bool hasNavMeshPath = Agent.CalculatePath(playerPosition, path);
