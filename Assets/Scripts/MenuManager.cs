@@ -12,68 +12,61 @@ public class MenuManager: MonoBehaviour {
     public Slider progressBar;
     public GameObject menuUI;
     public GameObject loadingUI;
-    public Image image;  // Assign the Image component from the Unity Editor
+    public GameObject bouncingSlime;
 
-    private bool loadGame = false;
-    // private 
+    private bool _loadGame = false;
 
     // Start is called before the first frame update
     void Start() {
-        setHighScore();
+        SetHighScore();
     }
 
     void Awake() {
-        this.loadMenu();
+        this.LoadMenu();
     }
 
-    public void loadMenu() {
+    private void LoadMenu() {
         menuUI.SetActive(true);
         loadingUI.SetActive(false);
-        this.loadGame = false;
+        this._loadGame = false;
     }
 
-    public void loadLevel() {
+    public void LoadLevel() {
         menuUI.SetActive(false);
         loadingUI.SetActive(true);
         
-        this.loadGame = true;
-        StartCoroutine(launchLoadSequence());
+        this._loadGame = true;
+        StartCoroutine(LaunchLoadSequence());
         Debug.Log("TEST");
     }
 
-    IEnumerator launchLoadSequence()
-    {
-        if (!this.loadGame)
-        {
+    IEnumerator LaunchLoadSequence() {
+        if (!this._loadGame) {
             yield return null;
         }
-
+        
+        bouncingSlime.GetComponent<UISpriteAnimation>().StartAnimation();
+        
         AsyncOperation loadOperation = SceneManager.LoadSceneAsync(
             "SampleScene", LoadSceneMode.Single
         );
 
-        while (!loadOperation.isDone)
-        {
+        while (!loadOperation.isDone) {
             float progress = Mathf.Clamp01(loadOperation.progress / .9f);
             progressBar.value = progress;
             yield return null;
         }
     }
 
-    public void resetHighScore() {
+    public void ResetHighScore() {
         this.gameScore.ResetHighestValue();
-        this.setHighScore();
+        this.SetHighScore();
     }
 
-    public void setHighScore() {
+    private void SetHighScore() {
         // set highscore
         highscoreText.GetComponent<TextMeshProUGUI>().text = (
             "TOP- " + gameScore.previousHighestValue.ToString("D6")
         );
-    }
-
-    // Update is called once per frame
-    void Update() {
-        
     }
 }
