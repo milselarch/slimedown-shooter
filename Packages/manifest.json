@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.h8man.2d.navmeshplus": "file:/home/milselarch/projects/SUTD/50-033GG/NavMeshPlus-master",
+    "com.h8man.2d.navmeshplus": "https://github.com/h8man/NavMeshPlus.git",
     "com.nobi.roundedcorners": "https://github.com/kirevdokimov/Unity-UI-Rounded-Corners.git",
     "com.unity.ai.navigation": "1.1.5",
     "com.unity.collab-proxy": "2.0.7",
