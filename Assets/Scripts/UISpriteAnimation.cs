@@ -1,38 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class UISpriteAnimation : MonoBehaviour {
-    public Image m_Image;
+    public Image image;
+    public Sprite[] spriteArray;
+    public float speed = .02f;
 
-    public Sprite[] m_SpriteArray;
-    public float m_Speed = .02f;
-
-    private int m_IndexSprite;
-    Coroutine m_CorotineAnim;
-    bool IsDone;
-    public void Func_PlayUIAnim()
-    {
-        IsDone = false;
+    private int _indexSprite;
+    private Coroutine _coroutineAnim;
+    private bool _isDone;
+    
+    public void Func_PlayUIAnim() {
+        _isDone = false;
         StartCoroutine(Func_PlayAnimUI());
     }
 
-    public void Func_StopUIAnim()
-    {
-        IsDone = true;
+    public void Func_StopUIAnim() {
+        _isDone = true;
         StopCoroutine(Func_PlayAnimUI());
     }
+    
     IEnumerator Func_PlayAnimUI() {
-        yield return new WaitForSeconds(m_Speed);
-        if (m_IndexSprite >= m_SpriteArray.Length) {
-            m_IndexSprite = 0;
+        yield return new WaitForSeconds(speed);
+        if (_indexSprite >= spriteArray.Length) {
+            _indexSprite = 0;
         }
         
-        m_Image.sprite = m_SpriteArray[m_IndexSprite];
-        m_IndexSprite += 1;
-        if (IsDone == false) {
-            m_CorotineAnim = StartCoroutine(Func_PlayAnimUI());
+        image.sprite = spriteArray[_indexSprite];
+        _indexSprite += 1;
+        if (_isDone == false) {
+            _coroutineAnim = StartCoroutine(Func_PlayAnimUI());
         }
     }
 }
