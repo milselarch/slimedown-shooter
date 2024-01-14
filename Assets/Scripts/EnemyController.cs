@@ -26,7 +26,6 @@ public class EnemyController: MonoBehaviour {
     public Animator enemyAnimator;
 
     private NavMeshAgent Agent;
-
     private Rigidbody2D enemyBody;
     private GameObject player;
     private float lastJump = -10.0f;

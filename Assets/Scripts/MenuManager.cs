@@ -15,6 +15,7 @@ public class MenuManager: MonoBehaviour {
     public Image image;  // Assign the Image component from the Unity Editor
 
     private bool loadGame = false;
+    // private 
 
     // Start is called before the first frame update
     void Start() {
