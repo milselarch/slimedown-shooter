@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     public Vector2 GetPosition2D() {
-        Vector3 position = this.transform.position;
+        var position = this.transform.position;
         return new Vector2(position.x, position.y);
     }
 
@@ -84,12 +84,12 @@ public class PlayerController : MonoBehaviour {
             yMovement = this.speed * this._verticalDirection;
         }
         
-        Vector2 movement = new Vector2(xMovement, yMovement);
+        var movement = new Vector2(xMovement, yMovement);
         _playerBody.AddForce(movement);
     }
     
     public void OnMouseClick(InputAction.CallbackContext context) {
-        if (_dead) { return; }
+        if (_dead || GameState.paused) { return; }
 
         // Check if the mouse button was pressed
         if (!context.started) { return; }
@@ -165,10 +165,9 @@ public class PlayerController : MonoBehaviour {
         }
     }
     
-    public void OnVerticalMoveAction(InputAction.CallbackContext context)
-    {
+    public void OnVerticalMoveAction(InputAction.CallbackContext context) {
         if (context.started) {
-            int faceTop = context.ReadValue<float>() > 0 ? 1 : -1;
+            var faceTop = context.ReadValue<float>() > 0 ? 1 : -1;
             _verticalDirection = faceTop;
         }
         if (context.canceled) {
@@ -178,7 +177,7 @@ public class PlayerController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        float velocity = Mathf.Abs(_playerBody.velocity.magnitude);
+        var velocity = Mathf.Abs(_playerBody.velocity.magnitude);
         playerAnimator.SetFloat(SPEED, velocity);
     }
 
