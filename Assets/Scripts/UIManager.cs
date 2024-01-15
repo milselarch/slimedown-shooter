@@ -42,12 +42,13 @@ public class UIManager: MonoBehaviour {
             return;
         }
 
-        var paused = pauseScreen.activeSelf;
-        if (paused) {
-            pauseScreen.SetActive(false);
+        GameState.paused = !GameState.paused;
+        
+        if (GameState.paused) {
+            pauseScreen.SetActive(true);
             Time.timeScale = 1.0f;
         } else {
-            pauseScreen.SetActive(true);
+            pauseScreen.SetActive(false);
             Time.timeScale = 0.0f;   
         }
     }
