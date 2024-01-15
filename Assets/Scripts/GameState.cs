@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GameState {
+public static class GameState {
     private static bool _paused = false;
 
     public static bool paused {
