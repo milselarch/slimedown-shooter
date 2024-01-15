@@ -43,14 +43,7 @@ public class UIManager: MonoBehaviour {
         }
 
         GameState.paused = !GameState.paused;
-        
-        if (GameState.paused) {
-            pauseScreen.SetActive(true);
-            Time.timeScale = 1.0f;
-        } else {
-            pauseScreen.SetActive(false);
-            Time.timeScale = 0.0f;   
-        }
+        pauseScreen.SetActive(GameState.paused);
     }
 
     public void OnPlayerHealthUpdate() {

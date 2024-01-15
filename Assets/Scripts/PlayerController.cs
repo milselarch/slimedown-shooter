@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        if (_dead) { return; }
+        if (_dead || GameState.paused) { return; }
         
         // this.canFire = true;
         var xMovement = 0.0f;
