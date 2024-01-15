@@ -1,0 +1,28 @@
+#root {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#PauseButton {
+    align-self: center;
+    -unity-font-definition: url("/Assets/Fonts/pixel-unicode.ttf");
+    padding: 20px;
+    padding-left: 60px;
+    padding-right: 60px;
+    font-size: 100px;
+
+    border-radius: 5px; /* rounded corners */
+    border-width: 0; /* border size */
+    border-color: #708090; /* grey border */
+}
+
+.button {
+    background-color: white;
+}
+.button:hover {
+    background-color: #B0C4DE; /* slightly lighter blue on hover */
+}
+.button:active {
+    background-color: #6C7B8B; /* even darker blue when pressed */
+}
