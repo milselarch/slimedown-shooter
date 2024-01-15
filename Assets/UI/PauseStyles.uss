@@ -4,25 +4,29 @@
     justify-content: center;
 }
 
-#PauseButton {
+#MainMenuButton {
     align-self: center;
     -unity-font-definition: url("/Assets/Fonts/pixel-unicode.ttf");
     padding: 20px;
     padding-left: 60px;
     padding-right: 60px;
-    font-size: 100px;
+    
+    font-size: 70px;
+    -unity-font-style: normal;
 
     border-radius: 5px; /* rounded corners */
-    border-width: 0; /* border size */
-    border-color: #708090; /* grey border */
 }
 
-.button {
+Button {
     background-color: white;
+    border-width: 4px; /* border size */
+    border-color: white;
 }
-.button:hover {
-    background-color: #B0C4DE; /* slightly lighter blue on hover */
+Button:hover {
+    background-color: #BABD8D; /* slightly lighter blue on hover */
 }
-.button:active {
-    background-color: #6C7B8B; /* even darker blue when pressed */
+Button:active {
+    background-color: #9B944C; /* even darker blue when pressed */
+    border-color: #9B944C;
+    color: #FFF;
 }
