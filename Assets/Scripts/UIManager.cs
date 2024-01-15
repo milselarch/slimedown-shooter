@@ -47,8 +47,7 @@ public class UIManager: MonoBehaviour {
     }
 
     public void OnPlayerHealthUpdate() {
-        if (health.Value == 0)
-        {
+        if (health.Value == 0) {
             gameOverScreen.SetActive(true);
         }
     }
