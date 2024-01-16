@@ -1,7 +1,10 @@
 using UnityEngine;
 
-public static class GameState {
+public class GameState: MonoBehaviour {
     private static bool _paused = false;
+    public static IntVariable health;
+
+    public static bool dead => health.Value <= 0;
 
     public static bool paused {
         get => _paused;

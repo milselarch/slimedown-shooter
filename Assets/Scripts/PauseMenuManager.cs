@@ -26,5 +26,15 @@ public class PauseMenuManager: MonoBehaviour {
     private void OnEnable() {
         StartCoroutine(LaunchInitializer());
     }
+    
+    public void TogglePause() {
+        if (GameState.dead) {
+            // don't pause game if game over
+            return;
+        }
+
+        GameState.paused = !GameState.paused;
+        pauseScreen.SetActive(GameState.paused);
+    }
 }
 

@@ -36,18 +36,8 @@ public class UIManager: MonoBehaviour {
         StartCoroutine(TimerUpdateLoop());
     }
 
-    public void TogglePause() {
-        if (gameOverScreen.activeSelf) {
-            // don't pause game if game over
-            return;
-        }
-
-        GameState.paused = !GameState.paused;
-        pauseScreen.SetActive(GameState.paused);
-    }
-
     public void OnPlayerHealthUpdate() {
-        if (health.Value == 0) {
+        if (GameState.dead) {
             gameOverScreen.SetActive(true);
         }
     }

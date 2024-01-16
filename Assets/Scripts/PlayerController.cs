@@ -38,10 +38,10 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody2D _playerBody;
     private float _lastCharge = 0.0f;
     private bool _charging = false;
-    private bool _dead = false;
 
     // Start is called before the first frame update
     void Start() {
+        GameState.health = health;
         // Set to be 30 FPS
         Application.targetFrameRate =  30;
         
@@ -49,12 +49,6 @@ public class PlayerController : MonoBehaviour {
         _playerSprite = GetComponent<SpriteRenderer>();
         _playerBody = GetComponent<Rigidbody2D>();
         GameRestart();
-    }
-
-    public void OnHealthUpdate() {
-        if (health.Value <= 0) {
-            _dead = true;
-        }   
     }
 
     public Vector2 GetPosition2D() {
@@ -67,11 +61,11 @@ public class PlayerController : MonoBehaviour {
         _faceRight = true;
         _playerSprite.flipX = false;
         _charging = false;
-        _dead = false;
+        // TODO: reset health
     }
 
     void FixedUpdate() {
-        if (_dead || GameState.paused) { return; }
+        if (GameState.dead || GameState.paused) { return; }
         
         // this.canFire = true;
         var xMovement = 0.0f;
@@ -89,7 +83,7 @@ public class PlayerController : MonoBehaviour {
     }
     
     public void OnMouseClick(InputAction.CallbackContext context) {
-        if (_dead || GameState.paused) { return; }
+        if (GameState.dead || GameState.paused) { return; }
 
         // Check if the mouse button was pressed
         if (!context.started) { return; }
@@ -126,7 +120,7 @@ public class PlayerController : MonoBehaviour {
     public void OnChargeAttack(InputAction.CallbackContext context) {
         if (!context.started) { return; }
         if (_charging) { return; }
-        if (_dead) { return; }
+        if (GameState.dead) { return; }
 
         var timestamp = Time.time;
         var timeSinceLastCharge = timestamp - _lastCharge;
