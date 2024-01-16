@@ -20,7 +20,6 @@ public class UIManager: MonoBehaviour {
     public TextMeshProUGUI countdownText;
 
     public GameObject gameOverScreen;
-    public GameObject pauseScreen;
 
     private bool _destroyed = false;
 	private bool _exiting = false;
@@ -32,7 +31,6 @@ public class UIManager: MonoBehaviour {
         UpdateUI();
 
         gameOverScreen.SetActive(false);
-        pauseScreen.SetActive(false);
         StartCoroutine(TimerUpdateLoop());
     }
 
