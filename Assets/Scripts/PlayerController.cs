@@ -38,12 +38,11 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody2D _playerBody;
     private float _lastCharge = 0.0f;
     private bool _charging = false;
-
+    
     // Start is called before the first frame update
     void Start() {
         GameState.health = health;
-        // Set to be 30 FPS
-        Application.targetFrameRate =  30;
+        Application.targetFrameRate = 60;
         
         // assign mario sprite object
         _playerSprite = GetComponent<SpriteRenderer>();
@@ -118,9 +117,9 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void OnChargeAttack(InputAction.CallbackContext context) {
+        if (GameState.dead || GameState.paused) { return; }
         if (!context.started) { return; }
         if (_charging) { return; }
-        if (GameState.dead) { return; }
 
         var timestamp = Time.time;
         var timeSinceLastCharge = timestamp - _lastCharge;
@@ -148,6 +147,8 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void OnHorizontalMoveAction(InputAction.CallbackContext context) {
+        if (GameState.dead || GameState.paused) { return; }
+        
         if (context.started) {
             var faceRight = context.ReadValue<float>() > 0 ? 1 : -1;
             this._faceRight = faceRight == 1;
@@ -160,6 +161,8 @@ public class PlayerController : MonoBehaviour {
     }
     
     public void OnVerticalMoveAction(InputAction.CallbackContext context) {
+        if (GameState.dead || GameState.paused) { return; }
+
         if (context.started) {
             var faceTop = context.ReadValue<float>() > 0 ? 1 : -1;
             _verticalDirection = faceTop;
