@@ -6,8 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
-public class UIManager : MonoBehaviour
-{
+public class UIManager: MonoBehaviour {
     public IntVariable gameScore;
     public IntVariable health;
     public IntVariable waveCounter;
@@ -20,14 +19,13 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI waveText;
     public TextMeshProUGUI countdownText;
 
-    [FormerlySerializedAs("gameOverCanvas")] public GameObject gameOverScreen;
+    public GameObject gameOverScreen;
 
     private bool _destroyed = false;
-	private bool exiting = false;
+	private bool _exiting = false;
     
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         gameScore.SetValue(0);
         health.SetValue(100);
         UpdateUI();
@@ -36,24 +34,23 @@ public class UIManager : MonoBehaviour
         StartCoroutine(TimerUpdateLoop());
     }
 
-    public void OnPlayerHealthUpdate()
-    {
-        if (health.Value == 0)
-        {
+    public void OnPlayerHealthUpdate() {
+        if (GameState.dead) {
             gameOverScreen.SetActive(true);
         }
     }
 
     public void ReturnToMainMenu() {
-        if (!this.exiting) {
-            this.exiting = true;
-            StartCoroutine(FadeAndExit());
+        if (this._exiting) {
+            return;
         }
+
+        this._exiting = true;
+        StartCoroutine(FadeAndExit());
     }
     
-    IEnumerator FadeAndExit()
-    {
-        for (float alpha = 1f; alpha >= -0.05f; alpha -= 0.05f) {
+    IEnumerator FadeAndExit() {
+        for (var alpha = 1f; alpha >= -0.05f; alpha -= 0.05f) {
             gameOverCanvas.alpha = alpha;
             yield return new WaitForSecondsRealtime(0.1f);
         }
@@ -62,15 +59,12 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadSceneAsync("Menu", LoadSceneMode.Single);
     }
     
-    private void OnDestroy()
-    {
+    private void OnDestroy() {
         _destroyed = true;
     }
 
-    IEnumerator TimerUpdateLoop()
-    {
-        while (!_destroyed)
-        {
+    private IEnumerator TimerUpdateLoop() {
+        while (!_destroyed) {
             yield return new WaitForSeconds(0.3f);
             UpdateTimer();
         }
@@ -78,23 +72,22 @@ public class UIManager : MonoBehaviour
         yield return null;
     }
 
-    public void UpdateTimer() {
-        int timestampNow = (int) Time.time;
-        int allowedWaveDuration = 20 + 5 * waveCounter.Value;
-        int durationPassed = timestampNow - waveTimestamp.Value; 
-        int durationLeft = Math.Max(
+    private void UpdateTimer() {
+        var timestampNow = (int) Time.time;
+        var allowedWaveDuration = 20 + 5 * waveCounter.Value;
+        var durationPassed = timestampNow - waveTimestamp.Value; 
+        var durationLeft = Math.Max(
             allowedWaveDuration - durationPassed, 0
         );
         
-        int minutes = durationLeft / 60;
-        int seconds = durationLeft % 60;
+        var minutes = durationLeft / 60;
+        var seconds = durationLeft % 60;
         countdownText.SetText(
             minutes + ":" + seconds.ToString("00")
         );
     }
 
-    public void UpdateUI()
-    {
+    public void UpdateUI() {
         // Debug.Log("HEALTH_UPDATE");
         gameScoreText.SetText("SCORE: " + gameScore.Value);
         healthText.SetText("HEALTH: " + health.Value);

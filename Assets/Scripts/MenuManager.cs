@@ -66,7 +66,7 @@ public class MenuManager: MonoBehaviour {
     private void SetHighScore() {
         // set highscore
         highscoreText.GetComponent<TextMeshProUGUI>().text = (
-            "TOP- " + gameScore.previousHighestValue.ToString("D6")
+            "HIGHSCORE: " + gameScore.previousHighestValue.ToString("D6")
         );
     }
 }
