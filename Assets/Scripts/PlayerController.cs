@@ -38,12 +38,11 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody2D _playerBody;
     private float _lastCharge = 0.0f;
     private bool _charging = false;
-    private bool _dead = false;
-
+    
     // Start is called before the first frame update
     void Start() {
-        // Set to be 30 FPS
-        Application.targetFrameRate =  30;
+        GameState.health = health;
+        Application.targetFrameRate = 60;
         
         // assign mario sprite object
         _playerSprite = GetComponent<SpriteRenderer>();
@@ -51,14 +50,8 @@ public class PlayerController : MonoBehaviour {
         GameRestart();
     }
 
-    public void OnHealthUpdate() {
-        if (health.Value <= 0) {
-            _dead = true;
-        }   
-    }
-
     public Vector2 GetPosition2D() {
-        Vector3 position = this.transform.position;
+        var position = this.transform.position;
         return new Vector2(position.x, position.y);
     }
 
@@ -67,11 +60,11 @@ public class PlayerController : MonoBehaviour {
         _faceRight = true;
         _playerSprite.flipX = false;
         _charging = false;
-        _dead = false;
+        // TODO: reset health
     }
 
     void FixedUpdate() {
-        if (_dead) { return; }
+        if (GameState.dead || GameState.paused) { return; }
         
         // this.canFire = true;
         var xMovement = 0.0f;
@@ -84,12 +77,12 @@ public class PlayerController : MonoBehaviour {
             yMovement = this.speed * this._verticalDirection;
         }
         
-        Vector2 movement = new Vector2(xMovement, yMovement);
+        var movement = new Vector2(xMovement, yMovement);
         _playerBody.AddForce(movement);
     }
     
     public void OnMouseClick(InputAction.CallbackContext context) {
-        if (_dead) { return; }
+        if (GameState.dead || GameState.paused) { return; }
 
         // Check if the mouse button was pressed
         if (!context.started) { return; }
@@ -124,9 +117,9 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void OnChargeAttack(InputAction.CallbackContext context) {
+        if (GameState.dead || GameState.paused) { return; }
         if (!context.started) { return; }
         if (_charging) { return; }
-        if (_dead) { return; }
 
         var timestamp = Time.time;
         var timeSinceLastCharge = timestamp - _lastCharge;
@@ -154,6 +147,8 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void OnHorizontalMoveAction(InputAction.CallbackContext context) {
+        if (GameState.dead || GameState.paused) { return; }
+        
         if (context.started) {
             var faceRight = context.ReadValue<float>() > 0 ? 1 : -1;
             this._faceRight = faceRight == 1;
@@ -165,10 +160,11 @@ public class PlayerController : MonoBehaviour {
         }
     }
     
-    public void OnVerticalMoveAction(InputAction.CallbackContext context)
-    {
+    public void OnVerticalMoveAction(InputAction.CallbackContext context) {
+        if (GameState.dead || GameState.paused) { return; }
+
         if (context.started) {
-            int faceTop = context.ReadValue<float>() > 0 ? 1 : -1;
+            var faceTop = context.ReadValue<float>() > 0 ? 1 : -1;
             _verticalDirection = faceTop;
         }
         if (context.canceled) {
@@ -178,7 +174,7 @@ public class PlayerController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        float velocity = Mathf.Abs(_playerBody.velocity.magnitude);
+        var velocity = Mathf.Abs(_playerBody.velocity.magnitude);
         playerAnimator.SetFloat(SPEED, velocity);
     }
 
