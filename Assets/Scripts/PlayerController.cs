@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        if (GameState.dead || GameState.paused) { return; }
+        if (!GameState.allowPlayerAction) { return; }
         
         // this.canFire = true;
         var xMovement = 0.0f;
@@ -80,22 +80,22 @@ public class PlayerController : MonoBehaviour {
         var movement = new Vector2(xMovement, yMovement);
         _playerBody.AddForce(movement);
     }
-    
-    public void OnMouseClick(InputAction.CallbackContext context) {
-        if (GameState.dead || GameState.paused) { return; }
 
-        // Check if the mouse button was pressed
-        if (!context.started) { return; }
-        // if (!this.canFire) {}
-    
+    private static Vector2 GetMouseDirection() {
         // Get the position of the mouse click relative to the center of the screen
         var mousePosition = Mouse.current.position.ReadValue();
         var center = new Vector2(Screen.width / 2f, Screen.height / 2f);
         var mouseOffset = mousePosition - center;
-
-        // Log the mouse click position relative to the center
-        Debug.Log("Mouse click offset from center: " + mouseOffset);
-        var direction = mouseOffset.normalized;
+        var mouseDirection = mouseOffset.normalized;
+        return mouseDirection;
+    }
+    
+    public void OnMouseClick(InputAction.CallbackContext context) {
+        if (!GameState.allowPlayerAction) { return; }
+        // Check if the mouse button was pressed
+        if (!context.started) { return; }
+        
+        var direction = GetMouseDirection();
         var direction3 = new Vector3(
             direction.x, direction.y, 0.0f
         );
@@ -120,7 +120,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void OnChargeAttack(InputAction.CallbackContext context) {
-        if (GameState.dead || GameState.paused) { return; }
+        if (!GameState.allowPlayerAction) { return; }
         if (!context.started) { return; }
         if (_charging) { return; }
 
@@ -130,15 +130,9 @@ public class PlayerController : MonoBehaviour {
         if (!chargeCooldownComplete) { return; }
 
         _lastCharge = chargeWaitDuration;
-        var faceDirection = this._faceRight ? 1 : -1;
-
-        var chargeDirection = _playerBody.velocity.magnitude > 0 ? 
-            _playerBody.velocity.normalized : 
-            new Vector2(faceDirection, 0.0f);
-
-        _playerBody.velocity = Vector2.zero;
-        chargeDirection.x = Math.Abs(chargeDirection.x) * faceDirection;
+        var chargeDirection = GetMouseDirection();
         _playerBody.AddForce(chargeForce * chargeDirection, ForceMode2D.Impulse);
+        
         playerAnimator.SetTrigger(CHARGING);
         health.Decrement(1, 0);
         playerHealthUpdate.Invoke();
@@ -150,7 +144,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void OnHorizontalMoveAction(InputAction.CallbackContext context) {
-        if (GameState.dead || GameState.paused) { return; }
+        if (!GameState.allowPlayerAction) { return; }
         
         if (context.started) {
             var faceRight = context.ReadValue<float>() > 0 ? 1 : -1;
@@ -164,7 +158,7 @@ public class PlayerController : MonoBehaviour {
     }
     
     public void OnVerticalMoveAction(InputAction.CallbackContext context) {
-        if (GameState.dead || GameState.paused) { return; }
+        if (!GameState.allowPlayerAction) { return; }
 
         if (context.started) {
             var faceTop = context.ReadValue<float>() > 0 ? 1 : -1;
