@@ -6,17 +6,23 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 public class PauseMenuManager : MonoBehaviour {
     public GameObject pauseCanvas;
     public UIDocument pauseUI;
+    
     private Button _playButton;
+    private Button _manuMenuButton;
 
     private void Initialize() {
         var root = pauseUI.rootVisualElement;
         this._playButton = root.Q<Button>("PlayButton");
+        this._manuMenuButton = root.Q<Button>("MainMenuButton");
+            
         Assert.IsNotNull(this._playButton);
         this._playButton.clickable.clicked += OnPlayButtonClicked;
+        this._manuMenuButton.clickable.clicked += OnMainMenuButtonClicked;
     }
     
     private void Show() {
@@ -32,6 +38,10 @@ public class PauseMenuManager : MonoBehaviour {
     private void OnPlayButtonClicked() {
         GameState.paused = false;
         Hide();
+    }
+
+    private void OnMainMenuButtonClicked() {
+        SceneManager.LoadSceneAsync("Menu", LoadSceneMode.Single);
     }
     
     private IEnumerator LaunchInitializer() {

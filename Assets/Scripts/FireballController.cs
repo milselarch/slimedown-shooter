@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class FireballController : MonoBehaviour
+public class BlasterShotController : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] private float scaleSpeed = 1.0f;
@@ -33,12 +33,12 @@ public class FireballController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
-    {
+    void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.CompareTag("Enemy")) {
-            // destroy self
-            Destroy(gameObject);
 			collision.gameObject.GetComponent<EnemyController>().Damage();
         }
+        
+        // destroy self
+        Destroy(gameObject);
     }
 }

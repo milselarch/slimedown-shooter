@@ -100,10 +100,13 @@ public class PlayerController : MonoBehaviour {
             direction.x, direction.y, 0.0f
         );
 
+        var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        var rotation = Quaternion.Euler(0, 0, angle);
+        
         var x = Instantiate(
             attackPrefab, 
             transform.position + direction3 * fireBallOffset, 
-            Quaternion.identity
+            rotation
         );
         // Get the Rigidbody component of the instantiated object
         var rb = x.GetComponent<Rigidbody2D>();
