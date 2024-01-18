@@ -5,11 +5,20 @@ using UnityEngine.AI;
 using UnityEngine.Events;
 using System;
 using JetBrains.Annotations;
+using UnityEngine.Assertions;
+using UnityEngine.Serialization;
+using UnityEngine.TextCore;
 
 public class EnemyController: MonoBehaviour {
+	private static readonly int BOUNCE = Animator.StringToHash("bounce");
+	private static readonly int ATTACK = Animator.StringToHash("attack");
+	private static readonly int DEAD = Animator.StringToHash("dead");
+	
+	public Material defaultMaterial;
+	public Material glowMaterial;
+	
     public float jumpForce = 7.0f;
     public float jumpInterval = 1.0f;
-
     public float attackForce = 11.0f;
     public float attackInterval = 2.0f;
     public float attackDistance = 3.0f;
@@ -25,145 +34,143 @@ public class EnemyController: MonoBehaviour {
 
     public Animator enemyAnimator;
 
-    private NavMeshAgent Agent;
-    private Rigidbody2D enemyBody;
-    private GameObject player;
-    private float lastJump = -10.0f;
-    private float lastAttack = -10.0f;
-	private bool dead = false;
-	private int health = 0;
+    private NavMeshAgent _agent;
+    private Rigidbody2D _enemyBody;
+    private GameObject _player;
+    private float _lastJump = -10.0f;
+    private float _lastAttack = -10.0f;
+	private bool _dead = false;
+	private int _health = 0;
 
-    // Start is called before the first frame update
+	// Start is called before the first frame update
     void Start() {
-	    Agent = GetComponent<NavMeshAgent>();
-	    Agent.updateRotation = false;
-	    Agent.updateUpAxis = false;
-	    Agent.isStopped = true;
+	    _agent = GetComponent<NavMeshAgent>();
+	    _agent.updateRotation = false;
+	    _agent.updateUpAxis = false;
+	    _agent.isStopped = true;
 	    
-        enemyBody = GetComponent<Rigidbody2D>();
-        player = GameObject.FindGameObjectWithTag("Player");
+        _enemyBody = GetComponent<Rigidbody2D>();
+        _player = GameObject.FindGameObjectWithTag("Player");
 		GameRestart();
     }
 
-    public void GameRestart() {
-		this.health = this.maxHealth;
-        enemyAnimator.SetBool("dead", false);
-        lastJump = GetTimestamp();
-        lastAttack = lastJump;
-		dead = false;
+    private void GameRestart() {
+		this._health = this.maxHealth;
+		GetComponent<SpriteRenderer>().material = defaultMaterial;
+        enemyAnimator.SetBool(DEAD, false);
+        
+        _lastJump = GetTimestamp();
+        _lastAttack = _lastJump;
+		_dead = false;
     }
 
     float GetTimestamp() {
         return Time.time;
     }
 
-    public void Damage() {
-	    this.Damage(1);
-    }
-    
-	// inflict damage to the enemy
-	public void Damage(int damage) {
-		if (health == 0) {
+    // inflict damage to the enemy
+	public void Damage(int damage = 1) {
+		if (_health == 0) {
 			Destroy(gameObject);
 			return;
-		}
-
-		if (health > 0) {
-			health = Math.Max(health - damage, 0);
 		} 
+		
+		Assert.IsTrue(_health > 0);
+		_health = Math.Max(_health - damage, 0);
 		
 		gameScore.Increment();
 		scoreUpdate.Invoke();
 
-		if (health == 0) {
+		if (_health == 0) {
+			GetComponent<SpriteRenderer>().material = glowMaterial;
 			enemyAnimator.SetBool("dead", true);
-			transform.localScale = Vector3.one;
 			
+			transform.localScale = Vector3.one;
 			onEnemyKill.Invoke();
 			UpdateCollider();
-			dead = true;
+			_dead = true;
 		}
 		
 		// adjust enemy size based on their current health
-		float newScale = smallestScale + (
-			(1.0f - smallestScale) * ((float) health) / maxHealth
+		var newScale = smallestScale + (
+			(1.0f - smallestScale) * ((float) _health) / maxHealth
 		);
 		transform.localScale = Vector3.one * newScale;
 		UpdateCollider();
 	}
 
-	void UpdateCollider() {
-		BoxCollider2D col = gameObject.GetComponent<BoxCollider2D>();
-        if (col) {
-			// adjust bounding box to fit new sprite scale accordingly
-			col.size = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.size;
-			col.offset = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.center;
-		}
+	private void UpdateCollider() {
+		var col = gameObject.GetComponent<BoxCollider2D>();
+		if (!col) { return; }
+
+		// adjust bounding box to fit new sprite scale accordingly
+		col.size = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.size;
+		col.offset = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.center;
 	}
 
 	private void OnCollisionEnter2D(Collision2D other) {
 		if (
 			(other.gameObject.CompareTag("Player"))
 		) {
-			if (health == 0) {
+			if (_health == 0) {
 				Destroy(gameObject);
 			}
 		}
 	}
 
 	public void AttemptSelfDestruct() {
-		if (health == 0) {
+		if (_health == 0) {
 			Destroy(gameObject);
 		}
 	}
 
 	public int GetEnemyHealth() {
-		return this.health;
+		return this._health;
 	}
 
 	public bool IsAlive() {
-		return this.health > 0;
+		return this._health > 0;
 	}
 
     void FixedUpdate() {
-		if (dead) { return; }
+		if (_dead) { return; }
 
-		var playerController = player.GetComponent<PlayerController>();
-		Vector2 playerPosition = playerController.GetPosition2D();
+		var playerController = _player.GetComponent<PlayerController>();
+		var playerPosition = playerController.GetPosition2D();
 
-		NavMeshPath path = new NavMeshPath();
-		bool hasNavMeshPath = Agent.CalculatePath(playerPosition, path);
-		Vector3 playerVectorDist = player.transform.position - transform.position;
-		Vector3 movementDirection = playerVectorDist;
+		var path = new NavMeshPath();
+		var hasNavMeshPath = _agent.CalculatePath(playerPosition, path);
+		var playerVectorDist = _player.transform.position - transform.position;
+		var movementDirection = playerVectorDist;
 			
 		if (hasNavMeshPath && (path.corners.Length > 1)) {
 			// use NavMeshPlus AI to calculate movement direction
 			movementDirection = path.corners[1] - transform.position;
 		}
 		
-        float timestampNow = GetTimestamp();
-        float jumpDurationPassed = timestampNow - lastJump;
-        float attackDurationPassed = timestampNow - lastAttack;
-        float alignemnt = Vector3.Dot(
+		var timestampNow = GetTimestamp();
+        var jumpDurationPassed = timestampNow - _lastJump;
+        var attackDurationPassed = timestampNow - _lastAttack;
+        var alignment = Vector3.Dot(
 	        playerVectorDist.normalized, movementDirection.normalized
 	    );
 
-	    bool hasLineOfSight = alignemnt >= 0.99;
-        Vector3 playerDirection = movementDirection.normalized;
-        float playerDistance = movementDirection.magnitude;
+	    var hasLineOfSight = alignment >= 0.99;
+	    var playerDirection = movementDirection.normalized;
+        var playerDistance = movementDirection.magnitude;
         // Debug.Log("PLAYER_DISTANCE= " + playerDistance);
 
         if (hasLineOfSight && (playerDistance < this.attackDistance)) {
-            if (attackDurationPassed > attackInterval) {
-                lastAttack = timestampNow;
-                enemyBody.AddForce(playerDirection * attackForce, ForceMode2D.Impulse);
-                enemyAnimator.SetTrigger("attack");
-            }
+	        if (!(attackDurationPassed > attackInterval)) { return; }
+	        
+	        _lastAttack = timestampNow;
+	        _enemyBody.AddForce(playerDirection * attackForce, ForceMode2D.Impulse);
+	        enemyAnimator.SetTrigger(ATTACK);
         } else if (jumpDurationPassed > jumpInterval) {
 			// jump towards the player
-            lastJump = timestampNow;
-            enemyBody.AddForce(playerDirection * jumpForce, ForceMode2D.Impulse);
-            enemyAnimator.SetTrigger("bounce");
+            _lastJump = timestampNow;
+            _enemyBody.AddForce(playerDirection * jumpForce, ForceMode2D.Impulse);
+            enemyAnimator.SetTrigger(BOUNCE);
         }
     }
 
