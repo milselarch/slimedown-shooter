@@ -11,9 +11,9 @@ public class ParallaxScroller : MonoBehaviour {
     public Renderer[] layers;
     public float[] speedMultiplier;
     // parallax scroll speed for when player is moving
-    public float scrollSpeedScale = 1.0f;
+    public float scrollSpeedScale = 0.1f;
     // parallax scroll speed based on time passed
-    public float xTimeSpeedScale = 0.005f;
+    public float xTimeSpeedScale = 0.3f;
     public float yTimeSpeedScale = 0.00f;
 
     public Transform player;

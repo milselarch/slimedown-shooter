@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/StatsOverlayStyles.uss?fileID=7433441132597879392&amp;guid=45ada97d74cb834f88ab00b540502311&amp;type=3#StatsOverlayStyles" />
+    <ui:VisualElement name="Wrapper" style="flex-grow: 1;">
+        <ui:VisualElement name="StatsWrapper">
+            <ui:Label tabindex="-1" text="SCORE: 0" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Score" />
+            <ui:Label tabindex="-1" text="WAVE 1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="WaveCounter" />
+            <ui:Label tabindex="-1" text="HEALTH: 100" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Health" />
+        </ui:VisualElement>
+        <ui:Label tabindex="-1" text="0:00" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Timer" />
+    </ui:VisualElement>
+</ui:UXML>
