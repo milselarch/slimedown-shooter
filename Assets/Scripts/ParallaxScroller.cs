@@ -12,8 +12,8 @@ public class ParallaxScroller : MonoBehaviour {
     public float scrollSpeedScale = 1.0f;
     public Transform player;
     public Transform mainCamera;
-    
-    private Vector3 _prevPlayerPosition;
+
+    private Vector3 _startPlayerPosition;
     private Vector3 _prevCameraPosition;
     private Vector2[] _offset;
 
@@ -24,10 +24,18 @@ public class ParallaxScroller : MonoBehaviour {
         }
         
         UpdatePositions();
+        Restart();
+    }
+
+    private void Restart() {
+        _startPlayerPosition = GetPlayerPosition();
+    }
+
+    private Vector3 GetPlayerPosition() {
+        return player.transform.position;
     }
 
     private void UpdatePositions() {
-        _prevPlayerPosition = player.transform.position;
         _prevCameraPosition = mainCamera.transform.position;
     }
 
@@ -43,16 +51,11 @@ public class ParallaxScroller : MonoBehaviour {
         
         if (Math.Max(Math.Abs(xOffset), Math.Abs(yOffset)) > THRESHOLD) {
             for (var i = 0; i < layers.Length; i++) {
-                if (_offset[i].x > 1.0f || _offset[i].x < -1.0f) {
-                    _offset[i].x = 0.0f; // reset offset
-                }
-                if (_offset[i].y > 1.0f || _offset[i].y < -1.0f) {
-                    _offset[i].y = 0.0f; // reset offset
-                }
-
-                var newOffset = player.transform.position - _prevPlayerPosition;
+                var newOffset = GetPlayerPosition() - _startPlayerPosition;
                 var scale = speedMultiplier[i] * scrollSpeedScale;
-                _offset[i] += scale * ToVector2(newOffset);
+                var displacement = scale * ToVector2(newOffset);
+                
+                _offset[i] = new Vector2(displacement.x % 1.0f, displacement.y % 1.0f);
                 layers[i].material.mainTextureOffset = _offset[i];
             }
         }
