@@ -83,7 +83,7 @@ public class EnemyController: MonoBehaviour {
 
 		if (_health == 0) {
 			GetComponent<SpriteRenderer>().material = glowMaterial;
-			enemyAnimator.SetBool("dead", true);
+			enemyAnimator.SetBool(DEAD, true);
 			
 			transform.localScale = Vector3.one;
 			onEnemyKill.Invoke();
@@ -109,12 +109,12 @@ public class EnemyController: MonoBehaviour {
 	}
 
 	private void OnCollisionEnter2D(Collision2D other) {
-		if (
-			(other.gameObject.CompareTag("Player"))
-		) {
-			if (_health == 0) {
-				Destroy(gameObject);
-			}
+		if ((!other.gameObject.CompareTag("Player"))) {
+			return;
+		}
+
+		if (_health == 0) {
+			Destroy(gameObject);
 		}
 	}
 
