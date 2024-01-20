@@ -9,7 +9,7 @@ public class IntVariable: Variable<int> {
     private readonly List<ValueChangeCallback> _callbacks = new();
 
     public override void SetValue(int value) {
-        var prevValue = this.Value;
+        var prevValue = this._value;
         if (value > previousHighestValue) {
             previousHighestValue = value;
         }
@@ -19,13 +19,14 @@ public class IntVariable: Variable<int> {
     }
 
     private void TriggerCallbacks(int prevValue, int newValue) {
-        if (prevValue != newValue) { return; }
+        if (prevValue == newValue) { return; }
         foreach (var callback in _callbacks) {
             callback(prevValue, newValue);
         }
     }
 
     public void AttachCallback(ValueChangeCallback callback) {
+        Debug.Log("ATTACHED");
         _callbacks.Add(callback);
     }
 
@@ -49,7 +50,7 @@ public class IntVariable: Variable<int> {
     }
 
     public void ApplyChange(int amount) {
-        var prevValue = this.Value;
+        var prevValue = this._value;
         this.Value += amount;
         TriggerCallbacks(prevValue, _value);
     }

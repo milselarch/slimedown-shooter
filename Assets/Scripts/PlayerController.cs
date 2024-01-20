@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour {
     private static readonly int CHARGING = Animator.StringToHash("charging");
     private static readonly int SPEED = Animator.StringToHash("speed");
     private const float DEFAULT_STAMP = -1.0f;
+    private const float TOLERANCE = 0.001f;
     
     public float maxSpeed = 20;
     public float impulseForce = 5.0f;
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviour {
     public float fireBallOffset = 1.0f;
     public float chargeWaitDuration = 1.0f;
     public float chargeForce = 5.0f;
+    public float damageTintDuration = 0.5f;
     public GameObject attackPrefab;
     public Animator playerAnimator;
     
@@ -49,7 +51,6 @@ public class PlayerController : MonoBehaviour {
         GameState.health = health;
         Application.targetFrameRate = 60;
         StartCoroutine(FadeDamageEffect());
-        health.AttachCallback(OnDamageTaken);
         
         // assign mario sprite object
         _playerSprite = GetComponent<SpriteRenderer>();
@@ -59,14 +60,21 @@ public class PlayerController : MonoBehaviour {
     }
 
     private IEnumerator FadeDamageEffect() {
+        yield return null;
+
         while (!_destroyed) {
             yield return null;
-        }
-    }
-
-    private void OnDamageTaken(int prevHealth, int newHealth) {
-        if (newHealth < prevHealth) {
-            _lastDamagedTime = Time.time;
+            if (Math.Abs(_lastDamagedTime - DEFAULT_STAMP) < TOLERANCE) {
+                continue;                
+            }
+            var timePassed = Time.time - _lastDamagedTime;
+            if (timePassed > damageTintDuration) {
+                continue;
+            }
+            
+            _playerSprite.color = Color.Lerp(
+                damageTint, _originalColor, timePassed / damageTintDuration
+            );
         }
     }
 
@@ -240,8 +248,13 @@ public class PlayerController : MonoBehaviour {
             scoreUpdate.Invoke();
         } else {
             // slime deals 5 damage to player
-            health.Decrement(5, 0);
-            playerHealthUpdate.Invoke();
+            ReceiveSlimeDamage(5);
         }
+    }
+
+    private void ReceiveSlimeDamage(int amount) {
+        health.Decrement(amount, 0);
+        _lastDamagedTime = Time.time;
+        playerHealthUpdate.Invoke();
     }
 }
