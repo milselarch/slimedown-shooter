@@ -25,6 +25,10 @@ Label {
     font-size: 50px;
     color: white;
 }
+Label.outlined {
+    -unity-text-outline-color: #444;
+    -unity-text-outline-width: 22px;
+}
 
 Label#Health, Label#Score {
     width: 350px;
