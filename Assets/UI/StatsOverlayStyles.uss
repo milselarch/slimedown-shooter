@@ -1,0 +1,50 @@
+#Wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    margin-top: 35px;
+}
+
+#StatsWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-grow: 0;
+    flex-shrink: 1;
+}
+
+#StatsWrapper > Label {
+    justify-content: center;
+    align-self: center;
+    flex-shrink: 1;
+}
+
+Label {
+    -unity-font-definition: url("/Assets/Fonts/pixel-unicode.ttf");
+    font-size: 50px;
+    color: white;
+}
+Label.outlined {
+    -unity-text-outline-color: #444;
+    -unity-text-outline-width: 22px;
+}
+
+Label#Health, Label#Score {
+    width: 350px;
+    -unity-text-align: middle-center;
+}
+
+Label#WaveCounter {
+    -unity-text-align: middle-center;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+}
+
+Label#Timer {
+    margin-bottom: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -20px;
+}
