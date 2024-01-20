@@ -1,10 +1,9 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
+using UnityEngine.UIElements;
+using TMPro;
 
 public class UIManager: MonoBehaviour {
     public IntVariable gameScore;
@@ -14,18 +13,25 @@ public class UIManager: MonoBehaviour {
     public IntVariable waveTimestamp;
     public CanvasGroup gameOverCanvas;
 
-    public TextMeshProUGUI gameScoreText;
-    public TextMeshProUGUI healthText;
-    public TextMeshProUGUI waveText;
-    public TextMeshProUGUI countdownText;
-
+    public UIDocument statsUI;
     public GameObject gameOverScreen;
 
+    private Label _scoreText;
+    private Label _waveText;
+    private Label _healthText;
+    private Label _countdownText;
+    
     private bool _destroyed = false;
 	private bool _exiting = false;
     
     // Start is called before the first frame update
     void Start() {
+        var root = statsUI.rootVisualElement;
+        this._scoreText = root.Q<Label>("Score");
+        this._waveText = root.Q<Label>("WaveCounter");
+        this._healthText = root.Q<Label>("Health");
+        this._countdownText = root.Q<Label>("Timer");
+        
         gameScore.SetValue(0);
         health.SetValue(100);
         UpdateUI();
@@ -82,22 +88,14 @@ public class UIManager: MonoBehaviour {
         
         var minutes = durationLeft / 60;
         var seconds = durationLeft % 60;
-        countdownText.SetText(
-            minutes + ":" + seconds.ToString("00")
-        );
+        _countdownText.text = minutes + ":" + seconds.ToString("00");
     }
 
     public void UpdateUI() {
         // Debug.Log("HEALTH_UPDATE");
-        gameScoreText.SetText("SCORE: " + gameScore.Value);
-        healthText.SetText("HEALTH: " + health.Value);
-        waveText.SetText("WAVE: " + waveCounter.Value);
+        _scoreText.text = "SCORE: " + gameScore.Value;
+        _waveText.text = "WAVE: " + waveCounter.Value;
+        _healthText.text = "HEALTH: " + health.Value;
         UpdateTimer();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
