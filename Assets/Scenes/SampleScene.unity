@@ -874,7 +874,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 166711790}
   m_CullTransparentMesh: 1
---- !u!21 &354892995
+--- !u!21 &244485909
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 0
@@ -26449,7 +26449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 354892995}
+  m_Material: {fileID: 244485909}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -31543,7 +31543,7 @@ MonoBehaviour:
   m_PanelSettings: {fileID: 11400000, guid: c6ab2668072da4fec9918711cc880e5b, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: 2c66368638134fd5ca677c05bd05510f, type: 3}
-  m_SortingOrder: 0
+  m_SortingOrder: 11
 --- !u!1 &1707421918
 GameObject:
   m_ObjectHideFlags: 0
