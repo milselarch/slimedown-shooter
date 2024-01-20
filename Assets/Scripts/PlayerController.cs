@@ -10,19 +10,21 @@ using TMPro;
 public class PlayerController : MonoBehaviour {
     private static readonly int CHARGING = Animator.StringToHash("charging");
     private static readonly int SPEED = Animator.StringToHash("speed");
-
+    private const float DEFAULT_STAMP = -1.0f;
+    
     public float maxSpeed = 20;
     public float impulseForce = 5.0f;
     public float speed = 10;
     public float fireBallOffset = 1.0f;
     public float chargeWaitDuration = 1.0f;
-    public GameObject attackPrefab;
     public float chargeForce = 5.0f;
+    public GameObject attackPrefab;
     public Animator playerAnimator;
     
     // track and manage player's health and game score
     public IntVariable health;
     public IntVariable gameScore;
+    public Color damageTint;
 
     public UnityEvent scoreUpdate;
     public UnityEvent playerHealthUpdate;
@@ -36,18 +38,40 @@ public class PlayerController : MonoBehaviour {
     // keep track of which side the mario sprite is facing
     private SpriteRenderer _playerSprite;
     private Rigidbody2D _playerBody;
+    private Color _originalColor;
+    private float _lastDamagedTime = DEFAULT_STAMP;
     private float _lastCharge = 0.0f;
     private bool _charging = false;
+    private bool _destroyed = false;
     
     // Start is called before the first frame update
-    void Start() {
+    private void Start() {
         GameState.health = health;
         Application.targetFrameRate = 60;
+        StartCoroutine(FadeDamageEffect());
+        health.AttachCallback(OnDamageTaken);
         
         // assign mario sprite object
         _playerSprite = GetComponent<SpriteRenderer>();
         _playerBody = GetComponent<Rigidbody2D>();
+        _originalColor = _playerSprite.color;
         GameRestart();
+    }
+
+    private IEnumerator FadeDamageEffect() {
+        while (!_destroyed) {
+            yield return null;
+        }
+    }
+
+    private void OnDamageTaken(int prevHealth, int newHealth) {
+        if (newHealth < prevHealth) {
+            _lastDamagedTime = Time.time;
+        }
+    }
+
+    private void OnDestroy() {
+        _destroyed = true;
     }
 
     public Vector2 GetPosition2D() {
@@ -55,7 +79,7 @@ public class PlayerController : MonoBehaviour {
         return new Vector2(position.x, position.y);
     }
 
-    void GameRestart() {
+    private void GameRestart() {
         // reset sprite direction
         _faceRight = true;
         _playerSprite.flipX = false;
@@ -63,7 +87,7 @@ public class PlayerController : MonoBehaviour {
         // TODO: reset health
     }
 
-    void FixedUpdate() {
+    private void FixedUpdate() {
         if (!GameState.allowPlayerAction) { return; }
         
         // this.canFire = true;
@@ -170,7 +194,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
+    private void Update() {
         var velocity = Mathf.Abs(_playerBody.velocity.magnitude);
         playerAnimator.SetFloat(SPEED, velocity);
     }
