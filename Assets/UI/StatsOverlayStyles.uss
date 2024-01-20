@@ -26,8 +26,8 @@ Label {
     color: white;
 }
 Label.outlined {
-    -unity-text-outline-color: #444;
-    -unity-text-outline-width: 22px;
+    -unity-text-outline-color: #666;
+    -unity-text-outline-width: 20px;
 }
 
 Label#Health, Label#Score {
