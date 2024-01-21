@@ -39,7 +39,7 @@ public class PauseMenuManager : MonoBehaviour {
     }
     
     private void OnPlayButtonClicked() {
-        GameState.paused = false;
+        GameState.Paused = false;
         Hide();
     }
 
@@ -60,13 +60,13 @@ public class PauseMenuManager : MonoBehaviour {
     }
     
     public void TogglePause(InputAction.CallbackContext context) {
-        if (GameState.dead) {
+        if (GameState.Dead) {
             // don't pause game if game over
             return;
         }
 
-        GameState.paused = !GameState.paused;
-        if (GameState.paused) {
+        GameState.Paused = !GameState.Paused;
+        if (GameState.Paused) {
             Show();
         } else {
             Hide();
