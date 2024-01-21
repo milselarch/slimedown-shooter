@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using TMPro;
 using UnityEngine.Assertions;
+using Cursor = UnityEngine.Cursor;
 
 
 internal class StatsOverlay {
@@ -122,9 +123,9 @@ public class UIManager : MonoBehaviour {
     }
 
     public void OnPlayerHealthUpdate() {
-        if (GameState.dead) {
-            gameOverScreen.SetActive(true);
-        }
+        if (!GameState.dead) return;
+        gameOverScreen.SetActive(true);
+        Cursor.visible = true;
     }
 
     public void ReturnToMainMenu() {
