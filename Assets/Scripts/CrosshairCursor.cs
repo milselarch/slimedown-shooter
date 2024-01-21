@@ -29,7 +29,7 @@ public class CrosshairCursor : MonoBehaviour {
         crosshairTransform.position = position;
 
         var chargeProgress = playerController.GetChargeProgress();
-        Debug.Log("CHARGE_PROGRESS " + chargeProgress);
+        // Debug.Log("CHARGE_PROGRESS " + chargeProgress);
         _renderer.sprite = 
             GameState.IsApproxEqual(chargeProgress, 1.0f) ? 
             _defaultSprite : chargingSprite;

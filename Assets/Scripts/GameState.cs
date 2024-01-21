@@ -2,14 +2,14 @@ using System;
 using UnityEngine;
 
 public class GameState: MonoBehaviour {
-    public const float TOLERANCE = 0.001f;
+    private const float TOLERANCE = 0.001f;
     private static bool _paused = false;
-    public static IntVariable Health;
+    public static IntVariable health;
 
-    public static bool Dead {
+    public static bool dead {
         get {
-            if (!Health) { return false; }
-            return Health.Value <= 0;
+            if (!health) { return false; }
+            return health.Value <= 0;
         }
     }
 
@@ -17,11 +17,11 @@ public class GameState: MonoBehaviour {
         return Math.Abs(num1 - num2) < TOLERANCE;
     }
 
-    public static bool AllowPlayerAction => !(
-        GameState.Dead || GameState.Paused
+    public static bool allowPlayerAction => !(
+        GameState.dead || GameState.paused
     );
     
-    public static bool Paused {
+    public static bool paused {
         get => _paused;
         set {
             _paused = value;
