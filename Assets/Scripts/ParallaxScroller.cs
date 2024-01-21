@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.UI;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class ParallaxScroller : MonoBehaviour {
     private const float THRESHOLD = 0.001f;

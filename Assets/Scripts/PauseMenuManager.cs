@@ -7,6 +7,7 @@ using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
+using Cursor = UnityEngine.Cursor;
 
 public class PauseMenuManager : MonoBehaviour {
     public GameObject pauseCanvas;
@@ -28,11 +29,13 @@ public class PauseMenuManager : MonoBehaviour {
     private void Show() {
         pauseUI.rootVisualElement.style.visibility = Visibility.Visible;
         pauseCanvas.SetActive(true);
+        Cursor.visible = true;
     }
 
     private void Hide() {
         pauseUI.rootVisualElement.style.visibility = Visibility.Hidden;
         pauseCanvas.SetActive(false);
+        Cursor.visible = false;
     }
     
     private void OnPlayButtonClicked() {

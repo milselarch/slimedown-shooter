@@ -8,6 +8,7 @@ public class IntVariable: Variable<int> {
     public delegate void ValueChangeCallback(int prevValue, int newValue);
     private readonly List<ValueChangeCallback> _callbacks = new();
 
+    
     public override void SetValue(int value) {
         var prevValue = this._value;
         if (value > previousHighestValue) {
@@ -16,6 +17,10 @@ public class IntVariable: Variable<int> {
 
         _value = value;
         TriggerCallbacks(prevValue, _value);
+    }
+
+    public void ClearCallbacks() {
+        _callbacks.Clear();
     }
 
     private void TriggerCallbacks(int prevValue, int newValue) {

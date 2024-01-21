@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using TMPro;
+using Unity.VisualScripting;
 
 public class PlayerController : MonoBehaviour {
     private static readonly int CHARGING = Animator.StringToHash("charging");
@@ -70,6 +71,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void UpdateHealthBar(int currentHealth) {
+        if (_playerSprite == null) { return; }
         var healthRatio = currentHealth / (float) MAX_HEALTH;
         var threshold = healthRatio - 0.5f;
         Debug.Log("THRESHOLD " + threshold);
@@ -99,6 +101,7 @@ public class PlayerController : MonoBehaviour {
 
     private void OnDestroy() {
         _destroyed = true;
+        health.ClearCallbacks();
     }
 
     public Vector2 GetPosition2D() {
