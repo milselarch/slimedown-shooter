@@ -67,7 +67,6 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void OnHealthChange(int prevHealth, int newHealth) {
-        Debug.Log("HEALTH_CHANGE " + newHealth);
         UpdateHealthBar(newHealth);
     }
 
@@ -75,7 +74,6 @@ public class PlayerController : MonoBehaviour {
         if (_playerSprite == null) { return; }
         var healthRatio = currentHealth / (float) MAX_HEALTH;
         var threshold = healthRatio - 0.5f;
-        Debug.Log("THRESHOLD " + threshold);
         var propertyBlock = new MaterialPropertyBlock();
         propertyBlock.SetFloat(BOUNDARY_Y, threshold);
         _playerSprite.SetPropertyBlock(propertyBlock);
