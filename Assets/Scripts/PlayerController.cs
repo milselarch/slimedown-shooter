@@ -1,19 +1,14 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using TMPro;
-using Unity.VisualScripting;
 
 public class PlayerController : MonoBehaviour {
     private static readonly int CHARGING = Animator.StringToHash("charging");
     private static readonly int SPEED = Animator.StringToHash("speed");
     private static readonly int BOUNDARY_Y = Shader.PropertyToID("_boundaryY");
     private const float DEFAULT_STAMP = -1.0f;
-    private const float TOLERANCE = 0.001f;
     
     public float maxSpeed = 20;
     public float impulseForce = 5.0f;
@@ -51,9 +46,9 @@ public class PlayerController : MonoBehaviour {
 
     // Start is called before the first frame update
     private void Start() {
-        GameState.health = health;
+        GameState.Health = health;
         Application.targetFrameRate = 60;
-        // assign mario sprite object
+        _lastCharge = -chargeWaitDuration;
         _playerSprite = GetComponent<SpriteRenderer>();
         
         StartCoroutine(FadeDamageEffect());
@@ -63,6 +58,12 @@ public class PlayerController : MonoBehaviour {
         _playerBody = GetComponent<Rigidbody2D>();
         _originalColor = _playerSprite.color;
         GameRestart();
+    }
+
+    public float GetChargeProgress() {
+        var timePassed = Time.time - _lastCharge;
+        var progress = Math.Min(timePassed / chargeWaitDuration, 1.0f);
+        return progress;
     }
 
     private void OnHealthChange(int prevHealth, int newHealth) {
@@ -85,7 +86,7 @@ public class PlayerController : MonoBehaviour {
 
         while (!_destroyed) {
             yield return null;
-            if (Math.Abs(_lastDamagedTime - DEFAULT_STAMP) < TOLERANCE) {
+            if (GameState.IsApproxEqual(_lastDamagedTime, DEFAULT_STAMP)) {
                 continue;                
             }
             var timePassed = Time.time - _lastDamagedTime;
@@ -118,7 +119,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        if (!GameState.allowPlayerAction) { return; }
+        if (!GameState.AllowPlayerAction) { return; }
         
         // this.canFire = true;
         var xMovement = 0.0f;
@@ -145,7 +146,7 @@ public class PlayerController : MonoBehaviour {
     }
     
     public void OnMouseClick(InputAction.CallbackContext context) {
-        if (!GameState.allowPlayerAction) { return; }
+        if (!GameState.AllowPlayerAction) { return; }
         // Check if the mouse button was pressed
         if (!context.started) { return; }
         
@@ -174,7 +175,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void OnChargeAttack(InputAction.CallbackContext context) {
-        if (!GameState.allowPlayerAction) { return; }
+        if (!GameState.AllowPlayerAction) { return; }
         if (!context.started) { return; }
         if (_charging) { return; }
 
@@ -183,7 +184,7 @@ public class PlayerController : MonoBehaviour {
         var chargeCooldownComplete = timeSinceLastCharge > chargeWaitDuration;
         if (!chargeCooldownComplete) { return; }
 
-        _lastCharge = chargeWaitDuration;
+        _lastCharge = Time.time;
         var chargeDirection = GetMouseDirection();
         _playerBody.AddForce(chargeForce * chargeDirection, ForceMode2D.Impulse);
         
@@ -198,7 +199,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void OnHorizontalMoveAction(InputAction.CallbackContext context) {
-        if (!GameState.allowPlayerAction) { return; }
+        if (!GameState.AllowPlayerAction) { return; }
         
         if (context.started) {
             var faceRight = context.ReadValue<float>() > 0 ? 1 : -1;
@@ -212,7 +213,7 @@ public class PlayerController : MonoBehaviour {
     }
     
     public void OnVerticalMoveAction(InputAction.CallbackContext context) {
-        if (!GameState.allowPlayerAction) { return; }
+        if (!GameState.AllowPlayerAction) { return; }
 
         if (context.started) {
             var faceTop = context.ReadValue<float>() > 0 ? 1 : -1;
