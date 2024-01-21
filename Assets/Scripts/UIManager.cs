@@ -123,7 +123,7 @@ public class UIManager : MonoBehaviour {
     }
 
     public void OnPlayerHealthUpdate() {
-        if (!GameState.Dead) return;
+        if (!GameState.dead) return;
         gameOverScreen.SetActive(true);
         Cursor.visible = true;
     }

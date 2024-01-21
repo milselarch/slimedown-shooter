@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour {
 
     // Start is called before the first frame update
     private void Start() {
-        GameState.Health = health;
+        GameState.health = health;
         Application.targetFrameRate = 60;
         _lastCharge = -chargeWaitDuration;
         _playerSprite = GetComponent<SpriteRenderer>();
@@ -113,11 +113,13 @@ public class PlayerController : MonoBehaviour {
         _faceRight = true;
         _playerSprite.flipX = false;
         _charging = false;
-        // TODO: reset health
+        
+        GameState.paused = false;
+        health.Value = MAX_HEALTH;
     }
 
     private void FixedUpdate() {
-        if (!GameState.AllowPlayerAction) { return; }
+        if (!GameState.allowPlayerAction) { return; }
         
         // this.canFire = true;
         var xMovement = 0.0f;
@@ -144,7 +146,7 @@ public class PlayerController : MonoBehaviour {
     }
     
     public void OnMouseClick(InputAction.CallbackContext context) {
-        if (!GameState.AllowPlayerAction) { return; }
+        if (!GameState.allowPlayerAction) { return; }
         // Check if the mouse button was pressed
         if (!context.started) { return; }
         
@@ -173,7 +175,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void OnChargeAttack(InputAction.CallbackContext context) {
-        if (!GameState.AllowPlayerAction) { return; }
+        if (!GameState.allowPlayerAction) { return; }
         if (!context.started) { return; }
         if (_charging) { return; }
 
@@ -197,7 +199,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void OnHorizontalMoveAction(InputAction.CallbackContext context) {
-        if (!GameState.AllowPlayerAction) { return; }
+        if (!GameState.allowPlayerAction) { return; }
         
         if (context.started) {
             var faceRight = context.ReadValue<float>() > 0 ? 1 : -1;
@@ -211,7 +213,7 @@ public class PlayerController : MonoBehaviour {
     }
     
     public void OnVerticalMoveAction(InputAction.CallbackContext context) {
-        if (!GameState.AllowPlayerAction) { return; }
+        if (!GameState.allowPlayerAction) { return; }
 
         if (context.started) {
             var faceTop = context.ReadValue<float>() > 0 ? 1 : -1;

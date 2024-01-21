@@ -14,7 +14,7 @@
 }
 
 #PlayButton {
-    background-image: resource("Assets/UI/ui_play_button.png");
+    background-image: url("/Assets/UI/ui_play_button.png");
     -unity-background-scale-mode: scale-to-fit;
 
     border-width: 0;
@@ -24,10 +24,10 @@
     margin-bottom: 40px;
 }
 #PlayButton:hover {
-    background-image: resource("Assets/UI/ui_play_button_light.png");
+    background-image: url("/Assets/UI/ui_play_button_light.png");
 }
 #PlayButton:active {
-    background-image: resource("Assets/UI/ui_play_button_pressed.png");
+    background-image: url("/Assets/UI/ui_play_button_pressed.png");
 }
 
 Button {
