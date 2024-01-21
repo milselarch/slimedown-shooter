@@ -10,6 +10,7 @@ using TMPro;
 public class PlayerController : MonoBehaviour {
     private static readonly int CHARGING = Animator.StringToHash("charging");
     private static readonly int SPEED = Animator.StringToHash("speed");
+    private static readonly int BOUNDARY_Y = Shader.PropertyToID("_boundaryY");
     private const float DEFAULT_STAMP = -1.0f;
     private const float TOLERANCE = 0.001f;
     
@@ -19,7 +20,7 @@ public class PlayerController : MonoBehaviour {
     public float fireBallOffset = 1.0f;
     public float chargeWaitDuration = 1.0f;
     public float chargeForce = 5.0f;
-    public float damageTintDuration = 0.5f;
+    public float damageTintDuration = 0.3f;
     public GameObject attackPrefab;
     public Animator playerAnimator;
     
@@ -36,7 +37,8 @@ public class PlayerController : MonoBehaviour {
     private int _horizontalDirection = 0;
     private int _verticalDirection = 0;
     private bool _faceRight = true;
-    
+    private const int MAX_HEALTH = 100;
+
     // keep track of which side the mario sprite is facing
     private SpriteRenderer _playerSprite;
     private Rigidbody2D _playerBody;
@@ -45,18 +47,35 @@ public class PlayerController : MonoBehaviour {
     private float _lastCharge = 0.0f;
     private bool _charging = false;
     private bool _destroyed = false;
-    
+
     // Start is called before the first frame update
     private void Start() {
         GameState.health = health;
         Application.targetFrameRate = 60;
-        StartCoroutine(FadeDamageEffect());
-        
         // assign mario sprite object
         _playerSprite = GetComponent<SpriteRenderer>();
+        
+        StartCoroutine(FadeDamageEffect());
+        health.AttachCallback(OnHealthChange);
+        UpdateHealthBar(health.Value);
+        
         _playerBody = GetComponent<Rigidbody2D>();
         _originalColor = _playerSprite.color;
         GameRestart();
+    }
+
+    private void OnHealthChange(int prevHealth, int newHealth) {
+        Debug.Log("HEALTH_CHANGE " + newHealth);
+        UpdateHealthBar(newHealth);
+    }
+
+    private void UpdateHealthBar(int currentHealth) {
+        var healthRatio = currentHealth / (float) MAX_HEALTH;
+        var threshold = healthRatio - 0.5f;
+        Debug.Log("THRESHOLD " + threshold);
+        var propertyBlock = new MaterialPropertyBlock();
+        propertyBlock.SetFloat(BOUNDARY_Y, threshold);
+        _playerSprite.SetPropertyBlock(propertyBlock);
     }
 
     private IEnumerator FadeDamageEffect() {
@@ -225,7 +244,7 @@ public class PlayerController : MonoBehaviour {
             // charging the enemy increases player health by 1
             other.gameObject.GetComponent<EnemyController>().Damage(2);
             gameScore.Increment();
-            health.Increment(1, 100);
+            health.Increment(1, MAX_HEALTH);
                 
             var newEnemyHealth = other.gameObject
                 .GetComponent<EnemyController>().GetEnemyHealth();
@@ -235,14 +254,14 @@ public class PlayerController : MonoBehaviour {
                 // destroy its sprite also
                 other.gameObject
                     .GetComponent<EnemyController>().AttemptSelfDestruct();
-                health.Increment(14, 100);
+                health.Increment(14, MAX_HEALTH);
             }
                 
             playerHealthUpdate.Invoke();
 
         } else if (enemyHealth == 0) {
             // increase health after collecting dead slime
-            health.Increment(14, 100);
+            health.Increment(14, MAX_HEALTH);
             gameScore.Increment();
             playerHealthUpdate.Invoke();
             scoreUpdate.Invoke();
