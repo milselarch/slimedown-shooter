@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour {
     private static readonly int CHARGING = Animator.StringToHash("charging");
@@ -17,6 +18,8 @@ public class PlayerController : MonoBehaviour {
     public float chargeWaitDuration = 1.0f;
     public float chargeForce = 5.0f;
     public float damageTintDuration = 0.3f;
+    
+    public Tilemap tileMap;
     public GameObject attackPrefab;
     public Animator playerAnimator;
     
@@ -39,6 +42,7 @@ public class PlayerController : MonoBehaviour {
     private SpriteRenderer _playerSprite;
     private Rigidbody2D _playerBody;
     private Color _originalColor;
+    private float _lastFallTime = DEFAULT_STAMP;
     private float _lastDamagedTime = DEFAULT_STAMP;
     private float _lastCharge = 0.0f;
     private bool _charging = false;
@@ -61,9 +65,18 @@ public class PlayerController : MonoBehaviour {
     }
 
     public float GetChargeProgress() {
+        // check what fraction of required wait time for charge attack is completed 
         var timePassed = Time.time - _lastCharge;
         var progress = Math.Min(timePassed / chargeWaitDuration, 1.0f);
         return progress;
+    }
+
+    private bool GetChargeWaitDone() {
+        return GetChargeProgress() >= 1.0f;
+    }
+
+    private bool IsFalling() {
+        return !GameState.IsApproxEqual(_lastFallTime, DEFAULT_STAMP);
     }
 
     private void OnHealthChange(int prevHealth, int newHealth) {
@@ -119,21 +132,37 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        if (!GameState.allowPlayerAction) { return; }
-        
-        // this.canFire = true;
-        var xMovement = 0.0f;
-        var yMovement = 0.0f;
-        
-        if (Math.Abs(_playerBody.velocity.x) < maxSpeed) {
-            xMovement = this.speed * this._horizontalDirection;
-        } 
-        if (Math.Abs(_playerBody.velocity.y) < maxSpeed) {
-            yMovement = this.speed * this._verticalDirection;
+        if (GameState.allowPlayerAction && !IsFalling()) {
+            var xMovement = 0.0f;
+            var yMovement = 0.0f;
+
+            if (Math.Abs(_playerBody.velocity.x) < maxSpeed) {
+                xMovement = this.speed * this._horizontalDirection;
+            }
+
+            if (Math.Abs(_playerBody.velocity.y) < maxSpeed) {
+                yMovement = this.speed * this._verticalDirection;
+            }
+
+            var movement = new Vector2(xMovement, yMovement);
+            _playerBody.AddForce(movement);
         }
-        
-        var movement = new Vector2(xMovement, yMovement);
-        _playerBody.AddForce(movement);
+
+        var bounds = _playerSprite.bounds;
+        var center = bounds.center;
+        var extents = bounds.extents;
+        var bottomLeft = new Vector3(
+            center.x - extents.x, center.y - extents.y, center.z
+        );
+        var bottomRight = new Vector3(
+            center.x + extents.x, center.y - extents.y, center.z
+        );
+
+        var inTileMap = InTileMap(bottomLeft) || InTileMap(bottomRight);
+        if (!inTileMap && GetChargeWaitDone()) {
+            _playerBody.gravityScale = 1.0f;
+            _lastFallTime = Time.time;
+        }
     }
 
     private static Vector2 GetMouseDirection() {
@@ -279,5 +308,11 @@ public class PlayerController : MonoBehaviour {
         health.Decrement(amount, 0);
         _lastDamagedTime = Time.time;
         playerHealthUpdate.Invoke();
+    }
+    
+    private bool InTileMap(Vector3 position) {
+        // check if the spawn position is in spawnable tile area
+        var cellPosition = tileMap.WorldToCell(position);
+        return tileMap.HasTile(cellPosition);
     }
 }
