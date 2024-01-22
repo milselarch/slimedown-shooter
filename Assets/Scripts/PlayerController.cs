@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -61,7 +62,15 @@ public class PlayerController : MonoBehaviour {
         
         _playerBody = GetComponent<Rigidbody2D>();
         _originalColor = _playerSprite.color;
+        Debug.Log("CELL-POS-ALL " + GetAllTilePositions(tileMap));
         GameRestart();
+
+        var allPos = GetAllTilePositions(tileMap);
+        var positionsString = "";
+        foreach (var position in allPos) {
+            positionsString += position.ToString() + ", ";
+        }
+        Debug.Log("TILE-ALL " + positionsString);
     }
 
     public float GetChargeProgress() {
@@ -149,15 +158,17 @@ public class PlayerController : MonoBehaviour {
         }
 
         var bounds = _playerSprite.bounds;
-        var center = bounds.center;
+        var center = transform.position;
         var extents = bounds.extents;
-        var bottomLeft = new Vector3(
-            center.x - extents.x, center.y - extents.y, center.z
-        );
-        var bottomRight = new Vector3(
-            center.x + extents.x, center.y - extents.y, center.z
-        );
 
+        var bottomLeft = transform.TransformPoint(new Vector3(
+            -extents.x, -extents.y, center.z
+        ));
+        var bottomRight = transform.TransformPoint(new Vector3(
+            extents.x, -extents.y, center.z
+        ));
+
+        Debug.Log("CENTER_TILE " + bottomLeft + " " + bottomRight);
         var inTileMap = InTileMap(bottomLeft) || InTileMap(bottomRight);
         if (!inTileMap && GetChargeWaitDone()) {
             _playerBody.gravityScale = 1.0f;
@@ -310,9 +321,28 @@ public class PlayerController : MonoBehaviour {
         playerHealthUpdate.Invoke();
     }
     
+    private static List<Vector3Int> GetAllTilePositions(Tilemap tileMap) {
+        var tilePositions = new List<Vector3Int>();
+
+        for (var x = tileMap.cellBounds.xMin; x < tileMap.cellBounds.xMax; x++) {
+            for (var y = tileMap.cellBounds.yMin; y < tileMap.cellBounds.yMax; y++) {
+                var localPlace = new Vector3Int(
+                    x, y, (int) tileMap.transform.position.z
+                );
+                if (tileMap.HasTile(localPlace)) {
+                    tilePositions.Add(localPlace);
+                    // Debug.Log("CELL-POS " + localPlace);
+                }
+            }
+        }
+
+        return tilePositions;
+    }
+    
     private bool InTileMap(Vector3 position) {
         // check if the spawn position is in spawnable tile area
         var cellPosition = tileMap.WorldToCell(position);
+        Debug.Log("CELL_POS "+ cellPosition);
         return tileMap.HasTile(cellPosition);
     }
 }
