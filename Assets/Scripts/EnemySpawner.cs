@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour {
     // Start is called before the first frame update
-    [FormerlySerializedAs("tilemap")] public Tilemap tileMap;
+    public Tilemap tileMap;
     public float spawnRadius = 5.0f;
     public GameObject enemyPrefab;
     public float spawnInterval = 0.2f;

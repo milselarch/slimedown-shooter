@@ -576,6 +576,7 @@ MonoBehaviour:
   chargeWaitDuration: 1.5
   chargeForce: 10
   damageTintDuration: 0.3
+  tileMap: {fileID: 1349677781}
   attackPrefab: {fileID: 629856399997391991, guid: 776f2c61ca5dc34b7b445662a6354c7f, type: 3}
   playerAnimator: {fileID: 153426990}
   health: {fileID: 11400000, guid: b3f477ac3352f96838e6461ac054baae, type: 2}
@@ -1466,7 +1467,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 655812664}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!21 &722290728
+--- !u!21 &657732157
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 0
@@ -2120,7 +2121,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 2
-      m_TileSpriteIndex: 2
+      m_TileSpriteIndex: 3
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2141,10 +2142,10 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 1
-    m_Data: {fileID: 1914711269, guid: 0b05160147b2a56d8a847d489f7344a9, type: 3}
   - m_RefCount: 0
     m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: 1914711269, guid: 0b05160147b2a56d8a847d489f7344a9, type: 3}
   m_TileMatrixArray:
   - m_RefCount: 1
     m_Data:
@@ -2684,7 +2685,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f0d848f029ae6486884eede3011635b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilemap: {fileID: 1349677781}
+  tileMap: {fileID: 1349677781}
   spawnRadius: 2
   enemyPrefab: {fileID: 4340382988791990591, guid: 54bb952dcfad9ceb2af6aeedebfee289, type: 3}
   spawnInterval: 0.2
@@ -3199,7 +3200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 722290728}
+  m_Material: {fileID: 657732157}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
