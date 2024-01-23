@@ -181,7 +181,6 @@ public class PlayerController : MonoBehaviour {
             if (Math.Abs(_playerBody.velocity.x) < maxSpeed) {
                 xMovement = this.speed * this._horizontalDirection;
             }
-
             if (Math.Abs(_playerBody.velocity.y) < maxSpeed) {
                 yMovement = this.speed * this._verticalDirection;
             }
@@ -194,8 +193,8 @@ public class PlayerController : MonoBehaviour {
         var bottomLeft = bounds.min;
         var bottomRight = bounds.max;
         bottomRight.y = bottomLeft.y;
-        bottomLeft = transform.TransformPoint(bottomLeft);
-        bottomRight = transform.TransformPoint(bottomRight);
+        // bottomLeft = transform.TransformPoint(bottomLeft);
+        // bottomRight = transform.TransformPoint(bottomRight);
         
         _bottomLeft = bottomLeft;
         _bottomRight = bottomRight;
