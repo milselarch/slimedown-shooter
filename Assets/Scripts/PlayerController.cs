@@ -49,6 +49,9 @@ public class PlayerController : MonoBehaviour {
     private bool _charging = false;
     private bool _destroyed = false;
 
+    private Vector3 _bottomLeft;
+    private Vector3 _bottomRight;
+
     // Start is called before the first frame update
     private void Start() {
         GameState.health = health;
@@ -62,15 +65,45 @@ public class PlayerController : MonoBehaviour {
         
         _playerBody = GetComponent<Rigidbody2D>();
         _originalColor = _playerSprite.color;
-        Debug.Log("CELL-POS-ALL " + GetAllTilePositions(tileMap));
         GameRestart();
+    }
 
-        var allPos = GetAllTilePositions(tileMap);
-        var positionsString = "";
-        foreach (var position in allPos) {
-            positionsString += position.ToString() + ", ";
+    private void OnDrawGizmos() {
+        MarkTileMapPositions();
+    }
+
+    private void MarkTileMapPositions() {
+        if (tileMap == null) return;
+        
+        Gizmos.color = Color.red;
+        var bounds = tileMap.cellBounds;
+        var allTiles = tileMap.GetTilesBlock(bounds);
+        const float length = 0.9f;
+
+        for (var x = 0; x < bounds.size.x; x++) {
+            for (var y = 0; y < bounds.size.y; y++) {
+                var tile = allTiles[x + y * bounds.size.x];
+                if (tile == null) {
+                    continue;
+                }
+
+                var localPlace = new Vector3Int(
+                    x, y, (int) tileMap.transform.position.z
+                ) + bounds.position;
+                var leftCornerPos = tileMap.CellToWorld(localPlace);
+                var centerPos = new Vector3(
+                    leftCornerPos.x + length / 2, leftCornerPos.y + length / 2,
+                    leftCornerPos.z
+                ); 
+
+                Gizmos.DrawWireCube(centerPos, new Vector3(
+                    length, length, length
+                ));
+            }
         }
-        Debug.Log("TILE-ALL " + positionsString);
+        
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(_bottomLeft, _bottomRight);
     }
 
     public float GetChargeProgress() {
@@ -158,22 +191,21 @@ public class PlayerController : MonoBehaviour {
         }
 
         var bounds = _playerSprite.bounds;
-        var center = transform.position;
-        var extents = bounds.extents;
+        var bottomLeft = bounds.min;
+        var bottomRight = bounds.max;
+        bottomRight.y = bottomLeft.y;
+        bottomLeft = transform.TransformPoint(bottomLeft);
+        bottomRight = transform.TransformPoint(bottomRight);
+        
+        _bottomLeft = bottomLeft;
+        _bottomRight = bottomRight;
 
-        var bottomLeft = transform.TransformPoint(new Vector3(
-            -extents.x, -extents.y, center.z
-        ));
-        var bottomRight = transform.TransformPoint(new Vector3(
-            extents.x, -extents.y, center.z
-        ));
-
-        Debug.Log("CENTER_TILE " + bottomLeft + " " + bottomRight);
+        Debug.Log("CENTER_POS " + bottomLeft + " " + bottomRight);
         var inTileMap = InTileMap(bottomLeft) || InTileMap(bottomRight);
-        if (!inTileMap && GetChargeWaitDone()) {
-            _playerBody.gravityScale = 1.0f;
-            _lastFallTime = Time.time;
-        }
+        if (inTileMap || !GetChargeWaitDone()) { return; }
+
+        _playerBody.gravityScale = 1.0f;
+        _lastFallTime = Time.time;
     }
 
     private static Vector2 GetMouseDirection() {
@@ -340,9 +372,11 @@ public class PlayerController : MonoBehaviour {
     }
     
     private bool InTileMap(Vector3 position) {
+        position.z = 0.0f;
+        
         // check if the spawn position is in spawnable tile area
         var cellPosition = tileMap.WorldToCell(position);
-        Debug.Log("CELL_POS "+ cellPosition);
-        return tileMap.HasTile(cellPosition);
+        var inTileMap = tileMap.HasTile(cellPosition);
+        return inTileMap;
     }
 }
