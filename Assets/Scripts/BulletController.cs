@@ -4,24 +4,20 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class BlasterShotController : MonoBehaviour
-{
+public class BlasterShotController : MonoBehaviour {
     // Start is called before the first frame update
     [SerializeField] private float scaleSpeed = 1.0f;
 
-    void Start()
-    {
+    void Start() {
         StartCoroutine(ScaleAndDestroyCoroutine());
         GetComponent<AudioSource>().Play();
     }
 
-    private IEnumerator ScaleAndDestroyCoroutine()
-    {
+    private IEnumerator ScaleAndDestroyCoroutine() {
         // Wait for 2 seconds
         yield return new WaitForSecondsRealtime(2);
         // Gradually scale down the GameObject
-        while (transform.localScale.x > 0.01f)
-        {
+        while (transform.localScale.x > 0.01f) {
             transform.localScale -= Vector3.one * (scaleSpeed * Time.deltaTime);
             yield return null;
         }
@@ -33,7 +29,7 @@ public class BlasterShotController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void OnCollisionEnter2D(Collision2D collision) {
+    private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.CompareTag("Enemy")) {
 			collision.gameObject.GetComponent<EnemyController>().Damage();
         }
