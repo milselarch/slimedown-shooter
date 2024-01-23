@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void MarkTileMapPositions() {
-        if (tileMap == null) return;
+        if (tileMap == null) { return; }
         
         Gizmos.color = Color.red;
         var bounds = tileMap.cellBounds;
@@ -104,6 +104,13 @@ public class PlayerController : MonoBehaviour {
         
         Gizmos.color = Color.green;
         Gizmos.DrawLine(_bottomLeft, _bottomRight);
+    }
+
+    private void SetColliderEnabled(bool enable) {
+        var boxCollider2D = GetComponent<BoxCollider2D>();
+        if (boxCollider2D != null) {
+            boxCollider2D.enabled = enable;
+        }
     }
 
     public float GetChargeProgress() {
@@ -171,10 +178,13 @@ public class PlayerController : MonoBehaviour {
         
         GameState.paused = false;
         health.Value = MAX_HEALTH;
+        SetColliderEnabled(true);
     }
 
     private void FixedUpdate() {
-        if (GameState.allowPlayerAction && !IsFalling()) {
+        if (IsFalling()) { return; }
+        
+        if (GameState.allowPlayerAction) {
             var xMovement = 0.0f;
             var yMovement = 0.0f;
 
@@ -199,12 +209,15 @@ public class PlayerController : MonoBehaviour {
         _bottomLeft = bottomLeft;
         _bottomRight = bottomRight;
 
-        Debug.Log("CENTER_POS " + bottomLeft + " " + bottomRight);
+        // Debug.Log("CENTER_POS " + bottomLeft + " " + bottomRight);
         var inTileMap = InTileMap(bottomLeft) || InTileMap(bottomRight);
-        if (inTileMap || !GetChargeWaitDone()) { return; }
+        if (inTileMap || !GetChargeWaitDone()) {
+            return;
+        }
 
         _playerBody.gravityScale = 1.0f;
         _lastFallTime = Time.time;
+        SetColliderEnabled(false);
     }
 
     private static Vector2 GetMouseDirection() {
