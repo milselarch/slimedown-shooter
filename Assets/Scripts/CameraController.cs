@@ -5,37 +5,37 @@ using UnityEngine;
 public class CameraController : MonoBehaviour {
     public Transform player; // Players's Transform
 
-    private float offsetX; // initial x-offset between camera and Mario
-    private float startX; // smallest x-coordinate of the Camera
-    private float endX; // largest x-coordinate of the camera
+    private float _offsetX; // initial x-offset between camera and Mario
+    private float _startX; // smallest x-coordinate of the Camera
+    private float _endX; // largest x-coordinate of the camera
     
-    private float offsetY; // initial y-offset between camera and Mario
-    private float startY; // smallest y-coordinate of the Camera
-    private float endY; // largest y-coordinate of the camera
+    private float _offsetY; // initial y-offset between camera and Mario
+    private float _startY; // smallest y-coordinate of the Camera
+    private float _endY; // largest y-coordinate of the camera
     
-    private float viewportHalfWidth;
-    private float viewportHalfHeight;
+    private float _viewportHalfWidth;
+    private float _viewportHalfHeight;
 
     private Vector3 startPosition;
 
-    void Start()
-    {
-        startPosition = transform.position;
+    void Start() {
+        var position = this.transform.position;
+        startPosition = position;
         
         // get coordinate of the bottomleft of the viewport
         // z doesn't matter since the camera is orthographic
-        Vector3 bottomLeft = Camera.main.ViewportToWorldPoint(
+        var bottomLeft = Camera.main.ViewportToWorldPoint(
             new Vector3(0, 0, 0)
         );
-        viewportHalfWidth = Mathf.Abs(
-            bottomLeft.x - this.transform.position.x
+        _viewportHalfWidth = Mathf.Abs(
+            bottomLeft.x - position.x
         );
-        viewportHalfHeight = Mathf.Abs(
-            bottomLeft.y - this.transform.position.y
+        _viewportHalfHeight = Mathf.Abs(
+            bottomLeft.y - position.y
         );
 
-        offsetX = this.transform.position.x - player.position.x;
-        offsetY = this.transform.position.y - player.position.y;
+        _offsetX = position.x - player.position.x;
+        _offsetY = position.y - player.position.y;
     }
     
     public void GameRestart() {
@@ -45,11 +45,12 @@ public class CameraController : MonoBehaviour {
 
     void Update() {
         // Debug.Log("POS_X: " + player.position.x);
-        float desiredX = player.position.x + offsetX;
-        float desiredY = player.position.y + offsetY;
+        var position = player.position;
+        var desiredX = position.x + _offsetX;
+        var desiredY = position.y + _offsetY;
         
         // Debug.Log("IN_OF_BOUNDS");
-        this.transform.position = new Vector3(
+        transform.position = new Vector3(
             desiredX, desiredY, this.transform.position.z
         );
     }

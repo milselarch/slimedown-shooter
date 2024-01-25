@@ -50,6 +50,7 @@ public class ParallaxScroller : MonoBehaviour {
                 new Vector2(timePassed * xTimeSpeedScale, timePassed * yTimeSpeedScale)
             );
             
+            // Debug.Log("DISPLACEMENT: " + displacement);
             _offset[i] = new Vector2(displacement.x % 1.0f, displacement.y % 1.0f);
             layers[i].material.mainTextureOffset = _offset[i];
         }
