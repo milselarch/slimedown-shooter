@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour {
     public float chargeWaitDuration = 1.0f;
     public float chargeForce = 5.0f;
     public float damageTintDuration = 0.3f;
+    public float minYPosition = -100.0f;
     
     public Tilemap tileMap;
     public GameObject attackPrefab;
@@ -197,6 +198,11 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void FixedUpdate() {
+        // set floor for lowest Y level player can fall to
+        var position = transform.position;
+        position.y = Math.Max(minYPosition, position.y);
+        transform.position = position;
+        
         if (IsFalling()) {
             var fallDurationPassed = Time.time - _lastFallDamageTime;
             if (fallDurationPassed > FALL_DAMAGE_WAIT) {
@@ -230,12 +236,12 @@ public class PlayerController : MonoBehaviour {
         _bottomLeft = bottomLeft;
         _bottomRight = bottomRight;
 
-        // Debug.Log("CENTER_POS " + bottomLeft + " " + bottomRight);
+        // Debug.Log("POS " + transform.position);
         var inTileMap = InTileMap(bottomLeft) || InTileMap(bottomRight);
         if (inTileMap || _charging) {
             return;
         }
-
+        
         StartFalling();
     }
 
