@@ -8,6 +8,8 @@ using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour {
     private const string FALLING_SORTING_LAYER = "falling";
+    private const float FALL_DAMAGE_WAIT = 0.005f;
+    
     private static readonly int CHARGING = Animator.StringToHash("charging");
     private static readonly int SPEED = Animator.StringToHash("speed");
     private static readonly int BOUNDARY_Y = Shader.PropertyToID("_boundaryY");
@@ -44,9 +46,12 @@ public class PlayerController : MonoBehaviour {
     private SpriteRenderer _playerSprite;
     private Rigidbody2D _playerBody;
     private Color _originalColor;
+    
     private float _lastFallTime = DEFAULT_STAMP;
+    private float _lastFallDamageTime = DEFAULT_STAMP;
     private float _lastDamagedTime = DEFAULT_STAMP;
     private float _lastCharge = 0.0f;
+    
     private bool _charging = false;
     private bool _destroyed = false;
     private int _defaultSortingLayerID;
@@ -182,6 +187,9 @@ public class PlayerController : MonoBehaviour {
         _playerSprite.flipX = false;
         _charging = false;
         _playerSprite.sortingLayerID = _defaultSortingLayerID;
+
+        _lastFallTime = DEFAULT_STAMP;
+        _lastFallDamageTime = DEFAULT_STAMP;
         
         GameState.paused = false;
         health.Value = MAX_HEALTH;
@@ -189,17 +197,23 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        if (IsFalling()) { return; }
+        if (IsFalling()) {
+            var fallDurationPassed = Time.time - _lastFallDamageTime;
+            if (fallDurationPassed > FALL_DAMAGE_WAIT) {
+                _lastFallDamageTime = Time.time;
+                DrainHealth(1);
+            }
+        }
         
         if (GameState.allowPlayerAction) {
             var xMovement = 0.0f;
             var yMovement = 0.0f;
 
             if (Math.Abs(_playerBody.velocity.x) < maxSpeed) {
-                xMovement = this.speed * this._horizontalDirection;
+                xMovement = speed * _horizontalDirection;
             }
             if (Math.Abs(_playerBody.velocity.y) < maxSpeed) {
-                yMovement = this.speed * this._verticalDirection;
+                yMovement = speed * _verticalDirection;
             }
 
             var movement = new Vector2(xMovement, yMovement);
@@ -218,7 +232,7 @@ public class PlayerController : MonoBehaviour {
 
         // Debug.Log("CENTER_POS " + bottomLeft + " " + bottomRight);
         var inTileMap = InTileMap(bottomLeft) || InTileMap(bottomRight);
-        if (inTileMap || !GetChargeWaitDone()) {
+        if (inTileMap || _charging) {
             return;
         }
 
@@ -228,6 +242,7 @@ public class PlayerController : MonoBehaviour {
     private void StartFalling() {
         _playerBody.gravityScale = 1.0f;
         _lastFallTime = Time.time;
+        _lastFallDamageTime = _lastFallTime;
         _playerSprite.sortingLayerID = _fallingSortingLayerID;
         SetColliderEnabled(false);
     }
@@ -294,8 +309,12 @@ public class PlayerController : MonoBehaviour {
         _charging = false;
     }
 
+    private bool CanMove() {
+        return GameState.allowPlayerAction && !_charging && !IsFalling();
+    }
+
     public void OnHorizontalMoveAction(InputAction.CallbackContext context) {
-        if (!GameState.allowPlayerAction) { return; }
+        if (!CanMove()) { return; }
         
         if (context.started) {
             var faceRight = context.ReadValue<float>() > 0 ? 1 : -1;
@@ -309,7 +328,7 @@ public class PlayerController : MonoBehaviour {
     }
     
     public void OnVerticalMoveAction(InputAction.CallbackContext context) {
-        if (!GameState.allowPlayerAction) { return; }
+        if (!CanMove()) { return; }
 
         if (context.started) {
             var faceTop = context.ReadValue<float>() > 0 ? 1 : -1;
