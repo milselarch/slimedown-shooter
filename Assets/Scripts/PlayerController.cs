@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour {
+    private const string FALLING_SORTING_LAYER = "falling";
     private static readonly int CHARGING = Animator.StringToHash("charging");
     private static readonly int SPEED = Animator.StringToHash("speed");
     private static readonly int BOUNDARY_Y = Shader.PropertyToID("_boundaryY");
@@ -48,16 +49,21 @@ public class PlayerController : MonoBehaviour {
     private float _lastCharge = 0.0f;
     private bool _charging = false;
     private bool _destroyed = false;
-
+    private int _defaultSortingLayerID;
+    private int _fallingSortingLayerID;
+    
     private Vector3 _bottomLeft;
     private Vector3 _bottomRight;
 
     // Start is called before the first frame update
     private void Start() {
+        _fallingSortingLayerID = SortingLayer.NameToID(FALLING_SORTING_LAYER);
+        
         GameState.health = health;
         Application.targetFrameRate = 60;
         _lastCharge = -chargeWaitDuration;
         _playerSprite = GetComponent<SpriteRenderer>();
+        _defaultSortingLayerID = _playerSprite.sortingLayerID;
         
         StartCoroutine(FadeDamageEffect());
         health.AttachCallback(OnHealthChange);
@@ -175,6 +181,7 @@ public class PlayerController : MonoBehaviour {
         _faceRight = true;
         _playerSprite.flipX = false;
         _charging = false;
+        _playerSprite.sortingLayerID = _defaultSortingLayerID;
         
         GameState.paused = false;
         health.Value = MAX_HEALTH;
@@ -215,8 +222,13 @@ public class PlayerController : MonoBehaviour {
             return;
         }
 
+        StartFalling();
+    }
+
+    private void StartFalling() {
         _playerBody.gravityScale = 1.0f;
         _lastFallTime = Time.time;
+        _playerSprite.sortingLayerID = _fallingSortingLayerID;
         SetColliderEnabled(false);
     }
 
