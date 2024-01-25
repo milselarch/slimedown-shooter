@@ -1,15 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
-public class EnemySpawner : MonoBehaviour
-{
+public class EnemySpawner : MonoBehaviour {
     // Start is called before the first frame update
-    public Tilemap tilemap;
+    public Tilemap tileMap;
     public float spawnRadius = 5.0f;
     public GameObject enemyPrefab;
     public float spawnInterval = 0.2f;
@@ -28,30 +29,27 @@ public class EnemySpawner : MonoBehaviour
     private int _enemiesKilled = 0;
     private int _spawned = 0;
 
-    void Start()
-    {
+    private void Start() {
         waveCounter.SetValue(0);
         waveTimestamp.SetValue(0);
         _startPosition = transform.position;
         StartCoroutine(SpawnAttackWave());
         StartCoroutine(TimerUpdateLoop());
     }
-    
-    IEnumerator TimerUpdateLoop()
-    {
+
+    private IEnumerator TimerUpdateLoop() {
         /*
          * Drains player health every 3 seconds if he's
          * ran out of time to complete the current attack wave
          */
-        while (!_destroyed)
-        {
-            int timestampNow = (int) Time.time;
-            int allowedWaveDuration = 20 + 5 * waveCounter.Value;
-            int durationPassed = timestampNow - waveTimestamp.Value;
-            int durationLeft = allowedWaveDuration - durationPassed;
+        while (!_destroyed) {
+            var timestampNow = (int) Time.time;
+            var allowedWaveDuration = 20 + 5 * waveCounter.Value;
+            var durationPassed = timestampNow - waveTimestamp.Value;
+            var durationLeft = allowedWaveDuration - durationPassed;
 
             if (durationLeft <= -1) {
-                int penalty = (int) Math.Log10(-durationLeft) + 1;
+                var penalty = (int) Math.Log10(-durationLeft) + 1;
                 timerDrainHealth.Invoke(penalty);
             }
             
@@ -65,26 +63,21 @@ public class EnemySpawner : MonoBehaviour
         _enemiesKilled += 1;
 
         // check if any enemies from the previous wave are still alive
-        bool hasLivingEnemies = false;
-        foreach (Transform child in transform)
-        {
-            bool alive = child.GetComponent<EnemyController>().IsAlive();
-            if (alive)
-            {
-                hasLivingEnemies = true;
-                break;
-            }
+        var hasLivingEnemies = (
+            from Transform child in transform 
+            select child.GetComponent<EnemyController>().IsAlive()
+        ).Any(alive => alive);
+
+        if (hasLivingEnemies || _spawning) {
+            return;
         }
-        
-        if (!hasLivingEnemies && !_spawning) {
-            Debug.Log("WAVE IS OVER");
-            StartCoroutine(SpawnAttackWave());
-            waveUpdate.Invoke();
-        }
+
+        Debug.Log("WAVE IS OVER");
+        StartCoroutine(SpawnAttackWave());
+        waveUpdate.Invoke();
     }
 
-    IEnumerator SpawnAttackWave()
-    {
+    IEnumerator SpawnAttackWave() {
         /*
          * spawn slimes in an attack wave
          */
@@ -101,19 +94,18 @@ public class EnemySpawner : MonoBehaviour
         // set start of attack wave to right now
         waveTimestamp.SetValue((int) Time.time);
         
-        while (_spawned < waveCounter.Value + 3)
-        {
-            float offsetX = 2 * Random.Range(0.0f, spawnRadius) - spawnRadius;
-            float offsetY = 2 * Random.Range(0.0f, spawnRadius) - spawnRadius;
-            Vector3 spawnPosition = new Vector3(
+        while (_spawned < waveCounter.Value + 3) {
+            var offsetX = 2 * Random.Range(0.0f, spawnRadius) - spawnRadius;
+            var offsetY = 2 * Random.Range(0.0f, spawnRadius) - spawnRadius;
+            var spawnPosition = new Vector3(
                 _startPosition.x + offsetX,
                 _startPosition.y + offsetY,
                 _startPosition.z
             );
 
-            bool spawnable = InTilemap(spawnPosition);
+            var spawnable = InTileMap(spawnPosition);
             if (spawnable) {
-                GameObject enemy = Instantiate(
+                var enemy = Instantiate(
                     enemyPrefab, spawnPosition,
                     Quaternion.identity
                 );
@@ -129,20 +121,13 @@ public class EnemySpawner : MonoBehaviour
         yield return null;
     }
     
-    private bool InTilemap(Vector3 position) {
+    private bool InTileMap(Vector3 position) {
         // check if the spawn position is in spawnable tile area
-        Vector3Int cellPosition = tilemap.WorldToCell(position);
-        return tilemap.HasTile(cellPosition);
+        var cellPosition = tileMap.WorldToCell(position);
+        return tileMap.HasTile(cellPosition);
     }
 
-    private void OnDestroy()
-    {
+    private void OnDestroy() {
         _destroyed = true;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

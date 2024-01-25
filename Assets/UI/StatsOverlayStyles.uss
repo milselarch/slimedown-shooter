@@ -26,7 +26,7 @@ Label {
     color: white;
 }
 Label.outlined {
-    -unity-text-outline-color: rgba(0, 0, 0, 0);
+    -unity-text-outline-color: rgba(0, 0, 0, 255);
     -unity-text-outline-width: 20px;
 }
 

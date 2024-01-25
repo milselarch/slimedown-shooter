@@ -43,6 +43,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: falling
+    uniqueID: 3594281763
+    locked: 0
+  - name: environment
+    uniqueID: 1619089811
+    locked: 0
   - name: enemies
     uniqueID: 4169772951
     locked: 0

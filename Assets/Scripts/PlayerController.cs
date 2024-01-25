@@ -1,10 +1,15 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour {
+    private const string FALLING_SORTING_LAYER = "falling";
+    private const float FALL_DAMAGE_WAIT = 0.005f;
+    
     private static readonly int CHARGING = Animator.StringToHash("charging");
     private static readonly int SPEED = Animator.StringToHash("speed");
     private static readonly int BOUNDARY_Y = Shader.PropertyToID("_boundaryY");
@@ -17,6 +22,9 @@ public class PlayerController : MonoBehaviour {
     public float chargeWaitDuration = 1.0f;
     public float chargeForce = 5.0f;
     public float damageTintDuration = 0.3f;
+    public float minYPosition = -100.0f;
+    
+    public Tilemap tileMap;
     public GameObject attackPrefab;
     public Animator playerAnimator;
     
@@ -39,17 +47,29 @@ public class PlayerController : MonoBehaviour {
     private SpriteRenderer _playerSprite;
     private Rigidbody2D _playerBody;
     private Color _originalColor;
+    
+    private float _lastFallTime = DEFAULT_STAMP;
+    private float _lastFallDamageTime = DEFAULT_STAMP;
     private float _lastDamagedTime = DEFAULT_STAMP;
     private float _lastCharge = 0.0f;
+    
     private bool _charging = false;
     private bool _destroyed = false;
+    private int _defaultSortingLayerID;
+    private int _fallingSortingLayerID;
+    
+    private Vector3 _bottomLeft;
+    private Vector3 _bottomRight;
 
     // Start is called before the first frame update
     private void Start() {
+        _fallingSortingLayerID = SortingLayer.NameToID(FALLING_SORTING_LAYER);
+        
         GameState.health = health;
         Application.targetFrameRate = 60;
         _lastCharge = -chargeWaitDuration;
         _playerSprite = GetComponent<SpriteRenderer>();
+        _defaultSortingLayerID = _playerSprite.sortingLayerID;
         
         StartCoroutine(FadeDamageEffect());
         health.AttachCallback(OnHealthChange);
@@ -60,10 +80,64 @@ public class PlayerController : MonoBehaviour {
         GameRestart();
     }
 
+    private void OnDrawGizmos() {
+        MarkTileMapPositions();
+    }
+
+    private void MarkTileMapPositions() {
+        if (tileMap == null) { return; }
+        
+        Gizmos.color = Color.red;
+        var bounds = tileMap.cellBounds;
+        var allTiles = tileMap.GetTilesBlock(bounds);
+        const float length = 0.9f;
+
+        for (var x = 0; x < bounds.size.x; x++) {
+            for (var y = 0; y < bounds.size.y; y++) {
+                var tile = allTiles[x + y * bounds.size.x];
+                if (tile == null) {
+                    continue;
+                }
+
+                var localPlace = new Vector3Int(
+                    x, y, (int) tileMap.transform.position.z
+                ) + bounds.position;
+                var leftCornerPos = tileMap.CellToWorld(localPlace);
+                var centerPos = new Vector3(
+                    leftCornerPos.x + length / 2, leftCornerPos.y + length / 2,
+                    leftCornerPos.z
+                ); 
+
+                Gizmos.DrawWireCube(centerPos, new Vector3(
+                    length, length, length
+                ));
+            }
+        }
+        
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(_bottomLeft, _bottomRight);
+    }
+
+    private void SetColliderEnabled(bool enable) {
+        var boxCollider2D = GetComponent<BoxCollider2D>();
+        if (boxCollider2D != null) {
+            boxCollider2D.enabled = enable;
+        }
+    }
+
     public float GetChargeProgress() {
+        // check what fraction of required wait time for charge attack is completed 
         var timePassed = Time.time - _lastCharge;
         var progress = Math.Min(timePassed / chargeWaitDuration, 1.0f);
         return progress;
+    }
+
+    private bool GetChargeWaitDone() {
+        return GetChargeProgress() >= 1.0f;
+    }
+
+    private bool IsFalling() {
+        return !GameState.IsApproxEqual(_lastFallTime, DEFAULT_STAMP);
     }
 
     private void OnHealthChange(int prevHealth, int newHealth) {
@@ -113,27 +187,70 @@ public class PlayerController : MonoBehaviour {
         _faceRight = true;
         _playerSprite.flipX = false;
         _charging = false;
+        _playerSprite.sortingLayerID = _defaultSortingLayerID;
+
+        _lastFallTime = DEFAULT_STAMP;
+        _lastFallDamageTime = DEFAULT_STAMP;
         
         GameState.paused = false;
         health.Value = MAX_HEALTH;
+        SetColliderEnabled(true);
     }
 
     private void FixedUpdate() {
-        if (!GameState.allowPlayerAction) { return; }
+        // set floor for lowest Y level player can fall to
+        var position = transform.position;
+        position.y = Math.Max(minYPosition, position.y);
+        transform.position = position;
         
-        // this.canFire = true;
-        var xMovement = 0.0f;
-        var yMovement = 0.0f;
-        
-        if (Math.Abs(_playerBody.velocity.x) < maxSpeed) {
-            xMovement = this.speed * this._horizontalDirection;
-        } 
-        if (Math.Abs(_playerBody.velocity.y) < maxSpeed) {
-            yMovement = this.speed * this._verticalDirection;
+        if (IsFalling()) {
+            var fallDurationPassed = Time.time - _lastFallDamageTime;
+            if (fallDurationPassed > FALL_DAMAGE_WAIT) {
+                _lastFallDamageTime = Time.time;
+                DrainHealth(1);
+            }
         }
         
-        var movement = new Vector2(xMovement, yMovement);
-        _playerBody.AddForce(movement);
+        if (GameState.allowPlayerAction) {
+            var xMovement = 0.0f;
+            var yMovement = 0.0f;
+
+            if (Math.Abs(_playerBody.velocity.x) < maxSpeed) {
+                xMovement = speed * _horizontalDirection;
+            }
+            if (Math.Abs(_playerBody.velocity.y) < maxSpeed) {
+                yMovement = speed * _verticalDirection;
+            }
+
+            var movement = new Vector2(xMovement, yMovement);
+            _playerBody.AddForce(movement);
+        }
+
+        var bounds = _playerSprite.bounds;
+        var bottomLeft = bounds.min;
+        var bottomRight = bounds.max;
+        bottomRight.y = bottomLeft.y;
+        // bottomLeft = transform.TransformPoint(bottomLeft);
+        // bottomRight = transform.TransformPoint(bottomRight);
+        
+        _bottomLeft = bottomLeft;
+        _bottomRight = bottomRight;
+
+        // Debug.Log("POS " + transform.position);
+        var inTileMap = InTileMap(bottomLeft) || InTileMap(bottomRight);
+        if (inTileMap || _charging) {
+            return;
+        }
+        
+        StartFalling();
+    }
+
+    private void StartFalling() {
+        _playerBody.gravityScale = 1.0f;
+        _lastFallTime = Time.time;
+        _lastFallDamageTime = _lastFallTime;
+        _playerSprite.sortingLayerID = _fallingSortingLayerID;
+        SetColliderEnabled(false);
     }
 
     private static Vector2 GetMouseDirection() {
@@ -198,8 +315,12 @@ public class PlayerController : MonoBehaviour {
         _charging = false;
     }
 
+    private bool CanMove() {
+        return GameState.allowPlayerAction && !_charging && !IsFalling();
+    }
+
     public void OnHorizontalMoveAction(InputAction.CallbackContext context) {
-        if (!GameState.allowPlayerAction) { return; }
+        if (!CanMove()) { return; }
         
         if (context.started) {
             var faceRight = context.ReadValue<float>() > 0 ? 1 : -1;
@@ -213,7 +334,7 @@ public class PlayerController : MonoBehaviour {
     }
     
     public void OnVerticalMoveAction(InputAction.CallbackContext context) {
-        if (!GameState.allowPlayerAction) { return; }
+        if (!CanMove()) { return; }
 
         if (context.started) {
             var faceTop = context.ReadValue<float>() > 0 ? 1 : -1;
@@ -279,5 +400,32 @@ public class PlayerController : MonoBehaviour {
         health.Decrement(amount, 0);
         _lastDamagedTime = Time.time;
         playerHealthUpdate.Invoke();
+    }
+    
+    private static List<Vector3Int> GetAllTilePositions(Tilemap tileMap) {
+        var tilePositions = new List<Vector3Int>();
+
+        for (var x = tileMap.cellBounds.xMin; x < tileMap.cellBounds.xMax; x++) {
+            for (var y = tileMap.cellBounds.yMin; y < tileMap.cellBounds.yMax; y++) {
+                var localPlace = new Vector3Int(
+                    x, y, (int) tileMap.transform.position.z
+                );
+                if (tileMap.HasTile(localPlace)) {
+                    tilePositions.Add(localPlace);
+                    // Debug.Log("CELL-POS " + localPlace);
+                }
+            }
+        }
+
+        return tilePositions;
+    }
+    
+    private bool InTileMap(Vector3 position) {
+        position.z = 0.0f;
+        
+        // check if the spawn position is in spawnable tile area
+        var cellPosition = tileMap.WorldToCell(position);
+        var inTileMap = tileMap.HasTile(cellPosition);
+        return inTileMap;
     }
 }
