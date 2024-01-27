@@ -77,7 +77,7 @@ public class EnemySpawner : MonoBehaviour {
         waveUpdate.Invoke();
     }
 
-    IEnumerator SpawnAttackWave() {
+    private IEnumerator SpawnAttackWave() {
         /*
          * spawn slimes in an attack wave
          */

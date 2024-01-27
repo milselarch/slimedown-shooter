@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameState: MonoBehaviour {
     private const float TOLERANCE = 0.001f;
     private static bool _paused = false;
+    
     public static IntVariable health;
+    public static Dictionary<int, EnemyController> livingEnemies;
 
     public static bool dead {
         get {
