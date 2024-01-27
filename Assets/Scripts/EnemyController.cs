@@ -14,6 +14,7 @@ public class EnemyController: MonoBehaviour {
 	private static readonly int ATTACK = Animator.StringToHash("attack");
 	private static readonly int DEAD = Animator.StringToHash("dead");
 	
+    public int id { get; private set; } = -1;
 	public Material defaultMaterial;
 	public Material glowMaterial;
 	
@@ -42,7 +43,7 @@ public class EnemyController: MonoBehaviour {
 	private bool _dead = false;
 	private int _health = 0;
 
-	// Start is called before the first frame update
+    // Start is called before the first frame update
     void Start() {
 	    _agent = GetComponent<NavMeshAgent>();
 	    _agent.updateRotation = false;
@@ -68,10 +69,14 @@ public class EnemyController: MonoBehaviour {
         return Time.time;
     }
 
+    public void SetID(int newId) {
+        Assert.IsTrue(this.id == -1);
+        this.id = newId;
+    }
+    
     // inflict damage to the enemy
 	public void Damage(int damage = 1) {
-		if (_health == 0) {
-			Destroy(gameObject);
+		if (AttemptSelfDestruct()) {
 			return;
 		} 
 		
@@ -86,6 +91,7 @@ public class EnemyController: MonoBehaviour {
 			enemyAnimator.SetBool(DEAD, true);
 			
 			transform.localScale = Vector3.one;
+            GameState.KillEnemy(id);
 			onEnemyKill.Invoke();
 			UpdateCollider();
 			_dead = true;
@@ -113,16 +119,18 @@ public class EnemyController: MonoBehaviour {
 			return;
 		}
 
-		if (_health == 0) {
-			Destroy(gameObject);
-		}
-	}
+        AttemptSelfDestruct();
+    }
 
-	public void AttemptSelfDestruct() {
-		if (_health == 0) {
-			Destroy(gameObject);
-		}
-	}
+	public bool AttemptSelfDestruct() {
+        if (_health != 0) {
+            return false;
+        }
+
+        Destroy(gameObject);
+        GameState.KillEnemy(id);
+        return true;
+    }
 
 	public int GetEnemyHealth() {
 		return this._health;

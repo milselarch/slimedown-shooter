@@ -246,7 +246,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void StartFalling() {
-        _playerBody.gravityScale = 1.0f;
+        _playerBody.gravityScale = 5.0f;
         _lastFallTime = Time.time;
         _lastFallDamageTime = _lastFallTime;
         _playerSprite.sortingLayerID = _fallingSortingLayerID;

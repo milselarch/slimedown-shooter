@@ -23,11 +23,9 @@ public class EnemySpawner : MonoBehaviour {
 
     private Vector3 _startPosition;
     private bool _destroyed = false;
-    private bool _spawning = false;
     
     private int _lastSpawnedWave = 0;
     private int _enemiesKilled = 0;
-    private int _spawned = 0;
 
     private void Start() {
         waveCounter.SetValue(0);
@@ -63,12 +61,7 @@ public class EnemySpawner : MonoBehaviour {
         _enemiesKilled += 1;
 
         // check if any enemies from the previous wave are still alive
-        var hasLivingEnemies = (
-            from Transform child in transform 
-            select child.GetComponent<EnemyController>().IsAlive()
-        ).Any(alive => alive);
-
-        if (hasLivingEnemies || _spawning) {
+        if (GameState.HasLivingEnemies() || GameState.spawning) {
             return;
         }
 
@@ -81,20 +74,19 @@ public class EnemySpawner : MonoBehaviour {
         /*
          * spawn slimes in an attack wave
          */
-        while (_spawning) {
+        while (GameState.spawning) {
             // wait for previous wave to finish spawning
             yield return null;
         }
         
-        _spawning = true;
         _enemiesKilled = 0;
         waveCounter.Increment();
-        _spawned = 0;
+        GameState.ResetWave();
 
         // set start of attack wave to right now
         waveTimestamp.SetValue((int) Time.time);
         
-        while (_spawned < waveCounter.Value + 3) {
+        while (GameState.spawned < waveCounter.Value + 3) {
             var offsetX = 2 * Random.Range(0.0f, spawnRadius) - spawnRadius;
             var offsetY = 2 * Random.Range(0.0f, spawnRadius) - spawnRadius;
             var spawnPosition = new Vector3(
@@ -111,13 +103,13 @@ public class EnemySpawner : MonoBehaviour {
                 );
 
                 enemy.transform.SetParent(transform, true);
-                _spawned += 1;
+                GameState.AddLivingEnemy(enemy);
             }
 
             yield return new WaitForSeconds(spawnInterval);
         }
 
-        _spawning = false;
+        GameState.StopSpawning();
         yield return null;
     }
     
