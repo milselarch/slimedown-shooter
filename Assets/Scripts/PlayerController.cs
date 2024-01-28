@@ -354,32 +354,16 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
-        if (!other.gameObject.CompareTag("Enemy")) {
+        var enemyController = other.gameObject.GetComponent<EnemyController>();
+        if (enemyController == null) {
             return;
         }
 
-        var enemyHealth = other.gameObject
-            .GetComponent<EnemyController>().GetEnemyHealth();
+        var enemyHealth = enemyController.GetEnemyHealth();
             
         if (_charging) {
             // charging the enemy increases player health by 1
-            other.gameObject.GetComponent<EnemyController>().Damage(2);
-            gameScore.Increment();
-            health.Increment(1, _maxHealth);
-                
-            var newEnemyHealth = other.gameObject
-                .GetComponent<EnemyController>().GetEnemyHealth();
-
-            if (newEnemyHealth == 0) {
-                // if charging killed the slime automatically
-                // destroy its sprite also
-                other.gameObject
-                    .GetComponent<EnemyController>().AttemptSelfDestruct();
-                health.Increment(14, _maxHealth);
-            }
-                
-            playerHealthUpdate.Invoke();
-
+            ApplyChargeAttack(enemyController);
         } else if (enemyHealth == 0) {
             // increase health after collecting dead slime
             health.Increment(14, _maxHealth);
@@ -390,6 +374,43 @@ public class PlayerController : MonoBehaviour {
             // slime deals 5 damage to player
             ReceiveSlimeDamage(5);
         }
+    }
+
+    private void ApplyChargeAttack(EnemyController enemyController) {
+        var enemyBody = enemyController.enemyBody;
+        var chargeAlignment = Vector2.Dot(_playerBody.velocity, enemyBody.velocity);
+        // whether or not player and enemy are moving towards each other
+        var velocitiesColliding = chargeAlignment < 0.0f;
+        
+        // direction from player to enemy
+        var directionToEnemy = (enemyBody.position - _playerBody.position);
+        // whether player is charging in the direction of the enemy
+        var chargingInEnemyDirection = (Vector2.Dot(
+            directionToEnemy, _playerBody.velocity
+        ) > 0.0f);
+
+        /*
+         Don't apply damage to slimes if neither of these are satisfied
+         1. slime is in the direction of movement of player
+         2. slime and player and moving towards each other  
+        */
+        if (!velocitiesColliding && !chargingInEnemyDirection) { return; }
+        
+        // charging the enemy increases player health by 1
+        enemyController.Damage(2);
+        gameScore.Increment();
+        health.Increment(1, _maxHealth);
+                
+        var newEnemyHealth = enemyController.GetEnemyHealth();
+
+        if (newEnemyHealth == 0) {
+            // if charging killed the slime,
+            // automatically destroy its sprite also
+            enemyController.AttemptSelfDestruct();
+            health.Increment(14, _maxHealth);
+        }
+                
+        playerHealthUpdate.Invoke();
     }
 
     private void ReceiveSlimeDamage(int amount) {

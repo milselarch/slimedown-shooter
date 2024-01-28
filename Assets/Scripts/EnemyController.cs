@@ -65,6 +65,8 @@ public class EnemyController: MonoBehaviour {
 		_dead = false;
     }
 
+    public Rigidbody2D enemyBody => _enemyBody;
+
     private static float GetTimestamp() {
         return Time.time;
     }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour {
-    public Transform player; // Players's Transform
+    public Transform player; // Player's Transform
     public GameConstants gameConstants;
     
     private float _offsetX; // initial x-offset between camera and Mario
@@ -24,8 +24,12 @@ public class CameraController : MonoBehaviour {
         var position = this.transform.position;
         _startPosition = position;
         
-        // get coordinate of the bottomleft of the viewport
+        // get coordinate of the bottom left of the viewport
         // z doesn't matter since the camera is orthographic
+        if (Camera.main == null) {
+            return;
+        }
+
         var bottomLeft = Camera.main.ViewportToWorldPoint(
             new Vector3(0, 0, 0)
         );
@@ -36,8 +40,9 @@ public class CameraController : MonoBehaviour {
             bottomLeft.y - position.y
         );
 
-        _offsetX = position.x - player.position.x;
-        _offsetY = position.y - player.position.y;
+        var playerPosition = player.position;
+        _offsetX = position.x - playerPosition.x;
+        _offsetY = position.y - playerPosition.y;
     }
     
     public void GameRestart() {
@@ -49,12 +54,13 @@ public class CameraController : MonoBehaviour {
         // Debug.Log("POS_X: " + player.position.x);
         var position = player.position;
         var desiredX = position.x + _offsetX;
-        var desiredY = position.y + _offsetY;
+        var desiredY = Math.Max(
+            position.y + _offsetY, gameConstants.minYCameraPosition
+        );
         
         // Debug.Log("IN_OF_BOUNDS");
         transform.position = new Vector3(
-            desiredX, Math.Max(desiredY, gameConstants.minYCameraPosition), 
-            this.transform.position.z
+            desiredX, desiredY, this.transform.position.z
         );
     }
 }
