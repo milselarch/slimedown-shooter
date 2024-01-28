@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using TMPro;
 using UnityEngine.Assertions;
+using UnityEngine.Events;
 using Cursor = UnityEngine.Cursor;
 
 
@@ -99,6 +100,7 @@ public class UIManager : MonoBehaviour {
     // timestamp for start of attack wave
     public IntVariable waveTimestamp;
     public CanvasGroup gameOverCanvas;
+    public UnityEvent restartEvent;
 
     public UIDocument statsUI;
     public UIDocument outlineStatsUI;
@@ -109,7 +111,7 @@ public class UIManager : MonoBehaviour {
     private MultipleStatsOverlay _statsOverlays;
     
     // Start is called before the first frame update
-    void Start() {
+    private void Start() {
         _statsOverlays = new MultipleStatsOverlay();
         _statsOverlays.AddOverlay(outlineStatsUI, true);
         _statsOverlays.AddOverlay(statsUI);
@@ -126,6 +128,10 @@ public class UIManager : MonoBehaviour {
         if (!GameState.dead) return;
         gameOverScreen.SetActive(true);
         Cursor.visible = true;
+    }
+
+    public void InitiateRestart() {
+        restartEvent.Invoke();
     }
 
     public void ReturnToMainMenu() {
