@@ -13,8 +13,8 @@ public class EnemyController: MonoBehaviour {
 	private static readonly int BOUNCE = Animator.StringToHash("bounce");
 	private static readonly int ATTACK = Animator.StringToHash("attack");
 	private static readonly int DEAD = Animator.StringToHash("dead");
-	
-    public int id { get; private set; } = -1;
+
+    private int id { get; set; } = -1;
 	public Material defaultMaterial;
 	public Material glowMaterial;
 	
@@ -65,7 +65,7 @@ public class EnemyController: MonoBehaviour {
 		_dead = false;
     }
 
-    float GetTimestamp() {
+    private static float GetTimestamp() {
         return Time.time;
     }
 
@@ -140,7 +140,7 @@ public class EnemyController: MonoBehaviour {
 		return this._health > 0;
 	}
 
-    void FixedUpdate() {
+    private void FixedUpdate() {
 		if (_dead) { return; }
 
 		var playerController = _player.GetComponent<PlayerController>();

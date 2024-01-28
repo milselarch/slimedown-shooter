@@ -11,7 +11,7 @@ public class ParallaxScroller : MonoBehaviour {
     public float xTimeSpeedScale = 0.3f;
     public float yTimeSpeedScale = 0.00f;
 
-    public Transform player;
+    // public Transform player;
     public Transform mainCamera;
 
     private float _startTime;
@@ -33,7 +33,7 @@ public class ParallaxScroller : MonoBehaviour {
     }
 
     private Vector3 GetPlayerPosition() {
-        return player.transform.position;
+        return mainCamera.transform.position;
     }
     
 

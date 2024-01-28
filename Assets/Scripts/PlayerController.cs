@@ -22,7 +22,6 @@ public class PlayerController : MonoBehaviour {
     public float chargeWaitDuration = 1.0f;
     public float chargeForce = 5.0f;
     public float damageTintDuration = 0.3f;
-    public float minYPosition = -100.0f;
     
     public Tilemap tileMap;
     public GameObject attackPrefab;
@@ -35,13 +34,13 @@ public class PlayerController : MonoBehaviour {
 
     public UnityEvent scoreUpdate;
     public UnityEvent playerHealthUpdate;
+    public GameConstants gameConstants;
 
 	// whether or not player is allowed to fire projectile
 	// private bool canFire = false;
     private int _horizontalDirection = 0;
     private int _verticalDirection = 0;
     private bool _faceRight = true;
-    private const int MAX_HEALTH = 100;
 
     // keep track of which side the mario sprite is facing
     private SpriteRenderer _playerSprite;
@@ -57,6 +56,7 @@ public class PlayerController : MonoBehaviour {
     private bool _destroyed = false;
     private int _defaultSortingLayerID;
     private int _fallingSortingLayerID;
+    private int _maxHealth;
     
     private Vector3 _bottomLeft;
     private Vector3 _bottomRight;
@@ -64,7 +64,8 @@ public class PlayerController : MonoBehaviour {
     // Start is called before the first frame update
     private void Start() {
         _fallingSortingLayerID = SortingLayer.NameToID(FALLING_SORTING_LAYER);
-        
+        _maxHealth = gameConstants.startMaxHealth;
+            
         GameState.health = health;
         Application.targetFrameRate = 60;
         _lastCharge = -chargeWaitDuration;
@@ -146,7 +147,7 @@ public class PlayerController : MonoBehaviour {
 
     private void UpdateHealthBar(int currentHealth) {
         if (_playerSprite == null) { return; }
-        var healthRatio = currentHealth / (float) MAX_HEALTH;
+        var healthRatio = currentHealth / (float) _maxHealth;
         var threshold = healthRatio - 0.5f;
         var propertyBlock = new MaterialPropertyBlock();
         propertyBlock.SetFloat(BOUNDARY_Y, threshold);
@@ -193,16 +194,11 @@ public class PlayerController : MonoBehaviour {
         _lastFallDamageTime = DEFAULT_STAMP;
         
         GameState.paused = false;
-        health.Value = MAX_HEALTH;
+        health.Value = _maxHealth;
         SetColliderEnabled(true);
     }
 
     private void FixedUpdate() {
-        // set floor for lowest Y level player can fall to
-        var position = transform.position;
-        position.y = Math.Max(minYPosition, position.y);
-        transform.position = position;
-        
         if (IsFalling()) {
             var fallDurationPassed = Time.time - _lastFallDamageTime;
             if (fallDurationPassed > FALL_DAMAGE_WAIT) {
@@ -246,7 +242,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void StartFalling() {
-        _playerBody.gravityScale = 5.0f;
+        _playerBody.gravityScale = gameConstants.gravityScale;
         _lastFallTime = Time.time;
         _lastFallDamageTime = _lastFallTime;
         _playerSprite.sortingLayerID = _fallingSortingLayerID;
@@ -369,7 +365,7 @@ public class PlayerController : MonoBehaviour {
             // charging the enemy increases player health by 1
             other.gameObject.GetComponent<EnemyController>().Damage(2);
             gameScore.Increment();
-            health.Increment(1, MAX_HEALTH);
+            health.Increment(1, _maxHealth);
                 
             var newEnemyHealth = other.gameObject
                 .GetComponent<EnemyController>().GetEnemyHealth();
@@ -379,14 +375,14 @@ public class PlayerController : MonoBehaviour {
                 // destroy its sprite also
                 other.gameObject
                     .GetComponent<EnemyController>().AttemptSelfDestruct();
-                health.Increment(14, MAX_HEALTH);
+                health.Increment(14, _maxHealth);
             }
                 
             playerHealthUpdate.Invoke();
 
         } else if (enemyHealth == 0) {
             // increase health after collecting dead slime
-            health.Increment(14, MAX_HEALTH);
+            health.Increment(14, _maxHealth);
             gameScore.Increment();
             playerHealthUpdate.Invoke();
             scoreUpdate.Invoke();
