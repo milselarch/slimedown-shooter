@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
@@ -23,21 +25,31 @@ public class EnemySpawner : MonoBehaviour {
 
     private Vector3 _startPosition;
     private bool _destroyed = false;
-    
-    private int _lastSpawnedWave = 0;
     private int _enemiesKilled = 0;
+    [CanBeNull] private IEnumerator _spawnCoroutine;
 
     private void Start() {
+        _startPosition = transform.position;
+        StartCoroutine(TimerUpdateLoop());
+        GameRestart();
+    }
+
+    public void GameRestart() {
+        _enemiesKilled = 0;
         waveCounter.SetValue(0);
         waveTimestamp.SetValue(0);
-        _startPosition = transform.position;
-        StartCoroutine(SpawnAttackWave());
-        StartCoroutine(TimerUpdateLoop());
+
+        if (_spawnCoroutine != null) {
+            StopCoroutine(_spawnCoroutine);
+            _spawnCoroutine = null;
+        }
+        _spawnCoroutine = SpawnAttackWave();
+        StartCoroutine(_spawnCoroutine);
     }
 
     private IEnumerator TimerUpdateLoop() {
         /*
-         * Drains player health every 3 seconds if he's
+         * Drains player health every 3 seconds if hes
          * ran out of time to complete the current attack wave
          */
         while (!_destroyed) {
@@ -74,19 +86,32 @@ public class EnemySpawner : MonoBehaviour {
         /*
          * spawn slimes in an attack wave
          */
-        while (GameState.spawning) {
-            // wait for previous wave to finish spawning
-            yield return null;
-        }
+        Assert.IsFalse(GameState.spawning);
         
         _enemiesKilled = 0;
         waveCounter.Increment();
-        GameState.ResetWave();
+        GameState.ResetWaveSpawnFlags();
+        Assert.IsTrue(GameState.spawning);
+        yield return null;
 
         // set start of attack wave to right now
         waveTimestamp.SetValue((int) Time.time);
+        var firstSpawn = true;
         
         while (GameState.spawned < waveCounter.Value + 3) {
+            if (!firstSpawn) {
+                yield return new WaitForSeconds(spawnInterval);
+            } else {
+                firstSpawn = false;
+            }
+            
+            /*
+             * Note to self: made sure that there are no yields between
+             * the last enemy instantiation and the function exit, so that theres
+             * a 0% chance that the last enemy is killed and a new wave is spawned
+             * before the current spawning code exits
+             */
+
             var offsetX = 2 * Random.Range(0.0f, spawnRadius) - spawnRadius;
             var offsetY = 2 * Random.Range(0.0f, spawnRadius) - spawnRadius;
             var spawnPosition = new Vector3(
@@ -96,21 +121,19 @@ public class EnemySpawner : MonoBehaviour {
             );
 
             var spawnable = InTileMap(spawnPosition);
-            if (spawnable) {
-                var enemy = Instantiate(
-                    enemyPrefab, spawnPosition,
-                    Quaternion.identity
-                );
+            if (!spawnable) { continue; }
 
-                enemy.transform.SetParent(transform, true);
-                GameState.AddLivingEnemy(enemy);
-            }
+            var enemy = Instantiate(
+                enemyPrefab, spawnPosition,
+                Quaternion.identity
+            );
 
-            yield return new WaitForSeconds(spawnInterval);
+            enemy.transform.SetParent(transform, true);
+            GameState.AddLivingEnemy(enemy.GetComponent<EnemyController>());
         }
 
         GameState.StopSpawning();
-        yield return null;
+        Assert.IsFalse(GameState.spawning);
     }
     
     private bool InTileMap(Vector3 position) {

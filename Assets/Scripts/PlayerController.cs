@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour {
     // keep track of which side the mario sprite is facing
     private SpriteRenderer _playerSprite;
     private Rigidbody2D _playerBody;
+    private Vector3 _startPosition;
     private Color _originalColor;
     
     private float _lastFallTime = DEFAULT_STAMP;
@@ -65,6 +66,7 @@ public class PlayerController : MonoBehaviour {
     private void Start() {
         _fallingSortingLayerID = SortingLayer.NameToID(FALLING_SORTING_LAYER);
         _maxHealth = gameConstants.startMaxHealth;
+        _startPosition = transform.position;
             
         GameState.health = health;
         Application.targetFrameRate = 60;
@@ -183,18 +185,23 @@ public class PlayerController : MonoBehaviour {
         return new Vector2(position.x, position.y);
     }
 
-    private void GameRestart() {
+    public void GameRestart() {
+        transform.position = _startPosition;
+        _playerBody.velocity = Vector2.zero;
+        _playerBody.gravityScale = 0.0f;
+        
         // reset sprite direction
         _faceRight = true;
         _playerSprite.flipX = false;
         _charging = false;
         _playerSprite.sortingLayerID = _defaultSortingLayerID;
 
+        // reset fall damage counters
         _lastFallTime = DEFAULT_STAMP;
         _lastFallDamageTime = DEFAULT_STAMP;
         
         GameState.paused = false;
-        health.Value = _maxHealth;
+        health.Value = gameConstants.startMaxHealth;
         SetColliderEnabled(true);
     }
 

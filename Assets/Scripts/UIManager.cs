@@ -119,9 +119,13 @@ public class UIManager : MonoBehaviour {
         gameScore.SetValue(0);
         health.SetValue(100);
         UpdateUI();
-
-        gameOverScreen.SetActive(false);
+        
         StartCoroutine(TimerUpdateLoop());
+        GameRestart();
+    }
+
+    public void GameRestart() {
+        gameOverScreen.SetActive(false);
     }
 
     public void OnPlayerHealthUpdate() {
@@ -131,6 +135,7 @@ public class UIManager : MonoBehaviour {
     }
 
     public void InitiateRestart() {
+        Debug.Log("Initiating restart...");
         restartEvent.Invoke();
     }
 

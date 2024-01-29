@@ -15,7 +15,7 @@ public class ParallaxScroller : MonoBehaviour {
     public Transform mainCamera;
 
     private float _startTime;
-    private Vector3 _startPlayerPosition;
+    private Vector3 _startCameraPosition;
     private Vector2[] _offset;
 
     private void Start() {
@@ -24,15 +24,15 @@ public class ParallaxScroller : MonoBehaviour {
             _offset[i] = Vector2.zero;	
         }
         
-        Restart();
+        GameRestart();
     }
 
-    private void Restart() {
+    private void GameRestart() {
         _startTime = Time.time;
-        _startPlayerPosition = GetPlayerPosition();
+        _startCameraPosition = GetCameraPosition();
     }
 
-    private Vector3 GetPlayerPosition() {
+    private Vector3 GetCameraPosition() {
         return mainCamera.transform.position;
     }
     
@@ -43,7 +43,7 @@ public class ParallaxScroller : MonoBehaviour {
 
     private void Update() {
         for (var i = 0; i < layers.Length; i++) {
-            var newOffset = GetPlayerPosition() - _startPlayerPosition;
+            var newOffset = GetCameraPosition() - _startCameraPosition;
             var timePassed = Time.time - this._startTime;
             var displacement = speedMultiplier[i] * (
                 scrollSpeedScale * ToVector2(newOffset) + 

@@ -44,7 +44,7 @@ public class EnemyController: MonoBehaviour {
 	private int _health = 0;
 
     // Start is called before the first frame update
-    void Start() {
+    private void Start() {
 	    _agent = GetComponent<NavMeshAgent>();
 	    _agent.updateRotation = false;
 	    _agent.updateUpAxis = false;
@@ -52,10 +52,10 @@ public class EnemyController: MonoBehaviour {
 	    
         _enemyBody = GetComponent<Rigidbody2D>();
         _player = GameObject.FindGameObjectWithTag("Player");
-		GameRestart();
+        Respawn();
     }
-
-    private void GameRestart() {
+    
+    private void Respawn() {
 		this._health = this.maxHealth;
 		GetComponent<SpriteRenderer>().material = defaultMaterial;
         enemyAnimator.SetBool(DEAD, false);
@@ -122,6 +122,13 @@ public class EnemyController: MonoBehaviour {
 		}
 
         AttemptSelfDestruct();
+    }
+
+    public void GameRestart() {
+        // destroy self and deregister from GameState
+        _health = 0;
+        Destroy(gameObject);
+        GameState.KillEnemy(id);
     }
 
 	public bool AttemptSelfDestruct() {

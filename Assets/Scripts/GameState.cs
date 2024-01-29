@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 public class GameState: MonoBehaviour {
-    private static readonly Dictionary<int, GameObject> LIVING_ENEMIES = new();
+    private static readonly Dictionary<int, EnemyController> LIVING_ENEMIES = new();
     private const float TOLERANCE = 0.001f;
     private static bool _paused = false;
     
@@ -12,8 +12,9 @@ public class GameState: MonoBehaviour {
     public static int spawned { get; private set; } = 0;
     public static bool spawning { get; private set; } = false;
 
-    public static void ResetWave() {
+    public static void ResetWaveSpawnFlags() {
         spawned = 0;
+        Assert.IsFalse(spawning);
         spawning = true;
     }
 
@@ -25,7 +26,7 @@ public class GameState: MonoBehaviour {
         spawning = false;
     }
 
-    public static int GetNumLivingEnemies() {
+    private static int GetNumLivingEnemies() {
         return LIVING_ENEMIES.Count;
     }
 
@@ -33,10 +34,8 @@ public class GameState: MonoBehaviour {
         return GetNumLivingEnemies() > 0;
     }
 
-    public static void AddLivingEnemy(GameObject enemy) {
-        var controller = enemy.GetComponent<EnemyController>();
-        Assert.IsNotNull(controller);
-        controller.SetID(spawned);
+    public static void AddLivingEnemy(EnemyController enemy) {
+        enemy.SetID(spawned);
         LIVING_ENEMIES[spawned] = enemy;
         spawned += 1;
     }
