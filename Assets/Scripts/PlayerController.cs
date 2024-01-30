@@ -201,8 +201,13 @@ public class PlayerController : MonoBehaviour {
         _lastFallDamageTime = DEFAULT_STAMP;
         
         GameState.paused = false;
-        health.Value = gameConstants.startMaxHealth;
+        gameScore.SetValue(0);
+        health.SetValue(gameConstants.startMaxHealth);
+        playerHealthUpdate.Invoke();
+        scoreUpdate.Invoke();
+        
         SetColliderEnabled(true);
+        Input.ResetInputAxes();
     }
 
     private void FixedUpdate() {

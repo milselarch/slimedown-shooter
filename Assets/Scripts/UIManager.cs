@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 using TMPro;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
+using UnityEngine.PlayerLoop;
 using Cursor = UnityEngine.Cursor;
 
 
@@ -115,9 +116,6 @@ public class UIManager : MonoBehaviour {
         _statsOverlays = new MultipleStatsOverlay();
         _statsOverlays.AddOverlay(outlineStatsUI, true);
         _statsOverlays.AddOverlay(statsUI);
-
-        gameScore.SetValue(0);
-        health.SetValue(100);
         UpdateUI();
         
         StartCoroutine(TimerUpdateLoop());
@@ -125,7 +123,12 @@ public class UIManager : MonoBehaviour {
     }
 
     public void GameRestart() {
+        /* I set UIManager script execution order to be after
+         * EnemySpawner script execution order. That is the only thing
+         * guaranteeing that the wave count is reset before the UI
+         */
         gameOverScreen.SetActive(false);
+        UpdateUI();
     }
 
     public void OnPlayerHealthUpdate() {
