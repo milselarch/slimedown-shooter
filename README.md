@@ -11,7 +11,7 @@ Your life depends on slimes, and so does your death...
 This game is a top down action game (mainly a shooter)
 The main objective is to kill waves of slimes that spawn in and collect the slime particles they leave behind to regain health
 The catch is that you also consume health when shooting them, getting attacked by slimes, or when charging them (health has becoem a resource)
-![Screenshot from 2023-10-21 06-40-03](https://github.com/50033-game-design-and-development/50033-midterm-partb-milselarch/assets/11241733/a65542ee-675f-40b1-9dfd-fdc86971c445)
+![277063858-a65542ee-675f-40b1-9dfd-fdc86971c445](https://github.com/milselarch/slimedown-shooter/assets/11241733/60d1f43b-d3b9-4851-8150-c37c25d50a4c)
 
 ### Game Executable
 
