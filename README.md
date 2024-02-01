@@ -57,7 +57,7 @@ shooting and charging slimes cost health, so you can't just spam the attacks.
 After clearing 1 wave of slimes, a new wave will spawn. Each wave has 1 more slime 
 than the previous theres a time limit for each level (above the wave number) - 
 when you run out of time you will start taking damage every 3 seconds.
-You lose when you run out of health.
+You lose when you run out of health. 
 
 ## Features Implementation
 
