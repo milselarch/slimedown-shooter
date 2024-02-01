@@ -43,21 +43,31 @@ a high score.
 
 ## `Concept`
 
-### Gameplay Overview
+### `Gameplay Overview`
 
 Simple procedure on how to navigate in your game
 
-Use WASD to move.
+Use WASD to move.  
 click in the direction you want to shoot slimes at
-when slimes die they leave behind a slime particle. walk up to the slime particle to
-collect it and recharge your health. Press space to launch a charge attack in the
-direction of the mouse pointer (does 2 damage to slimes, they have 4 health each)
+when slimes die they leave behind a slime ball. walk up to the slime ball to
+collect it and recharge your health. Shooting at slime balls destroys them. 
+Press space to launch a charge attack in the direction of the mouse pointer 
+(does 2 damage to slimes, they have 4 health each)
 shooting and charging slimes cost health, so you can't just spam the attacks.
 
 After clearing 1 wave of slimes, a new wave will spawn. Each wave has 1 more slime 
 than the previous theres a time limit for each level (above the wave number) - 
 when you run out of time you will start taking damage every 3 seconds.
 You lose when you run out of health. 
+
+## `Primary Mechanics`
+
+1. Shooting mechanic  
+Click to fire a blaster shot at slimes, at the cost of 2 health. 
+If it hits a slime they take damage. If it hits a slime ball the slime ball is destroyed.
+2. Charging mechanic
+
+3. 
 
 ## Features Implementation
 
@@ -86,16 +96,6 @@ You are free to transform the table below into short paragraphs if you’d like.
 |    45     |     orange  |  movement, charge attack, aim and shoot all use InputSystem                                   |            2        |   10            |
 |     74    |  pink     |     used scriptable object game architecture for communicating health, score changes, and when enemies are killed                                |          3          |            15   |
 |    59     |   pink    |     create a timer where player health wil be drained after the timer runs out (resets at the start of each new wave)                                |                3    |         15      |
-
-**Total Feature Point spent: 25**
-
-**Maximum Marks to earn: 99**
-
-### Feature Tree Visual Representation
-
-Download the feature tree image and indicate the nodes that you have implemented. Display an image of your completed feature tree here, highlight or circle the **nodes** that you have implemented as a visual aid for us when we grade your submission
-
-![midterm-tree](https://github.com/50033-game-design-and-development/50033-midterm-partb-milselarch/assets/11241733/3c57de1e-69fd-4854-b805-bba88b7f8793)
 
 ### Feature Analysis
 
