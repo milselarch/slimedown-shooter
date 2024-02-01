@@ -1,44 +1,63 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/Xmv1pZ8x)
-# README.md
+# `SLIMEDOWN SHOOTER`
+## `Introduction`
 
-**SLIMEDOWN SHOOTER**
-## Basic Game Description
+### `Game Summary Pitch`
+Your life depends on slimes, and so does your death...  
 
-Genre, main objective, provide screenshot of your scene if you are proud of it
-
-Your life depends on slimes, and so does your death...   
-
-This game is a top down action game (mainly a shooter)
-The main objective is to kill waves of slimes that spawn in and collect the slime particles they leave behind to regain health
-The catch is that you also consume health when shooting them, getting attacked by slimes, or when charging them (health has become a resource)  
-  
 ![277063858-a65542ee-675f-40b1-9dfd-fdc86971c445](https://github.com/milselarch/slimedown-shooter/assets/11241733/60d1f43b-d3b9-4851-8150-c37c25d50a4c)
+Slimedown shooter is a top down 2D shooter game where the main objective 
+is to survive the endless waves of slimes that spawn in and collect the slime 
+particles they leave behind to replenish your health. The catch is that you also consume 
+health when shooting them, getting attacked by slimes, or when charging them 
+(health has become a resource).
 
-### Game Executable
+### `Inspiration`
+1. Boxhead is a 2.5D shooter game where you need to survive waves of zombies and devils
+2. Noita is a 2D rouguelite where you kill yourself easily interacting 
+with the world and where every pixel is simulated, leading to a very 
+chaotic and dynamic environment
 
-**State system requirements: Linux x86_64 (was developed on ubuntu 20.04)**
+### `Player Experience`
+On an island in the sky you gotta survive the endless slime hordes that come at
+you for as long as possible. You survive the waves of slimes by shooting and 
+charging at them, and when they die they turn into slime balls that you can use 
+to replenish your health. Deciding how and when to attack and avoid the slimes 
+must be done tactically to ensure survival.
 
-Provide a **link** to download your game executable
-[linux x86_64 executable](https://github.com/50033-game-design-and-development/50033-midterm-partb-milselarch/releases/download/v1.0.0/linux-executable.x86_64)
+### `Platform`
+The game is developed to be released on windows and linux (Ubuntu 20.04) PC
 
-### How to Play
+### `Development Software`
+- Unity 2022.3.9f1
+- Code Rider for writing C# code
+- GIMP for editing sprites
+
+### `Genre`
+Singleplayer, shooter, casual
+
+### `Target Audience`
+Without heavy or complicated ideas, and intuitive-to-grasp mechanics, 
+this game is marketed to at least casual game players who are up for shooting
+slimes and dodging their attacks to survive as long as possible and get
+a high score.
+
+## `Concept`
+
+### Gameplay Overview
 
 Simple procedure on how to navigate in your game
 
 Use WASD to move.
 click in the direction you want to shoot slimes at
-when slimes die they leave behind a slime particle. walk up to the slime particle to collect it and recharge your health
-press space to launch a charge attack in the direction the player is facing (does 2 damage to slimes, they have 4 health each)
-shooting and charging slimes cost health
+when slimes die they leave behind a slime particle. walk up to the slime particle to
+collect it and recharge your health. Press space to launch a charge attack in the
+direction of the mouse pointer (does 2 damage to slimes, they have 4 health each)
+shooting and charging slimes cost health, so you can't just spam the attacks.
 
-After clearing 1 wave of slimes, a new wave will spawn. Each wave has 1 more slime than the previous
-theres a time limit for each level (above the wave number) - when you run out of time you will start taking damage every 3 seconds.
-You lose when you run out of health
-
-### Gameplay Video
-
-A ~60s recorded run of your game from start to finish (you may record from Unity editor, show your Game window clearly). You may provide a **working link, or a gif embedded directly here.**    
-[https://www.youtube.com/watch?v=efx0LmTTMKo](https://www.youtube.com/watch?v=efx0LmTTMKo)
+After clearing 1 wave of slimes, a new wave will spawn. Each wave has 1 more slime 
+than the previous theres a time limit for each level (above the wave number) - 
+when you run out of time you will start taking damage every 3 seconds.
+You lose when you run out of health.
 
 ## Features Implementation
 
