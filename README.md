@@ -60,7 +60,7 @@ than the previous theres a time limit for each level (above the wave number) -
 when you run out of time you will start taking damage every 3 seconds.
 You lose when you run out of health. 
 
-## `Primary Mechanics`
+### `Game Mechanics`
 
 1. Movement and slime ball collection  
 Use WASD to move around in the island, and the player picks up a slime ball when
@@ -76,77 +76,115 @@ If you hit a slime moving towards you while charging you deal damage to the slim
 You can also charge through caps between points in the island, and won't fall if you're
 not on the island for as long as the charge attack is still playing.
 4. Slime movement and attack  
+Slimes can hop from place to place towards the player with a timed cooldown 
+between hops, and also do a longer-range charge attack towards the player when
+it gets close enough to the player. If the slime hits the player during regular movement
+or during the charge attack, then the slime takes damage instead of the player
+5. Falling from the island  
+If the player is outside the boundaries of the island, then they can fall and die. 
+This can happen when the player charges out of the island, walks past the edges of
+the island or gets pushed off the edge by slimes.
 
-5. Falling from the island
+## `Art`
 
+### `Design`
+Pixel art for everything - UI, game world and sprites. 
+Sprites and game world should be bright, colorful and crisp.
 
-## Features Implementation
+## `Audio`
 
-Fill up the table below based on the **features** that you want us to grade you with. You may implement more features than what you can afford as your feature points, so you can select the features that we can grade. Feature prerequisite rule should apply.
+### `Music`
+Music should be retro and have action vibes
 
-You are free to transform the table below into short paragraphs if you’d like. The goal is to ensure that we **can find** and **confirm** each node implementation.
-(in the event I am only allowed to choose up to 90 points worth of nodes, I would elect to forfeit the 1st 3 (nodes 27, 18, 37))
+### `Sound Effects`
+Sound effects should be retro and synthesized rather than realistic
 
-| Node ID | Color | Short Description of Implementation | Feature Point Cost | Marks to earn |
-| ------- | ----- | ----------------------------------- | ------------------ | ------------- |
-|     27   |  white     |       Made sure text menuUI and game UI are readable and accessible                  |            1        |        3       |
-|     18   |  white     |       Added PlayerController.cs to manage player logic and resources                   |            1        |        3       |
-|     37   |  white     |       PascalCase for methods and camelCase for vars, args are observed                      |            1        |        3       |
-|     5   |  white     |           Attached camera controller to player extended it to cover 2 axes                          |            1        |        3       |
-|     7    |  white     |     arranged tilemap, game island collider, a house that has collision                                |           1         |      3         |
-|     19    |  white     |    designed, created enemy prefab                                 |              1      |           3    |
-|    22     | white      |    enemy slime animator with idle, bouncing, charging clips                                 |              1      |        3       |
-|    21     |  white     |  slime enemy has internal health system (4 hp) and can take and deal damage from player                                   |   1                 |      3         |
-|   17      |   white    |  added idle, moving, charge animation to player                                   |           1         |       3        |
-|   23      |  white     |    created 2D canvas with health and score and wave number and timer                                 |           1         |      3        |
-|    33     |   white    |  created health scriptable object that is shared betweem UI, player, and enemy scripts                                  |         1           |        3       |
-|  36       |  white     |        use conventional commit convention                             |        1            |       3        |
-|      24   | white      |    UI shows character health and score, updated in real time                                 |             1       |    3          |
-|  40       |  orange      |   slimes spawn in waves and each wave starts after you clear the last one                                  |           2         |        10       |
-|    44     |  orange      |    basic combat system, player can shoot and charge attack, slimes can charge attack, combat costs health (as in launching the attack drains your health also)         |     2               |  10             |
-|    45     |     orange  |  movement, charge attack, aim and shoot all use InputSystem                                   |            2        |   10            |
-|     74    |  pink     |     used scriptable object game architecture for communicating health, score changes, and when enemies are killed                                |          3          |            15   |
-|    59     |   pink    |     create a timer where player health wil be drained after the timer runs out (resets at the start of each new wave)                                |                3    |         15      |
+## `Game Experience`
 
-### Feature Analysis
+### `UI`
 
-For **each** of your **orange**, **pink** and **purple** nodes, explain clearly your game design justification on how this feature upgrades the **overall quality** of the game. In short, you’re providing a short **analysis**.
+An in-game overlay will show the score, health, wave number and time left for 
+the current attack wave.
 
-- If the feature stated that it has to support a core drive, explain which core drive.
-- If the feature does not state anything concrete, it becomes an **open ended feature. Please** use proper terminologies whenever possible.
-  - You can argue that this feature forms an **elegant rule**, or
-  - It improves the UX of the game, or
-  - **It improves code maintenance** overall
-- Consult our lecture slides for inspiration and samples on how to concisely **analyse** a game.
+### `Controls`
+1. Keyboard: 
+   1. `WASD`: movement
+   2. `Space`: charge in direction of cursor screen position
+   3. `Left Mouse Click`: fire a blaster shot
 
-orange rules:        
-40 - I added slime wave spawning because I thought its very natural to have. slimes are not very intimidating by themselves, what makes them dangerous in most games is the fact that theres a lot of them, and so this felt like an elegant rule. By having the number of enemies spawned increase each wave it naturally makes the game harder over time as well     
-44 - user experience is improved massively by slimes and the player being able to attack one another because that forms the central conflict and mechanic of the game, otherwise there wouldn't even be a game at all     
-45 - InputSystem helps with code maintainance as porting the game to a different device will not require any code changes most likely as far as handling player input data is concerned    
+## `Features Implementation`
 
-pink rules:         
-74 - used scriptable game object architecture mostly for game maintainance reasons. It's very nice to use events to communicate between player and enemy prefab instantiations, or player to UI      
-59 - I added a timer for each slime attack wave. The players health will start to drain after the time runs out. This disincentivises the player from just running around the slimes and slowly picking them off one by one as he know has to engage in them more aggressibely in order to defeat them without dying himself. Adds a sense of urgancy to the game in my opinion.    
+### `Features Implemented`
+1. create game world tile map
+2. create collider tile map with house
+3. design, create, enemy prefab and behavior
+4. enemy slime animator with idle, bouncing, charging clips
+5. slime enemy has internal health system (4 hp) and can take and deal damage from player
+6. add idle, moving, charge animation to player. 
+UI shows character health and score, updated in real time
+7. create 2D canvas with health and score and wave number and timer
+8. created health scriptable object that is shared between UI, player, and enemy scripts 
+9. slimes spawn in waves and each wave starts after you clear the last one
+10. basic combat system, player can shoot and charge attack, slimes can charge attack,
+combat costs health (as in launching the attack drains your health also)
+11. movement, charge attack, aim and shoot all use InputSystem
+12. use scriptable object game architecture for communicating health, 
+score changes, and when enemies are killed
+13. create a timer where player health wil be drained after the timer runs out 
+(resets at the start of each new wave)
+14. smooth edge transitions for island tiles
+15. enable URP shader rendering pipeline
+16. make slime balls shine in and out using URP shader
+17. Show when damage is taken by player (sprite turns red)
+18. show health bar of player (URP shader turns x% of player green from the top)
+19. add in game crosshair, hide default mouse pointer when in-game
+20. show charge cooldown on crosshair 
+21. refactor in-game HUD overlay with UIDocument
+22. add a pause menu w/ main menu button
+23. add slime animation to game loading screen, make game loading async
+24. debug wave spawning bug
+25. implement game restart functionality 
+26. make player fall off the map when he's past the island boundaries 
+(except when charging)
+27. debug charge attack
+(only inflict damage to slime if velocities are opposite or displacement 
+vector aligns with player velocity vector)
+28. enemy death counting refactor (use GameState to track alive slimes)
+29. parallax clouds effect tied to time and movement
+30. have camera detect from player after they drop far enough
+31. use AI navigation for slimes
 
-## Notes
+### `Features todo`
+1. add restart button in pause menu
+2. add bomb slime enemy type
+3. Add URP shader for charge attack
+4. Make the main menu look good + more features
+   1. Add windowed mode, full screen mode
+   2. Exit game option
+   3. master and music audio sliders
+5. Add instructions page 
+6. Add initial instructions overlay 
+7. have slime ball shine timings be relative to time of slime ball degeneration
+8. Create a nice starter menu screen
 
-Any other notes you would like to add here
-Not sure why the font isnt working in the exported game, but its functional regardless
-Used a tilemap for the game background, and a collision tilemap to set the boundaries of the world
-was originally planning to do node 69 (AI navigation) but the problem I faced was that that module is specific with 3D models only
+### `Future Potential Features todo`
+1. refactor game over menu using UIDocument
+2. dynamic tile map rules-based generation
 
-## Asset Used & Credits
+## `Asset Used & Credits`
 
-It’s nice to give **credits** to the creator of the assets (if info is available).
-tilemap:
-dirt, water, and islands were taken from the cozy farms global spritesheet      
-all variants of flowers were from cozy farm tiles folder       
-slime sprites were taken from cozy farm enemies (green slime folder)            
-house in middle of map is from cozy farms buildings sprite sheet    
+tile map:
+1. dirt, water, and islands were taken from the cozy farms global sprite sheet      
+2. all variants of flowers were from cozy farm tiles folder       
+3. slime sprites were taken from cozy farm enemies (green slime folder)            
+4. house in middle of map is from cozy farms buildings sprite sheet    
 
 player sprite are from pixel-adventure-1, main characters / virtual guy sprite sheet     
-fireball that player shoots out has its sprite from gothicvania church files/gothicvania church files/SPRITES/fx/fireball
-finally sound effect when fireball is shot out is from everyday-stuff-sfx/shapeforms-audio-effects/Sci Fi Weapons Cyberpunk Arsenal Preview/AUDIO/EXPLDsgn_Implode_15.wav
+fireball that player shoots out has its sprite from gothvania church 
+files/gothvania church files/SPRITES/fx/fireball
+finally sound effect when fireball is shot out is from 
+everyday-stuff-sfx/shapeforms-audio-effects/Sci Fi Weapons Cyberpunk Arsenal
+Preview/AUDIO/EXPLDsgn_Implode_15.wav
 
 
 
