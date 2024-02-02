@@ -62,12 +62,23 @@ You lose when you run out of health.
 
 ## `Primary Mechanics`
 
-1. Shooting mechanic  
+1. Movement and slime ball collection  
+Use WASD to move around in the island, and the player picks up a slime ball when
+they come into contact with it.
+2. Shooting mechanic  
 Click to fire a blaster shot at slimes, at the cost of 2 health. 
-If it hits a slime they take damage. If it hits a slime ball the slime ball is destroyed.
-2. Charging mechanic
+If it hits a slime they take damage. If a slime gets shot and its health goes down
+to 0 then the the slime degenerates into a slime ball.
+If the blaster shot hits a slime ball then it is destroyed.
+3. Charging mechanic  
+Press space to launch a charge attack in the direction of the mouse pointer.
+If you hit a slime moving towards you while charging you deal damage to the slime
+You can also charge through caps between points in the island, and won't fall if you're
+not on the island for as long as the charge attack is still playing.
+4. Slime movement and attack  
 
-3. 
+5. Falling from the island
+
 
 ## Features Implementation
 
