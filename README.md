@@ -156,19 +156,19 @@ vector aligns with player velocity vector)
 30. have camera detect from player after they drop far enough
 31. use AI navigation for slimes
 32. create license file for repo
+33. add restart button in pause menu
 
 ### `Features todo`
-1. add restart button in pause menu
-2. add bomb slime enemy type
-3. Add URP shader for charge attack
-4. Make the main menu look good + more features
+1. add bomb slime enemy type
+2. Add URP shader for charge attack
+3. Make the main menu look good + more features
    1. Add windowed mode, full screen mode
    2. Exit game option
    3. master and music audio sliders
-5. Add instructions page 
-6. Add initial instructions overlay 
-7. have slime ball shine timings be relative to time of slime ball degeneration
-8. Create a nice starter menu screen
+4. Add instructions page 
+5. Add initial instructions overlay 
+6. have slime ball shine timings be relative to time of slime ball degeneration
+7. Create a nice starter menu screen
 
 ### `Future Potential Features todo`
 1. refactor game over menu using UIDocument
