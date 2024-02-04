@@ -4,46 +4,52 @@
     justify-content: center;
 }
 
-#MainMenuButton {
+.menu-button {
     padding: 10px;
-    padding-left: 60px;
-    padding-right: 60px;
-    
+    /* padding-left: 60px; */
+    /* padding-right: 60px; */
+    width: 250px;
     font-size: 40px;
     -unity-font-style: normal;
+    
 }
 
 #PlayButton {
-    background-image: url("/Assets/UI/ui_play_button.png");
+    background-image: url('project://database/Assets/UI/ui_play_button.png?fileID=21300000&guid=a797c18087b8162caba1633c011e687c&type=3#ui_play_button');
     -unity-background-scale-mode: scale-to-fit;
-
     border-width: 0;
     width: 98px;
     height: 98px;
     background-color: rgba(0, 0, 0, 0);
     margin-bottom: 40px;
 }
+
 #PlayButton:hover {
-    background-image: url("/Assets/UI/ui_play_button_light.png");
+    background-image: url('project://database/Assets/UI/ui_play_button_light.png?fileID=21300000&guid=8c6b66e4ec002612788fdc4bcc1d6fa2&type=3#ui_play_button_light');
 }
+
 #PlayButton:active {
-    background-image: url("/Assets/UI/ui_play_button_pressed.png");
+    background-image: url('project://database/Assets/UI/ui_play_button_pressed.png?fileID=21300000&guid=45bca12658a83601688f06de848080c8&type=3#ui_play_button_pressed');
 }
 
 Button {
-    background-color: #63ab3f;
-    color: #222; /* c8d45d */
-    border-color: #63ab3f;
-    
-    border-width: 4px; /* border size */
+    background-color: rgb(99, 171, 63);
+    color: rgb(34, 34, 34);
+    border-color: rgb(99, 171, 63);
+    border-width: 4px;
     align-self: center;
-    border-radius: 5px; /* rounded corners */
-    -unity-font-definition: url("/Assets/Fonts/pixel-unicode.ttf");
+    border-radius: 5px;
+    -unity-font-definition: url('project://database/Assets/Fonts/pixel-unicode.ttf?fileID=12800000&guid=556bde64632b655ba9060ba448798705&type=3#pixel-unicode');
 }
+
 Button:hover {
-    color: #ffee83;
+    color: rgb(255, 238, 131);
 }
+
 Button:active {
-    border-color: #2f5753;
+    border-color: rgb(47, 87, 83);
     color: white;
+}
+
+.menuButton {
 }
