@@ -192,6 +192,7 @@ Preview/AUDIO/EXPLDsgn_Implode_15.wav`
 [Shapeforms Audio Effects Page](https://shapeforms.itch.io/shapeforms-audio-free-sfx/download/v9ETHAwN2i4n_Lt51l6pOZda0idBf_xsxjjzGHro)
 4. Parallax pixel art clouds background is from 
 [Free Sky Backgrounds](https://free-game-assets.itch.io/free-sky-with-clouds-background-pixel-art-set)
+5. Background music is [Chiptronical by Patrick De Arteaga](https://patrickdearteaga.com/arcade-music/)
 
 
 
