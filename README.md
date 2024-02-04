@@ -169,6 +169,7 @@ vector aligns with player velocity vector)
 5. Add initial instructions overlay 
 6. have slime ball shine timings be relative to time of slime ball degeneration
 7. Create a nice starter menu screen
+8. (bug) deal with input action being carried over on restart
 
 ### `Future Potential Features todo`
 1. refactor game over menu using UIDocument
