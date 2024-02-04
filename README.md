@@ -167,26 +167,30 @@ vector aligns with player velocity vector)
 6. Add initial instructions overlay 
 7. have slime ball shine timings be relative to time of slime ball degeneration
 8. Create a nice starter menu screen
+9. create license file for repo
 
 ### `Future Potential Features todo`
 1. refactor game over menu using UIDocument
 2. dynamic tile map rules-based generation
+3. day / night cycle
+4. more weapon types
 
 ## `Asset Used & Credits`
 
-tile map:
-1. dirt, water, and islands were taken from the cozy farms global sprite sheet      
-2. all variants of flowers were from cozy farm tiles folder       
-3. slime sprites were taken from cozy farm enemies (green slime folder)            
-4. house in middle of map is from cozy farms buildings sprite sheet    
-
-player sprite are from pixel-adventure-1, main characters / virtual guy sprite sheet     
-fireball that player shoots out has its sprite from gothvania church 
-files/gothvania church files/SPRITES/fx/fireball
-finally sound effect when fireball is shot out is from 
-everyday-stuff-sfx/shapeforms-audio-effects/Sci Fi Weapons Cyberpunk Arsenal
-Preview/AUDIO/EXPLDsgn_Implode_15.wav
-
+1. [Cozy farms](https://shubibubi.itch.io/cozy-farm) asset usages:
+    1. tile map:
+       1. dirt, water, and islands were taken from the cozy farms global sprite sheet
+       2. all variants of flowers were from cozy farm tiles folder        
+       3. house in middle of map is from cozy farms buildings sprite sheet
+    2. slime sprites were taken from cozy farm enemies (green slime folder)
+2. Player sprite are from pixel-adventure-1, main characters / virtual guy sprite sheet
+[pixel adventure pack](https://assetstore.unity.com/packages/2d/characters/pixel-adventure-1-155360)
+3. Sound effect when blaster shot is fired is from 
+`shapeforms-audio-effects/Sci Fi Weapons Cyberpunk Arsenal
+Preview/AUDIO/EXPLDsgn_Implode_15.wav`
+[Shapeforms Audio Effects Page](https://shapeforms.itch.io/shapeforms-audio-free-sfx/download/v9ETHAwN2i4n_Lt51l6pOZda0idBf_xsxjjzGHro)
+4. Parallax pixel art clouds background is from 
+[Free Sky Backgrounds](https://free-game-assets.itch.io/free-sky-with-clouds-background-pixel-art-set)
 
 
 
