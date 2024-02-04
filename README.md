@@ -154,6 +154,7 @@ vector aligns with player velocity vector)
 29. parallax clouds effect tied to time and movement
 30. have camera detect from player after they drop far enough
 31. use AI navigation for slimes
+32. create license file for repo
 
 ### `Features todo`
 1. add restart button in pause menu
@@ -167,7 +168,6 @@ vector aligns with player velocity vector)
 6. Add initial instructions overlay 
 7. have slime ball shine timings be relative to time of slime ball degeneration
 8. Create a nice starter menu screen
-9. create license file for repo
 
 ### `Future Potential Features todo`
 1. refactor game over menu using UIDocument
