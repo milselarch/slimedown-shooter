@@ -175,6 +175,6 @@ public class UIManager : MonoBehaviour {
     }
 
     public void UpdateUI() {
-        _statsOverlays.UpdateUI(this);
+        _statsOverlays?.UpdateUI(this);
     }
 }

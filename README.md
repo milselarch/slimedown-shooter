@@ -157,6 +157,7 @@ vector aligns with player velocity vector)
 31. use AI navigation for slimes
 32. create license file for repo
 33. add restart button in pause menu
+34. (bugfix) stop player movement being carried over on restart
 
 ### `Features todo`
 1. add bomb slime enemy type
@@ -169,7 +170,6 @@ vector aligns with player velocity vector)
 5. Add initial instructions overlay 
 6. have slime ball shine timings be relative to time of slime ball degeneration
 7. Create a nice starter menu screen
-8. (bug) deal with input action being carried over on restart
 
 ### `Future Potential Features todo`
 1. refactor game over menu using UIDocument

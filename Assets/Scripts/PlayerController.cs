@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour {
     public UnityEvent scoreUpdate;
     public UnityEvent playerHealthUpdate;
     public GameConstants gameConstants;
+    public InputActionAsset actionAsset;
 
 	// whether or not player is allowed to fire projectile
 	// private bool canFire = false;
@@ -85,6 +86,11 @@ public class PlayerController : MonoBehaviour {
 
     private void OnDrawGizmos() {
         MarkTileMapPositions();
+    }
+
+    private void ResetInputDevices() {
+        actionAsset.Disable();
+        actionAsset.Enable();
     }
 
     private void MarkTileMapPositions() {
@@ -186,6 +192,10 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void GameRestart() {
+        // zero out movement
+        _horizontalDirection = 0;
+        _verticalDirection = 0;
+        
         transform.position = _startPosition;
         _playerBody.velocity = Vector2.zero;
         _playerBody.gravityScale = 0.0f;
@@ -208,6 +218,7 @@ public class PlayerController : MonoBehaviour {
         
         SetColliderEnabled(true);
         Input.ResetInputAxes();
+        ResetInputDevices();
     }
 
     private void FixedUpdate() {
