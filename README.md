@@ -176,6 +176,7 @@ vector aligns with player velocity vector)
 2. dynamic tile map rules-based generation
 3. day / night cycle
 4. more weapon types
+5. make slimes be able to fall off the map too
 
 ## `Asset Used & Credits`
 
