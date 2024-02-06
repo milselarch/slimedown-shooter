@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 public class GameState: MonoBehaviour {
-    private static readonly Dictionary<int, EnemyController> LIVING_ENEMIES = new();
+    private static readonly Dictionary<int, BaseEnemyController> LIVING_ENEMIES = new();
     private const float TOLERANCE = 0.001f;
     private static bool _paused = false;
     
@@ -34,7 +34,7 @@ public class GameState: MonoBehaviour {
         return GetNumLivingEnemies() > 0;
     }
 
-    public static void AddLivingEnemy(EnemyController enemy) {
+    public static void AddLivingEnemy(BaseEnemyController enemy) {
         enemy.SetID(spawned);
         LIVING_ENEMIES[spawned] = enemy;
         spawned += 1;

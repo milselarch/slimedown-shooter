@@ -9,12 +9,26 @@ using UnityEngine.Assertions;
 using UnityEngine.Serialization;
 using UnityEngine.TextCore;
 
-public class EnemyController: MonoBehaviour {
+
+public class BaseEnemyController {
+    public int id { get; private set; } = -1;
+
+    public void SetID(int newId) {
+        Assert.IsTrue(this.id == -1);
+        this.id = newId;
+    }
+}
+
+public interface IBaseEnemyControllerable {
+    public BaseEnemyController GetBaseController();
+}
+
+
+public class EnemyController: MonoBehaviour, IBaseEnemyControllerable {
 	private static readonly int BOUNCE = Animator.StringToHash("bounce");
 	private static readonly int ATTACK = Animator.StringToHash("attack");
 	private static readonly int DEAD = Animator.StringToHash("dead");
-
-    private int id { get; set; } = -1;
+    
 	public Material defaultMaterial;
 	public Material glowMaterial;
 	
@@ -35,9 +49,11 @@ public class EnemyController: MonoBehaviour {
 
     public Animator enemyAnimator;
 
+    private readonly BaseEnemyController _baseController = new(); 
     private NavMeshAgent _agent;
     private Rigidbody2D _enemyBody;
     private GameObject _player;
+    
     private float _lastJump = -10.0f;
     private float _lastAttack = -10.0f;
 	private bool _dead = false;
@@ -71,10 +87,12 @@ public class EnemyController: MonoBehaviour {
         return Time.time;
     }
 
+    /*
     public void SetID(int newId) {
         Assert.IsTrue(this.id == -1);
         this.id = newId;
     }
+    */
     
     // inflict damage to the enemy
 	public void Damage(int damage = 1) {
@@ -93,7 +111,7 @@ public class EnemyController: MonoBehaviour {
 			enemyAnimator.SetBool(DEAD, true);
 			
 			transform.localScale = Vector3.one;
-            GameState.KillEnemy(id);
+            GameState.KillEnemy(_baseController.id);
 			onEnemyKill.Invoke();
 			UpdateCollider();
 			_dead = true;
@@ -128,7 +146,7 @@ public class EnemyController: MonoBehaviour {
         // destroy self and deregister from GameState
         _health = 0;
         Destroy(gameObject);
-        GameState.KillEnemy(id);
+        GameState.KillEnemy(_baseController.id);
     }
 
 	public bool AttemptSelfDestruct() {
@@ -137,7 +155,7 @@ public class EnemyController: MonoBehaviour {
         }
 
         Destroy(gameObject);
-        GameState.KillEnemy(id);
+        GameState.KillEnemy(_baseController.id);
         return true;
     }
 
@@ -194,5 +212,9 @@ public class EnemyController: MonoBehaviour {
     // Update is called once per frame
     void Update() {
 	    
+    }
+
+    public BaseEnemyController GetBaseController() {
+        return this._baseController;
     }
 }

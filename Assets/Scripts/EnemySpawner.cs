@@ -14,7 +14,8 @@ public class EnemySpawner : MonoBehaviour {
     // Start is called before the first frame update
     public Tilemap tileMap;
     public float spawnRadius = 5.0f;
-    public GameObject enemyPrefab;
+    public GameObject slimePrefab;
+    public GameObject bombSlimePrefab;
     public float spawnInterval = 0.2f;
     
     public IntVariable waveTimestamp;
@@ -124,12 +125,13 @@ public class EnemySpawner : MonoBehaviour {
             if (!spawnable) { continue; }
 
             var enemy = Instantiate(
-                enemyPrefab, spawnPosition,
+                slimePrefab, spawnPosition,
                 Quaternion.identity
             );
 
             enemy.transform.SetParent(transform, true);
-            GameState.AddLivingEnemy(enemy.GetComponent<EnemyController>());
+            var enemyControllable = enemy.GetComponent<IBaseEnemyControllerable>();
+            GameState.AddLivingEnemy(enemyControllable.GetBaseController());
         }
 
         GameState.StopSpawning();

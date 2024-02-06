@@ -123,7 +123,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: explosion-j_0
+      name: explosion-j-6
       rect:
         serializedVersion: 2
         x: 454
@@ -131,7 +131,7 @@ TextureImporter:
         width: 80
         height: 76
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -144,7 +144,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: explosion-j_1
+      name: explosion-j-7
       rect:
         serializedVersion: 2
         x: 545
@@ -152,7 +152,7 @@ TextureImporter:
         width: 82
         height: 78
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -165,7 +165,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: explosion-j_11
+      name: explosion-j-2
       rect:
         serializedVersion: 2
         x: 107
@@ -173,7 +173,7 @@ TextureImporter:
         width: 56
         height: 68
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -186,7 +186,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: explosion-j_12
+      name: explosion-j-3
       rect:
         serializedVersion: 2
         x: 188
@@ -194,7 +194,7 @@ TextureImporter:
         width: 68
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -207,7 +207,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: explosion-j_14
+      name: explosion-j-4
       rect:
         serializedVersion: 2
         x: 278
@@ -215,7 +215,7 @@ TextureImporter:
         width: 74
         height: 68
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -228,7 +228,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: explosion-j_15
+      name: explosion-j-5
       rect:
         serializedVersion: 2
         x: 367
@@ -236,7 +236,7 @@ TextureImporter:
         width: 75
         height: 71
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -249,7 +249,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: explosion-j_24
+      name: explosion-j-10
       rect:
         serializedVersion: 2
         x: 815
@@ -257,7 +257,7 @@ TextureImporter:
         width: 76
         height: 72
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -270,7 +270,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: explosion-j_30
+      name: explosion-j-1
       rect:
         serializedVersion: 2
         x: 35
@@ -278,7 +278,7 @@ TextureImporter:
         width: 20
         height: 22
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -291,7 +291,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: explosion-j_36
+      name: explosion-j-8
       rect:
         serializedVersion: 2
         x: 633
@@ -299,7 +299,7 @@ TextureImporter:
         width: 82
         height: 76
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -312,7 +312,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: explosion-j_38
+      name: explosion-j-9
       rect:
         serializedVersion: 2
         x: 725
@@ -320,7 +320,7 @@ TextureImporter:
         width: 77
         height: 72
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -343,14 +343,18 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      explosion-j_0: -1553590473
-      explosion-j_1: 1052521911
+      explosion-j-1: -1789738357
+      explosion-j-10: -1711239228
+      explosion-j-2: 1355925953
+      explosion-j-3: -1524195008
+      explosion-j-4: 535267934
+      explosion-j-5: -1302780004
+      explosion-j-6: -1553590473
+      explosion-j-7: 1052521911
+      explosion-j-8: -442445056
+      explosion-j-9: -70620950
       explosion-j_10: -1504357014
-      explosion-j_11: 1355925953
-      explosion-j_12: -1524195008
       explosion-j_13: 1955869511
-      explosion-j_14: 535267934
-      explosion-j_15: -1302780004
       explosion-j_16: -87780232
       explosion-j_17: 599886931
       explosion-j_18: -1004953552
@@ -360,22 +364,18 @@ TextureImporter:
       explosion-j_21: 1765476025
       explosion-j_22: -324732720
       explosion-j_23: -65822522
-      explosion-j_24: -1711239228
       explosion-j_25: -889978916
       explosion-j_26: 117738581
       explosion-j_27: -1933746132
       explosion-j_28: 1870468707
       explosion-j_29: -78107757
       explosion-j_3: -918367307
-      explosion-j_30: -1789738357
       explosion-j_31: -628284311
       explosion-j_32: 195654974
       explosion-j_33: 803789429
       explosion-j_34: 550319266
       explosion-j_35: 1822884249
-      explosion-j_36: -442445056
       explosion-j_37: -1619700048
-      explosion-j_38: -70620950
       explosion-j_39: -790531307
       explosion-j_4: 274836442
       explosion-j_40: -109441849
@@ -387,7 +387,6 @@ TextureImporter:
       explosion-j_46: -1818769941
       explosion-j_47: -872219470
       explosion-j_48: -321577068
-      explosion-j_5: 1139871408
       explosion-j_6: 155358449
       explosion-j_7: 1737444524
       explosion-j_8: 91240017
