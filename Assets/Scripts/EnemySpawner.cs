@@ -91,6 +91,9 @@ public class EnemySpawner : MonoBehaviour {
         
         _enemiesKilled = 0;
         waveCounter.Increment();
+        var currentWave = waveCounter.Value;
+        var slimesToSpawn = currentWave * 2;
+        
         GameState.ResetWaveSpawnFlags();
         Assert.IsTrue(GameState.spawning);
         yield return null;
@@ -99,7 +102,7 @@ public class EnemySpawner : MonoBehaviour {
         waveTimestamp.SetValue((int) Time.time);
         var firstSpawn = true;
         
-        while (GameState.spawned < waveCounter.Value + 3) {
+        while (GameState.spawned < slimesToSpawn) {
             if (!firstSpawn) {
                 yield return new WaitForSeconds(spawnInterval);
             } else {
@@ -124,10 +127,7 @@ public class EnemySpawner : MonoBehaviour {
             var spawnable = InTileMap(spawnPosition);
             if (!spawnable) { continue; }
 
-            var enemy = Instantiate(
-                slimePrefab, spawnPosition,
-                Quaternion.identity
-            );
+            var enemy = SpawnEnemy(spawnPosition);
 
             enemy.transform.SetParent(transform, true);
             var enemyControllable = enemy.GetComponent<IBaseEnemyControllerable>();
@@ -136,6 +136,16 @@ public class EnemySpawner : MonoBehaviour {
 
         GameState.StopSpawning();
         Assert.IsFalse(GameState.spawning);
+    }
+
+
+    private GameObject SpawnEnemy(Vector3 spawnPosition) {
+        var enemy = Instantiate(
+            slimePrefab, spawnPosition,
+            Quaternion.identity
+        );
+
+        return enemy;
     }
     
     private bool InTileMap(Vector3 position) {

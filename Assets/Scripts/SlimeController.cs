@@ -24,7 +24,7 @@ public interface IBaseEnemyControllerable {
 }
 
 
-public class EnemyController: MonoBehaviour, IBaseEnemyControllerable {
+public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 	private static readonly int BOUNCE = Animator.StringToHash("bounce");
 	private static readonly int ATTACK = Animator.StringToHash("attack");
 	private static readonly int DEAD = Animator.StringToHash("dead");
@@ -50,9 +50,9 @@ public class EnemyController: MonoBehaviour, IBaseEnemyControllerable {
     public Animator enemyAnimator;
 
     private readonly BaseEnemyController _baseController = new(); 
+    private PlayerController _playerController;
     private NavMeshAgent _agent;
-    private Rigidbody2D _enemyBody;
-    private GameObject _player;
+    internal GameObject player;
     
     private float _lastJump = -10.0f;
     private float _lastAttack = -10.0f;
@@ -66,8 +66,9 @@ public class EnemyController: MonoBehaviour, IBaseEnemyControllerable {
 	    _agent.updateUpAxis = false;
 	    _agent.isStopped = true;
 	    
-        _enemyBody = GetComponent<Rigidbody2D>();
-        _player = GameObject.FindGameObjectWithTag("Player");
+        enemyBody = GetComponent<Rigidbody2D>();
+        player = GameObject.FindGameObjectWithTag("Player");
+        _playerController = player.GetComponent<PlayerController>();
         Respawn();
     }
     
@@ -81,7 +82,7 @@ public class EnemyController: MonoBehaviour, IBaseEnemyControllerable {
 		_dead = false;
     }
 
-    public Rigidbody2D enemyBody => _enemyBody;
+    public Rigidbody2D enemyBody { get; private set; }
 
     private static float GetTimestamp() {
         return Time.time;
@@ -168,20 +169,33 @@ public class EnemyController: MonoBehaviour, IBaseEnemyControllerable {
 	}
 
     private void FixedUpdate() {
-		if (_dead) { return; }
+        DoUpdate();
+    }
 
-		var playerController = _player.GetComponent<PlayerController>();
-		var playerPosition = playerController.GetPosition2D();
-
-		var path = new NavMeshPath();
-		var hasNavMeshPath = _agent.CalculatePath(playerPosition, path);
-		var playerVectorDist = _player.transform.position - transform.position;
-		var movementDirection = playerVectorDist;
+    private Vector3 GetMovementVector(Vector3 playerVectorDist) {
+        var playerPosition = _playerController.GetPosition2D();
+        
+        var path = new NavMeshPath();
+        var hasNavMeshPath = _agent.CalculatePath(playerPosition, path);
+        var movementDirection = playerVectorDist;
 			
-		if (hasNavMeshPath && (path.corners.Length > 1)) {
-			// use NavMeshPlus AI to calculate movement direction
-			movementDirection = path.corners[1] - transform.position;
-		}
+        if (hasNavMeshPath && (path.corners.Length > 1)) {
+            // use NavMeshPlus AI to calculate movement direction
+            movementDirection = path.corners[1] - transform.position;
+        }
+
+        return movementDirection;
+    }
+
+    internal Vector3 GetPlayerOffset() {
+        return player.transform.position - transform.position;
+    }
+
+    internal bool DoUpdate() {
+		if (_dead) { return false; }
+        
+        var playerVectorDist = GetPlayerOffset();
+		var movementDirection = GetMovementVector(playerVectorDist);
 		
 		var timestampNow = GetTimestamp();
         var jumpDurationPassed = timestampNow - _lastJump;
@@ -196,22 +210,21 @@ public class EnemyController: MonoBehaviour, IBaseEnemyControllerable {
         // Debug.Log("PLAYER_DISTANCE= " + playerDistance);
 
         if (hasLineOfSight && (playerDistance < this.attackDistance)) {
-	        if (!(attackDurationPassed > attackInterval)) { return; }
-	        
-	        _lastAttack = timestampNow;
-	        _enemyBody.AddForce(playerDirection * attackForce, ForceMode2D.Impulse);
-	        enemyAnimator.SetTrigger(ATTACK);
+            if (!(attackDurationPassed > attackInterval)) {
+                return true;
+            }
+
+            _lastAttack = timestampNow;
+            enemyBody.AddForce(playerDirection * attackForce, ForceMode2D.Impulse);
+            enemyAnimator.SetTrigger(ATTACK);
         } else if (jumpDurationPassed > jumpInterval) {
 			// jump towards the player
             _lastJump = timestampNow;
-            _enemyBody.AddForce(playerDirection * jumpForce, ForceMode2D.Impulse);
+            enemyBody.AddForce(playerDirection * jumpForce, ForceMode2D.Impulse);
             enemyAnimator.SetTrigger(BOUNCE);
         }
-    }
 
-    // Update is called once per frame
-    void Update() {
-	    
+        return true;
     }
 
     public BaseEnemyController GetBaseController() {

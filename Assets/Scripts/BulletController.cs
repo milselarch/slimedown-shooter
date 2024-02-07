@@ -31,7 +31,7 @@ public class BlasterShotController : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.CompareTag("Enemy")) {
-			collision.gameObject.GetComponent<EnemyController>().Damage();
+			collision.gameObject.GetComponent<SlimeController>().Damage();
         }
         
         // destroy self

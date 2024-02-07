@@ -377,7 +377,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
-        var enemyController = other.gameObject.GetComponent<EnemyController>();
+        var enemyController = other.gameObject.GetComponent<SlimeController>();
         if (enemyController == null) {
             return;
         }
@@ -399,8 +399,8 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private void ApplyChargeAttack(EnemyController enemyController) {
-        var enemyBody = enemyController.enemyBody;
+    private void ApplyChargeAttack(SlimeController slimeController) {
+        var enemyBody = slimeController.enemyBody;
         var chargeAlignment = Vector2.Dot(_playerBody.velocity, enemyBody.velocity);
         // whether or not player and enemy are moving towards each other
         var velocitiesColliding = chargeAlignment < 0.0f;
@@ -420,16 +420,16 @@ public class PlayerController : MonoBehaviour {
         if (!velocitiesColliding && !chargingInEnemyDirection) { return; }
         
         // charging the enemy increases player health by 1
-        enemyController.Damage(2);
+        slimeController.Damage(2);
         gameScore.Increment();
         health.Increment(1, _maxHealth);
                 
-        var newEnemyHealth = enemyController.GetEnemyHealth();
+        var newEnemyHealth = slimeController.GetEnemyHealth();
 
         if (newEnemyHealth == 0) {
             // if charging killed the slime,
             // automatically destroy its sprite also
-            enemyController.AttemptSelfDestruct();
+            slimeController.AttemptSelfDestruct();
             health.Increment(14, _maxHealth);
         }
                 
