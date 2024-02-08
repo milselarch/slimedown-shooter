@@ -339,28 +339,22 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void OnHorizontalMoveAction(InputAction.CallbackContext context) {
-        if (!CanMove()) { return; }
-        
-        if (context.started) {
+        if (context.canceled) {
+            _horizontalDirection = 0;
+        } else if (context.started && CanMove()) {
             var faceRight = context.ReadValue<float>() > 0 ? 1 : -1;
             this._faceRight = faceRight == 1;
             _playerSprite.flipX = !this._faceRight;
             _horizontalDirection = faceRight;
         }
-        if (context.canceled) {
-            _horizontalDirection = 0;
-        }
     }
     
     public void OnVerticalMoveAction(InputAction.CallbackContext context) {
-        if (!CanMove()) { return; }
-
-        if (context.started) {
-            var faceTop = context.ReadValue<float>() > 0 ? 1 : -1;
-            _verticalDirection = faceTop;
-        }
         if (context.canceled) {
             _verticalDirection = 0;
+        } else if (context.started && CanMove()) {
+            var faceTop = context.ReadValue<float>() > 0 ? 1 : -1;
+            _verticalDirection = faceTop;
         }
     }
 
