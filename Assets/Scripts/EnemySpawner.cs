@@ -17,7 +17,8 @@ public class EnemySpawner : MonoBehaviour {
     public GameObject slimePrefab;
     public GameObject bombSlimePrefab;
     public float spawnInterval = 0.2f;
-    
+    public GameConstants gameConstants;
+
     public IntVariable waveTimestamp;
     public IntVariable waveCounter;
     public UnityEvent waveUpdate;
@@ -37,7 +38,7 @@ public class EnemySpawner : MonoBehaviour {
 
     public void GameRestart() {
         _enemiesKilled = 0;
-        waveCounter.SetValue(0);
+        waveCounter.SetValue(gameConstants.startWaveNumber);
         waveTimestamp.SetValue(0);
 
         if (_spawnCoroutine != null) {
@@ -127,8 +128,7 @@ public class EnemySpawner : MonoBehaviour {
             var spawnable = InTileMap(spawnPosition);
             if (!spawnable) { continue; }
 
-            var enemy = SpawnEnemy(spawnPosition);
-
+            var enemy = SpawnEnemy(spawnPosition, currentWave);
             enemy.transform.SetParent(transform, true);
             var enemyControllable = enemy.GetComponent<IBaseEnemyControllerable>();
             GameState.AddLivingEnemy(enemyControllable.GetBaseController());
@@ -139,10 +139,18 @@ public class EnemySpawner : MonoBehaviour {
     }
 
 
-    private GameObject SpawnEnemy(Vector3 spawnPosition) {
+    private GameObject SpawnEnemy(Vector3 spawnPosition, int waveNumber) {
+        var bombSlimeProbability = 0.0f;
+        if (waveNumber > 5) {
+            bombSlimeProbability = 0.05f;
+        }
+        
+        var spawnProbability = Random.Range(0.0f, 1.0f);
+        var enemyPrefab = spawnProbability < bombSlimeProbability ? 
+            bombSlimePrefab : slimePrefab;
+        
         var enemy = Instantiate(
-            slimePrefab, spawnPosition,
-            Quaternion.identity
+            enemyPrefab, spawnPosition, Quaternion.identity
         );
 
         return enemy;

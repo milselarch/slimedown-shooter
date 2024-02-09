@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 4685869353684810891}
   - component: {fileID: 8015860968851632765}
   - component: {fileID: 3189041440374100140}
-  - component: {fileID: 3181370342081471131}
   - component: {fileID: 5790352721469925192}
   - component: {fileID: 2410331393691139441}
   - component: {fileID: 1707041130891635261}
   - component: {fileID: 6895758111211780002}
   - component: {fileID: 2809649549374917642}
+  - component: {fileID: 3889577526565828668}
   m_Layer: 0
   m_Name: BombSlime
   m_TagString: Enemy
@@ -112,59 +112,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3181370342081471131
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4340382988791990591}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd1f74be131029b72937ceb1899e6cc7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  glowMaterial: {fileID: -876546973899608171, guid: f9a744a0054066f6dab6053582757c3b, type: 3}
-  jumpForce: 7
-  jumpInterval: 1
-  attackForce: 11
-  attackInterval: 2
-  attackDistance: 3
-  smallestScale: 0.75
-  maxHealth: 4
-  gameScore: {fileID: 11400000, guid: 7c7e34272961c8bc0b33cd338ee279ba, type: 2}
-  scoreUpdate:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 5def0dc826161937ca385c933fe3dc4b, type: 2}
-        m_TargetAssemblyTypeName: GameEvent`1[[UnityEngine.Object, UnityEngine
-        m_MethodName: Raise
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onEnemyKill:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 0fe4822add819e16caf497eec6f4994f, type: 2}
-        m_TargetAssemblyTypeName: GameEvent`1[[UnityEngine.Object, UnityEngine
-        m_MethodName: Raise
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  enemyAnimator: {fileID: 3189041440374100140}
 --- !u!50 &5790352721469925192
 Rigidbody2D:
   serializedVersion: 4
@@ -253,7 +200,7 @@ MonoBehaviour:
   Response:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3181370342081471131}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: EnemyController, Assembly-CSharp
         m_MethodName: AttemptSelfDestruct
         m_Mode: 1
@@ -303,7 +250,7 @@ MonoBehaviour:
   Response:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3181370342081471131}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: EnemyController, Assembly-CSharp
         m_MethodName: GameRestart
         m_Mode: 1
@@ -315,3 +262,33 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3889577526565828668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4340382988791990591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e65ad702544346c98ab342992874a37d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  glowMaterial: {fileID: -876546973899608171, guid: f9a744a0054066f6dab6053582757c3b, type: 3}
+  jumpForce: 7
+  jumpInterval: 1
+  attackForce: 11
+  attackInterval: 2
+  attackDistance: 3
+  smallestScale: 0.75
+  maxHealth: 4
+  gameScore: {fileID: 11400000, guid: 7c7e34272961c8bc0b33cd338ee279ba, type: 2}
+  scoreUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+  onEnemyKill:
+    m_PersistentCalls:
+      m_Calls: []
+  enemyAnimator: {fileID: 0}
+  triggerExplosionDistance: 10

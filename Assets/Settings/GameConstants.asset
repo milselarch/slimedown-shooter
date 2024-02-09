@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: GameConstants
   m_EditorClassIdentifier: 
   startMaxHealth: 100
+  startWaveNumber: 5
   gravityScale: 3
+  minYCameraPosition: -100
