@@ -65,12 +65,15 @@ public class PlayerController : MonoBehaviour {
 
     // Start is called before the first frame update
     private void Start() {
+        if (!Application.isEditor) {
+            Application.targetFrameRate = 60;
+        }
+        
         _fallingSortingLayerID = SortingLayer.NameToID(FALLING_SORTING_LAYER);
         _maxHealth = gameConstants.startMaxHealth;
         _startPosition = transform.position;
             
         GameState.health = health;
-        Application.targetFrameRate = 60;
         _lastCharge = -chargeWaitDuration;
         _playerSprite = GetComponent<SpriteRenderer>();
         _defaultSortingLayerID = _playerSprite.sortingLayerID;

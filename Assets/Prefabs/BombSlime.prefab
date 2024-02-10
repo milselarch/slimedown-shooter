@@ -275,7 +275,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  glowMaterial: {fileID: -876546973899608171, guid: f9a744a0054066f6dab6053582757c3b, type: 3}
+  glowMaterialTemplate: {fileID: -876546973899608171, guid: f9a744a0054066f6dab6053582757c3b, type: 3}
   jumpForce: 7
   jumpInterval: 1
   attackForce: 11

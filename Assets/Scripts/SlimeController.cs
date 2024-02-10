@@ -28,9 +28,11 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 	private static readonly int BOUNCE = Animator.StringToHash("bounce");
 	private static readonly int ATTACK = Animator.StringToHash("attack");
 	private static readonly int DEAD = Animator.StringToHash("dead");
-    
+    private static readonly int SHADER_START_TIME = Shader.PropertyToID("_startTime");
+    private static readonly int SHADER_FREQUENCY = Shader.PropertyToID("_frequency");
+
 	public Material defaultMaterial;
-	public Material glowMaterial;
+    public Material glowMaterialTemplate;
 	
     public float jumpForce = 7.0f;
     public float jumpInterval = 1.0f;
@@ -49,10 +51,11 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 
     public Animator enemyAnimator;
 
+    private Material _glowMaterial;
     private readonly BaseEnemyController _baseController = new(); 
     private PlayerController _playerController;
     private NavMeshAgent _agent;
-    internal GameObject player;
+    private GameObject _player;
     
     private float _lastJump = -10.0f;
     private float _lastAttack = -10.0f;
@@ -67,8 +70,9 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 	    _agent.isStopped = true;
 	    
         enemyBody = GetComponent<Rigidbody2D>();
-        player = GameObject.FindGameObjectWithTag("Player");
-        _playerController = player.GetComponent<PlayerController>();
+        _player = GameObject.FindGameObjectWithTag("Player");
+        _playerController = _player.GetComponent<PlayerController>();
+        _glowMaterial = new Material(glowMaterialTemplate);
         Respawn();
     }
     
@@ -108,7 +112,8 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 		scoreUpdate.Invoke();
 
 		if (_health == 0) {
-			GetComponent<SpriteRenderer>().material = glowMaterial;
+			GetComponent<SpriteRenderer>().material = _glowMaterial;
+            _glowMaterial.SetFloat(SHADER_START_TIME, Time.time);
 			enemyAnimator.SetBool(DEAD, true);
 			
 			transform.localScale = Vector3.one;
@@ -188,7 +193,7 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
     }
 
     internal Vector3 GetPlayerOffset() {
-        return player.transform.position - transform.position;
+        return _player.transform.position - transform.position;
     }
 
     internal bool DoUpdate() {
