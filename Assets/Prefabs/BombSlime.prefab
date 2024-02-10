@@ -290,5 +290,5 @@ MonoBehaviour:
   onEnemyKill:
     m_PersistentCalls:
       m_Calls: []
-  enemyAnimator: {fileID: 0}
+  enemyAnimator: {fileID: 3189041440374100140}
   triggerExplosionDistance: 10
