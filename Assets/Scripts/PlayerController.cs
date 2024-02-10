@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour {
     private static readonly int CHARGING = Animator.StringToHash("charging");
     private static readonly int SPEED = Animator.StringToHash("speed");
     private static readonly int BOUNDARY_Y = Shader.PropertyToID("_boundaryY");
-    private const float DEFAULT_STAMP = -1.0f;
     
     public float maxSpeed = 20;
     public float impulseForce = 5.0f;
@@ -49,9 +48,9 @@ public class PlayerController : MonoBehaviour {
     private Vector3 _startPosition;
     private Color _originalColor;
     
-    private float _lastFallTime = DEFAULT_STAMP;
-    private float _lastFallDamageTime = DEFAULT_STAMP;
-    private float _lastDamagedTime = DEFAULT_STAMP;
+    private float _lastFallTime = GameState.DEFAULT_STAMP;
+    private float _lastFallDamageTime = GameState.DEFAULT_STAMP;
+    private float _lastDamagedTime = GameState.DEFAULT_STAMP;
     private float _lastCharge = 0.0f;
     
     private bool _charging = false;
@@ -149,7 +148,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private bool IsFalling() {
-        return !GameState.IsApproxEqual(_lastFallTime, DEFAULT_STAMP);
+        return !GameState.IsApproxEqual(_lastFallTime, GameState.DEFAULT_STAMP);
     }
 
     private void OnHealthChange(int prevHealth, int newHealth) {
@@ -170,7 +169,7 @@ public class PlayerController : MonoBehaviour {
 
         while (!_destroyed) {
             yield return null;
-            if (GameState.IsApproxEqual(_lastDamagedTime, DEFAULT_STAMP)) {
+            if (GameState.IsApproxEqual(_lastDamagedTime, GameState.DEFAULT_STAMP)) {
                 continue;                
             }
             var timePassed = Time.time - _lastDamagedTime;
@@ -210,8 +209,8 @@ public class PlayerController : MonoBehaviour {
         _playerSprite.sortingLayerID = _defaultSortingLayerID;
 
         // reset fall damage counters
-        _lastFallTime = DEFAULT_STAMP;
-        _lastFallDamageTime = DEFAULT_STAMP;
+        _lastFallTime = GameState.DEFAULT_STAMP;
+        _lastFallDamageTime = GameState.DEFAULT_STAMP;
         
         GameState.paused = false;
         gameScore.SetValue(0);

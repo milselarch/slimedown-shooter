@@ -12,11 +12,11 @@ GameObject:
   - component: {fileID: 8015860968851632765}
   - component: {fileID: 3189041440374100140}
   - component: {fileID: 5790352721469925192}
+  - component: {fileID: 3889577526565828668}
   - component: {fileID: 2410331393691139441}
   - component: {fileID: 1707041130891635261}
   - component: {fileID: 6895758111211780002}
   - component: {fileID: 2809649549374917642}
-  - component: {fileID: 3889577526565828668}
   m_Layer: 0
   m_Name: BombSlime
   m_TagString: Enemy
@@ -139,6 +139,36 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &3889577526565828668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4340382988791990591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e65ad702544346c98ab342992874a37d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  glowMaterialTemplate: {fileID: -876546973899608171, guid: f9a744a0054066f6dab6053582757c3b, type: 3}
+  jumpForce: 7
+  jumpInterval: 1
+  attackForce: 11
+  attackInterval: 2
+  attackDistance: 3
+  smallestScale: 0.75
+  maxHealth: 4
+  gameScore: {fileID: 11400000, guid: 7c7e34272961c8bc0b33cd338ee279ba, type: 2}
+  scoreUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+  onEnemyKill:
+    m_PersistentCalls:
+      m_Calls: []
+  enemyAnimator: {fileID: 3189041440374100140}
+  triggerExplosionDistance: 10
 --- !u!61 &2410331393691139441
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -262,33 +292,3 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &3889577526565828668
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4340382988791990591}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e65ad702544346c98ab342992874a37d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  glowMaterialTemplate: {fileID: -876546973899608171, guid: f9a744a0054066f6dab6053582757c3b, type: 3}
-  jumpForce: 7
-  jumpInterval: 1
-  attackForce: 11
-  attackInterval: 2
-  attackDistance: 3
-  smallestScale: 0.75
-  maxHealth: 4
-  gameScore: {fileID: 11400000, guid: 7c7e34272961c8bc0b33cd338ee279ba, type: 2}
-  scoreUpdate:
-    m_PersistentCalls:
-      m_Calls: []
-  onEnemyKill:
-    m_PersistentCalls:
-      m_Calls: []
-  enemyAnimator: {fileID: 3189041440374100140}
-  triggerExplosionDistance: 10

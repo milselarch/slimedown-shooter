@@ -6,6 +6,8 @@ using UnityEngine.Assertions;
 public class GameState: MonoBehaviour {
     private static readonly Dictionary<int, BaseEnemyController> LIVING_ENEMIES = new();
     private const float TOLERANCE = 0.001f;
+    // ReSharper disable once InconsistentNaming
+    public const float DEFAULT_STAMP = -1.0f;
     private static bool _paused = false;
     
     public static IntVariable health;
