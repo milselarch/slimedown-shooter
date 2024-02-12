@@ -28,7 +28,7 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 	private static readonly int BOUNCE = Animator.StringToHash("bounce");
 	private static readonly int ATTACK = Animator.StringToHash("attack");
 	private static readonly int DEAD = Animator.StringToHash("dead");
-    private static readonly int SHADER_START_TIME = Shader.PropertyToID("_startTime");
+    internal static readonly int SHADER_START_TIME = Shader.PropertyToID("_startTime");
     private static readonly int SHADER_FREQUENCY = Shader.PropertyToID("_frequency");
 
 	public Material defaultMaterial;
@@ -51,7 +51,8 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 
     public Animator enemyAnimator;
 
-    private Material _glowMaterial;
+    internal Material glowMaterial;
+    internal SpriteRenderer spriteRenderer;
     private readonly BaseEnemyController _baseController = new(); 
     private PlayerController _playerController;
     private NavMeshAgent _agent;
@@ -72,13 +73,14 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
         enemyBody = GetComponent<Rigidbody2D>();
         _player = GameObject.FindGameObjectWithTag("Player");
         _playerController = _player.GetComponent<PlayerController>();
-        _glowMaterial = new Material(glowMaterialTemplate);
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        glowMaterial = new Material(glowMaterialTemplate);
         Respawn();
     }
     
     private void Respawn() {
 		this._health = this.maxHealth;
-		GetComponent<SpriteRenderer>().material = defaultMaterial;
+        spriteRenderer.material = defaultMaterial;
         enemyAnimator.SetBool(DEAD, false);
         
         _lastJump = GetTimestamp();
@@ -112,8 +114,8 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 		scoreUpdate.Invoke();
 
 		if (_health == 0) {
-			GetComponent<SpriteRenderer>().material = _glowMaterial;
-            _glowMaterial.SetFloat(SHADER_START_TIME, Time.time);
+			spriteRenderer.material = glowMaterial;
+            glowMaterial.SetFloat(SHADER_START_TIME, Time.time);
 			enemyAnimator.SetBool(DEAD, true);
 			
 			transform.localScale = Vector3.one;
@@ -136,8 +138,9 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 		if (!col) { return; }
 
 		// adjust bounding box to fit new sprite scale accordingly
-		col.size = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.size;
-		col.offset = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.center;
+        var sprite = spriteRenderer.sprite;
+        col.size = sprite.bounds.size;
+		col.offset = sprite.bounds.center;
 	}
 
 	private void OnCollisionEnter2D(Collision2D other) {
