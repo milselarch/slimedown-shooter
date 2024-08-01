@@ -156,6 +156,7 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
         _health = 0;
         Destroy(gameObject);
         GameState.KillEnemy(_baseController.id);
+        // Debug.Log("GameState.GameRestart");
     }
 
 	public bool AttemptSelfDestruct() {

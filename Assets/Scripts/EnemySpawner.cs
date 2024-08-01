@@ -141,8 +141,8 @@ public class EnemySpawner : MonoBehaviour {
 
     private GameObject SpawnEnemy(Vector3 spawnPosition, int waveNumber) {
         var bombSlimeProbability = 0.0f;
-        if (waveNumber > 5) {
-            bombSlimeProbability = 0.05f;
+        if (waveNumber > gameConstants.startBombSlimeWaveNo) {
+            bombSlimeProbability = gameConstants.bombSlimeSpawnProb;
         }
         
         var spawnProbability = Random.Range(0.0f, 1.0f);

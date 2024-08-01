@@ -16,3 +16,5 @@ MonoBehaviour:
   startWaveNumber: 5
   gravityScale: 3
   minYCameraPosition: -100
+  startBombSlimeWaveNo: 5
+  bombSlimeSpawnProb: 1

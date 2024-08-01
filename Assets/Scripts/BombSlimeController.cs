@@ -3,7 +3,7 @@ using UnityEngine;
 public class BombSlimeController : SlimeController {
     private static readonly int EXPLODE = Animator.StringToHash("explode");
 
-    public float triggerExplosionDistance = 10.0f;
+    public float triggerExplosionDistance = 4.0f;
 
     private bool _exploding = false;
     private float _detonationStamp = GameState.DEFAULT_STAMP;
@@ -17,8 +17,11 @@ public class BombSlimeController : SlimeController {
         if (!updated) { return; }
 
         var distanceToPlayer = GetPlayerOffset().magnitude;
-        if (!IsDetonating() && (distanceToPlayer < triggerExplosionDistance)) {
-            // enemyAnimator.SetBool(EXPLODE, true);
+        var triggerExplosion = 
+            !IsDetonating() && (distanceToPlayer < triggerExplosionDistance);
+        
+        if (triggerExplosion) {
+            enemyAnimator.SetBool(EXPLODE, true);
             _detonationStamp = Time.time;
             spriteRenderer.material = glowMaterial;
             glowMaterial.SetFloat(SHADER_START_TIME, _detonationStamp);
