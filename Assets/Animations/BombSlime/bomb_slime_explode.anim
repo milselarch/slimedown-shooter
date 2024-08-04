@@ -99,4 +99,11 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0.36666667
+    functionName: OnExplodeDone
+    data: 
+    objectReferenceParameter: {fileID: 4340382988791990591, guid: f41ff4252d4bfdd799a922f37243d9e8, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

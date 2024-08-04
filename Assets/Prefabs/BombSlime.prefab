@@ -168,7 +168,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   enemyAnimator: {fileID: 3189041440374100140}
-  triggerExplosionDistance: 4
+  triggerExplosionDistance: 2
 --- !u!61 &2410331393691139441
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -28,7 +28,7 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 	private static readonly int BOUNCE = Animator.StringToHash("bounce");
 	private static readonly int ATTACK = Animator.StringToHash("attack");
 	private static readonly int DEAD = Animator.StringToHash("dead");
-    internal static readonly int SHADER_START_TIME = Shader.PropertyToID("_startTime");
+    internal static readonly int shaderStartTime = Shader.PropertyToID("_startTime");
     private static readonly int SHADER_FREQUENCY = Shader.PropertyToID("_frequency");
 
 	public Material defaultMaterial;
@@ -115,7 +115,7 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 
 		if (_health == 0) {
 			spriteRenderer.material = glowMaterial;
-            glowMaterial.SetFloat(SHADER_START_TIME, Time.time);
+            glowMaterial.SetFloat(shaderStartTime, Time.time);
 			enemyAnimator.SetBool(DEAD, true);
 			
 			transform.localScale = Vector3.one;
@@ -167,6 +167,11 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
         Destroy(gameObject);
         GameState.KillEnemy(_baseController.id);
         return true;
+    }
+
+    protected void ForceSelfDestruct() {
+        _health = 0;
+        this.AttemptSelfDestruct();
     }
 
 	public int GetEnemyHealth() {
