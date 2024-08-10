@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour {
     public GameConstants gameConstants;
     public InputActionAsset actionAsset;
 
-	// whether or not player is allowed to fire projectile
+	// whether player is allowed to fire projectile
 	// private bool canFire = false;
     private int _horizontalDirection = 0;
     private int _verticalDirection = 0;
@@ -373,7 +373,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
-        var enemyController = other.gameObject.GetComponent<SlimeController>();
+        var enemyController = other.gameObject.GetComponent<IBaseEnemyControllerable>();
         if (enemyController == null) {
             return;
         }
@@ -385,17 +385,17 @@ public class PlayerController : MonoBehaviour {
             ApplyChargeAttack(enemyController);
         } else if (enemyHealth == 0) {
             // increase health after collecting dead slime
-            health.Increment(14, _maxHealth);
+            health.Increment(gameConstants.slimeBallHealth, _maxHealth);
             gameScore.Increment();
             playerHealthUpdate.Invoke();
             scoreUpdate.Invoke();
         } else {
-            // slime deals 5 damage to player
-            ReceiveSlimeDamage(5);
+            Debug.Log("ATTACK_DAMAGE: " + enemyController.GetAttackDamage());
+            ReceiveSlimeDamage(enemyController.GetAttackDamage());
         }
     }
 
-    private void ApplyChargeAttack(SlimeController slimeController) {
+    private void ApplyChargeAttack(IBaseEnemyControllerable slimeController) {
         var enemyBody = slimeController.enemyBody;
         var chargeAlignment = Vector2.Dot(_playerBody.velocity, enemyBody.velocity);
         // whether or not player and enemy are moving towards each other

@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 2809649549374917642}
   m_Layer: 0
   m_Name: BombSlime
-  m_TagString: Enemy
+  m_TagString: BombSlime
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -169,6 +169,8 @@ MonoBehaviour:
       m_Calls: []
   enemyAnimator: {fileID: 3189041440374100140}
   triggerExplosionDistance: 2
+  detonationWait: 1
+  explosionDamage: 10
 --- !u!61 &2410331393691139441
 BoxCollider2D:
   m_ObjectHideFlags: 0

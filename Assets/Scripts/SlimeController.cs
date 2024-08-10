@@ -12,7 +12,7 @@ using UnityEngine.TextCore;
 
 public class BaseEnemyController {
     public int id { get; private set; } = -1;
-
+    
     public void SetID(int newId) {
         Assert.IsTrue(this.id == -1);
         this.id = newId;
@@ -20,7 +20,13 @@ public class BaseEnemyController {
 }
 
 public interface IBaseEnemyControllerable {
+    public Rigidbody2D enemyBody { get; }
+    public bool AttemptSelfDestruct();
+    public void Damage(int damage);
+
     public BaseEnemyController GetBaseController();
+    public int GetAttackDamage();
+    public int GetEnemyHealth();
 }
 
 
@@ -41,7 +47,9 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
     public float attackDistance = 3.0f;
 	// smallest size (relative to original) sprite is allowed to shrink to
 	public float smallestScale = 0.75f;
-	public int maxHealth = 4;
+	
+    public int maxHealth = 4;
+    public int damage = 5;
     
 	public IntVariable gameScore;
 	// public IntVariable playerHealth;
@@ -53,6 +61,7 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 
     internal Material glowMaterial;
     internal SpriteRenderer spriteRenderer;
+    private BoxCollider2D _boxCollider;
     private readonly BaseEnemyController _baseController = new(); 
     private PlayerController _playerController;
     private NavMeshAgent _agent;
@@ -65,6 +74,7 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 
     // Start is called before the first frame update
     private void Start() {
+        _boxCollider = GetComponent<BoxCollider2D>();
 	    _agent = GetComponent<NavMeshAgent>();
 	    _agent.updateRotation = false;
 	    _agent.updateUpAxis = false;
@@ -76,6 +86,10 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
         spriteRenderer = GetComponent<SpriteRenderer>();
         glowMaterial = new Material(glowMaterialTemplate);
         Respawn();
+    }
+
+    public virtual int GetAttackDamage() {
+        return damage;
     }
     
     private void Respawn() {
@@ -134,21 +148,27 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 	}
 
 	private void UpdateCollider() {
-		var col = gameObject.GetComponent<BoxCollider2D>();
-		if (!col) { return; }
-
 		// adjust bounding box to fit new sprite scale accordingly
         var sprite = spriteRenderer.sprite;
-        col.size = sprite.bounds.size;
-		col.offset = sprite.bounds.center;
+        _boxCollider.size = sprite.bounds.size;
+        _boxCollider.offset = sprite.bounds.center;
 	}
+    
+    private void OnWillRenderObject() {
+        UpdateCollider();
+    }
 
-	private void OnCollisionEnter2D(Collision2D other) {
-		if ((!other.gameObject.CompareTag("Player"))) {
-			return;
-		}
-
-        AttemptSelfDestruct();
+    internal virtual void OnCollisionEnter2D(Collision2D other) {
+        var player = other.gameObject.GetComponent<PlayerController>();
+        var bombSlime = other.gameObject.GetComponent<BombSlimeController>();
+            
+        if (player != null) {
+            AttemptSelfDestruct();
+        } else if (bombSlime != null) {
+            if (bombSlime.IsExploding()) {
+                this.Damage(bombSlime.explosionDamage);
+            }
+        }
     }
 
     public void GameRestart() {

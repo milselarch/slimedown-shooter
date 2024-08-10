@@ -14,4 +14,6 @@ public class GameConstants : ScriptableObject {
 
     public int startBombSlimeWaveNo = 5;
     public float bombSlimeSpawnProb = 0.05f;
+
+    public int slimeBallHealth = 14;
 }

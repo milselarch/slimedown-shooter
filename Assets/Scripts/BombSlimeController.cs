@@ -6,7 +6,8 @@ public class BombSlimeController : SlimeController {
     public float triggerExplosionDistance = 2.0f;
     // duration between slime detonation and slime explosion
     public float detonationWait = 1.0f;
-
+    public int explosionDamage = 10;
+    
     private bool _exploding = false;
     private float _explosionArmingStamp = GameState.DEFAULT_STAMP;
 
@@ -17,6 +18,14 @@ public class BombSlimeController : SlimeController {
     private void OnExplodeDone() {
         _exploding = false;
         this.ForceSelfDestruct();
+    }
+    
+    public override int GetAttackDamage() {
+        return IsExploding() ? explosionDamage : base.GetAttackDamage();
+    }
+
+    public bool IsExploding() {
+        return _exploding;
     }
 
     private void FixedUpdate() {
@@ -38,6 +47,12 @@ public class BombSlimeController : SlimeController {
         } else if (startExplosion) {
             StartExplosion();
         }
+    }
+
+    internal override void OnCollisionEnter2D(Collision2D other) {
+        // TODO: add bomb slime collider check in player controller also
+        if (_exploding) { return; }
+        base.OnCollisionEnter2D(other);
     }
 
     private bool StartExplosion() {
