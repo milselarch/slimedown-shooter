@@ -390,7 +390,7 @@ public class PlayerController : MonoBehaviour {
             playerHealthUpdate.Invoke();
             scoreUpdate.Invoke();
         } else {
-            Debug.Log("ATTACK_DAMAGE: " + enemyController.GetAttackDamage());
+            // Debug.Log("ATTACK_DAMAGE: " + enemyController.GetAttackDamage());
             ReceiveSlimeDamage(enemyController.GetAttackDamage());
         }
     }

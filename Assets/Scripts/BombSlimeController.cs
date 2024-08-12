@@ -50,7 +50,6 @@ public class BombSlimeController : SlimeController {
     }
 
     internal override void OnCollisionEnter2D(Collision2D other) {
-        // TODO: add bomb slime collider check in player controller also
         if (_exploding) { return; }
         base.OnCollisionEnter2D(other);
     }
@@ -58,7 +57,10 @@ public class BombSlimeController : SlimeController {
     private bool StartExplosion() {
         if (_exploding) { return false; }
         _exploding = true;
-        
+        // make the explosion unmovable
+        this.enemyBody.bodyType = RigidbodyType2D.Static;
+        GameState.KillEnemy(baseController.id);
+
         enemyAnimator.SetBool(EXPLODE, true);
         _explosionArmingStamp = Time.time;
         return true;

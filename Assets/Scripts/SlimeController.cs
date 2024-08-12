@@ -49,7 +49,7 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 	public float smallestScale = 0.75f;
 	
     public int maxHealth = 4;
-    public int damage = 5;
+    public int attackDamage = 5;
     
 	public IntVariable gameScore;
 	// public IntVariable playerHealth;
@@ -62,7 +62,7 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
     internal Material glowMaterial;
     internal SpriteRenderer spriteRenderer;
     private BoxCollider2D _boxCollider;
-    private readonly BaseEnemyController _baseController = new(); 
+    internal readonly BaseEnemyController baseController = new(); 
     private PlayerController _playerController;
     private NavMeshAgent _agent;
     private GameObject _player;
@@ -89,7 +89,7 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
     }
 
     public virtual int GetAttackDamage() {
-        return damage;
+        return attackDamage;
     }
     
     private void Respawn() {
@@ -133,7 +133,7 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 			enemyAnimator.SetBool(DEAD, true);
 			
 			transform.localScale = Vector3.one;
-            GameState.KillEnemy(_baseController.id);
+            GameState.KillEnemy(baseController.id);
 			onEnemyKill.Invoke();
 			UpdateCollider();
 			_dead = true;
@@ -160,14 +160,21 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 
     internal virtual void OnCollisionEnter2D(Collision2D other) {
         var player = other.gameObject.GetComponent<PlayerController>();
-        var bombSlime = other.gameObject.GetComponent<BombSlimeController>();
-            
         if (player != null) {
             AttemptSelfDestruct();
-        } else if (bombSlime != null) {
+            return;
+        }
+
+        var bombSlime = other.gameObject.GetComponent<BombSlimeController>();
+        if (bombSlime != null) {
             if (bombSlime.IsExploding()) {
                 this.Damage(bombSlime.explosionDamage);
             }
+        }
+        
+        var bullet  = other.gameObject.GetComponent<BlasterShotController>();
+        if (bullet != null) {
+            this.Damage(BlasterShotController.GetAttackDamage());
         }
     }
 
@@ -175,7 +182,7 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
         // destroy self and deregister from GameState
         _health = 0;
         Destroy(gameObject);
-        GameState.KillEnemy(_baseController.id);
+        GameState.KillEnemy(baseController.id);
         // Debug.Log("GameState.GameRestart");
     }
 
@@ -185,7 +192,7 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
         }
 
         Destroy(gameObject);
-        GameState.KillEnemy(_baseController.id);
+        GameState.KillEnemy(baseController.id);
         return true;
     }
 
@@ -262,6 +269,6 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
     }
 
     public BaseEnemyController GetBaseController() {
-        return this._baseController;
+        return this.baseController;
     }
 }

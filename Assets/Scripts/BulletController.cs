@@ -7,10 +7,16 @@ using UnityEngine.Events;
 public class BlasterShotController : MonoBehaviour {
     // Start is called before the first frame update
     [SerializeField] private float scaleSpeed = 1.0f;
+    // TODO: make assignable from constructor
+    private const int DAMAGE = 1; 
 
     void Start() {
         StartCoroutine(ScaleAndDestroyCoroutine());
         GetComponent<AudioSource>().Play();
+    }
+
+    public static int GetAttackDamage() {
+        return DAMAGE;
     }
 
     private IEnumerator ScaleAndDestroyCoroutine() {
@@ -30,10 +36,6 @@ public class BlasterShotController : MonoBehaviour {
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.CompareTag("Slime")) {
-			collision.gameObject.GetComponent<SlimeController>().Damage();
-        }
-        
         // destroy self
         Destroy(gameObject);
     }
