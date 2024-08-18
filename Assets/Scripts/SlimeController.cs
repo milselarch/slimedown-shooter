@@ -193,6 +193,7 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 
         Destroy(gameObject);
         GameState.KillEnemy(baseController.id);
+        onEnemyKill.Invoke();
         return true;
     }
 

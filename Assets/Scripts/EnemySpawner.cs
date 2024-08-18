@@ -73,13 +73,11 @@ public class EnemySpawner : MonoBehaviour {
 
     public void OnEnemyKilled() {
         _enemiesKilled += 1;
-
         // check if any enemies from the previous wave are still alive
         if (GameState.HasLivingEnemies() || GameState.spawning) {
             return;
         }
 
-        Debug.Log("WAVE IS OVER");
         StartCoroutine(SpawnAttackWave());
         waveUpdate.Invoke();
     }

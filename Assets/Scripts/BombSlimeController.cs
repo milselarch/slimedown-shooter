@@ -18,6 +18,7 @@ public class BombSlimeController : SlimeController {
     private void OnExplodeDone() {
         _exploding = false;
         this.ForceSelfDestruct();
+        // Debug.Log("EXPLOSION_END");
     }
     
     public override int GetAttackDamage() {

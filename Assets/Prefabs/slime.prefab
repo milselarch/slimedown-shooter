@@ -133,6 +133,7 @@ MonoBehaviour:
   attackDistance: 3
   smallestScale: 0.75
   maxHealth: 4
+  attackDamage: 5
   gameScore: {fileID: 11400000, guid: 7c7e34272961c8bc0b33cd338ee279ba, type: 2}
   scoreUpdate:
     m_PersistentCalls:

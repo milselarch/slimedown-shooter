@@ -21,6 +21,8 @@ public class GameState: MonoBehaviour {
     }
 
     public static void KillEnemy(int id) {
+        // Debug.Log("COUNT_ENEMY " + LIVING_ENEMIES.Count);
+        // Debug.Log("KILL_ENEMY: " + id);
         LIVING_ENEMIES.Remove(id);
     }
 
