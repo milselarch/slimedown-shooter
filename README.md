@@ -5,7 +5,11 @@
 Your life depends on slimes, and so does your death...  
 
 ![islands-2](https://github.com/milselarch/slimedown-shooter/assets/11241733/17ed31dd-e6ee-49dc-8534-a29fe806df95)
-![slimedown-edit-290924](https://github.com/user-attachments/assets/44fd2e21-bcea-4003-8279-394485ab2a14)
+
+
+https://github.com/user-attachments/assets/fcb4c4d7-cc55-44b8-915a-da4a8135ecc8
+
+
 
 Slimedown shooter is a top down 2D shooter game where the main objective 
 is to survive the endless waves of slimes that spawn in and collect the slime 
