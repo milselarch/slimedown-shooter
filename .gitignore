@@ -3,6 +3,10 @@
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
 
+# jetbrains editor config
+.idea/
+.attach_pid*
+
 .DS_Store
 /[Ll]ibrary/
 /[Tt]emp/
