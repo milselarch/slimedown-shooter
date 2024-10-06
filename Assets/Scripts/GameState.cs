@@ -4,8 +4,10 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 public class GameState: MonoBehaviour {
-    private static readonly Dictionary<int, EnemyController> LIVING_ENEMIES = new();
+    private static readonly Dictionary<int, BaseEnemyController> LIVING_ENEMIES = new();
     private const float TOLERANCE = 0.001f;
+    // ReSharper disable once InconsistentNaming
+    public const float DEFAULT_STAMP = -1.0f;
     private static bool _paused = false;
     
     public static IntVariable health;
@@ -19,6 +21,8 @@ public class GameState: MonoBehaviour {
     }
 
     public static void KillEnemy(int id) {
+        // Debug.Log("COUNT_ENEMY " + LIVING_ENEMIES.Count);
+        // Debug.Log("KILL_ENEMY: " + id);
         LIVING_ENEMIES.Remove(id);
     }
 
@@ -34,7 +38,7 @@ public class GameState: MonoBehaviour {
         return GetNumLivingEnemies() > 0;
     }
 
-    public static void AddLivingEnemy(EnemyController enemy) {
+    public static void AddLivingEnemy(BaseEnemyController enemy) {
         enemy.SetID(spawned);
         LIVING_ENEMIES[spawned] = enemy;
         spawned += 1;

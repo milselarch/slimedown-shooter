@@ -14,9 +14,11 @@ public class EnemySpawner : MonoBehaviour {
     // Start is called before the first frame update
     public Tilemap tileMap;
     public float spawnRadius = 5.0f;
-    public GameObject enemyPrefab;
+    public GameObject slimePrefab;
+    public GameObject bombSlimePrefab;
     public float spawnInterval = 0.2f;
-    
+    public GameConstants gameConstants;
+
     public IntVariable waveTimestamp;
     public IntVariable waveCounter;
     public UnityEvent waveUpdate;
@@ -36,7 +38,7 @@ public class EnemySpawner : MonoBehaviour {
 
     public void GameRestart() {
         _enemiesKilled = 0;
-        waveCounter.SetValue(0);
+        waveCounter.SetValue(gameConstants.startWaveNumber);
         waveTimestamp.SetValue(0);
 
         if (_spawnCoroutine != null) {
@@ -71,13 +73,11 @@ public class EnemySpawner : MonoBehaviour {
 
     public void OnEnemyKilled() {
         _enemiesKilled += 1;
-
         // check if any enemies from the previous wave are still alive
         if (GameState.HasLivingEnemies() || GameState.spawning) {
             return;
         }
 
-        Debug.Log("WAVE IS OVER");
         StartCoroutine(SpawnAttackWave());
         waveUpdate.Invoke();
     }
@@ -90,6 +90,9 @@ public class EnemySpawner : MonoBehaviour {
         
         _enemiesKilled = 0;
         waveCounter.Increment();
+        var currentWave = waveCounter.Value;
+        var slimesToSpawn = currentWave * 2;
+        
         GameState.ResetWaveSpawnFlags();
         Assert.IsTrue(GameState.spawning);
         yield return null;
@@ -98,7 +101,7 @@ public class EnemySpawner : MonoBehaviour {
         waveTimestamp.SetValue((int) Time.time);
         var firstSpawn = true;
         
-        while (GameState.spawned < waveCounter.Value + 3) {
+        while (GameState.spawned < slimesToSpawn) {
             if (!firstSpawn) {
                 yield return new WaitForSeconds(spawnInterval);
             } else {
@@ -123,17 +126,32 @@ public class EnemySpawner : MonoBehaviour {
             var spawnable = InTileMap(spawnPosition);
             if (!spawnable) { continue; }
 
-            var enemy = Instantiate(
-                enemyPrefab, spawnPosition,
-                Quaternion.identity
-            );
-
+            var enemy = SpawnEnemy(spawnPosition, currentWave);
             enemy.transform.SetParent(transform, true);
-            GameState.AddLivingEnemy(enemy.GetComponent<EnemyController>());
+            var enemyControllable = enemy.GetComponent<IBaseEnemyControllerable>();
+            GameState.AddLivingEnemy(enemyControllable.GetBaseController());
         }
 
         GameState.StopSpawning();
         Assert.IsFalse(GameState.spawning);
+    }
+
+
+    private GameObject SpawnEnemy(Vector3 spawnPosition, int waveNumber) {
+        var bombSlimeProbability = 0.0f;
+        if (waveNumber > gameConstants.startBombSlimeWaveNo) {
+            bombSlimeProbability = gameConstants.bombSlimeSpawnProb;
+        }
+        
+        var spawnProbability = Random.Range(0.0f, 1.0f);
+        var enemyPrefab = spawnProbability < bombSlimeProbability ? 
+            bombSlimePrefab : slimePrefab;
+        
+        var enemy = Instantiate(
+            enemyPrefab, spawnPosition, Quaternion.identity
+        );
+
+        return enemy;
     }
     
     private bool InTileMap(Vector3 position) {

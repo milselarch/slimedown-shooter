@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour {
     private static readonly int CHARGING = Animator.StringToHash("charging");
     private static readonly int SPEED = Animator.StringToHash("speed");
     private static readonly int BOUNDARY_Y = Shader.PropertyToID("_boundaryY");
-    private const float DEFAULT_STAMP = -1.0f;
     
     public float maxSpeed = 20;
     public float impulseForce = 5.0f;
@@ -37,7 +36,7 @@ public class PlayerController : MonoBehaviour {
     public GameConstants gameConstants;
     public InputActionAsset actionAsset;
 
-	// whether or not player is allowed to fire projectile
+	// whether player is allowed to fire projectile
 	// private bool canFire = false;
     private int _horizontalDirection = 0;
     private int _verticalDirection = 0;
@@ -49,9 +48,9 @@ public class PlayerController : MonoBehaviour {
     private Vector3 _startPosition;
     private Color _originalColor;
     
-    private float _lastFallTime = DEFAULT_STAMP;
-    private float _lastFallDamageTime = DEFAULT_STAMP;
-    private float _lastDamagedTime = DEFAULT_STAMP;
+    private float _lastFallTime = GameState.DEFAULT_STAMP;
+    private float _lastFallDamageTime = GameState.DEFAULT_STAMP;
+    private float _lastDamagedTime = GameState.DEFAULT_STAMP;
     private float _lastCharge = 0.0f;
     
     private bool _charging = false;
@@ -65,12 +64,15 @@ public class PlayerController : MonoBehaviour {
 
     // Start is called before the first frame update
     private void Start() {
+        if (!Application.isEditor) {
+            Application.targetFrameRate = 60;
+        }
+        
         _fallingSortingLayerID = SortingLayer.NameToID(FALLING_SORTING_LAYER);
         _maxHealth = gameConstants.startMaxHealth;
         _startPosition = transform.position;
             
         GameState.health = health;
-        Application.targetFrameRate = 60;
         _lastCharge = -chargeWaitDuration;
         _playerSprite = GetComponent<SpriteRenderer>();
         _defaultSortingLayerID = _playerSprite.sortingLayerID;
@@ -146,7 +148,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private bool IsFalling() {
-        return !GameState.IsApproxEqual(_lastFallTime, DEFAULT_STAMP);
+        return !GameState.IsApproxEqual(_lastFallTime, GameState.DEFAULT_STAMP);
     }
 
     private void OnHealthChange(int prevHealth, int newHealth) {
@@ -167,7 +169,7 @@ public class PlayerController : MonoBehaviour {
 
         while (!_destroyed) {
             yield return null;
-            if (GameState.IsApproxEqual(_lastDamagedTime, DEFAULT_STAMP)) {
+            if (GameState.IsApproxEqual(_lastDamagedTime, GameState.DEFAULT_STAMP)) {
                 continue;                
             }
             var timePassed = Time.time - _lastDamagedTime;
@@ -207,8 +209,8 @@ public class PlayerController : MonoBehaviour {
         _playerSprite.sortingLayerID = _defaultSortingLayerID;
 
         // reset fall damage counters
-        _lastFallTime = DEFAULT_STAMP;
-        _lastFallDamageTime = DEFAULT_STAMP;
+        _lastFallTime = GameState.DEFAULT_STAMP;
+        _lastFallDamageTime = GameState.DEFAULT_STAMP;
         
         GameState.paused = false;
         gameScore.SetValue(0);
@@ -339,28 +341,22 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void OnHorizontalMoveAction(InputAction.CallbackContext context) {
-        if (!CanMove()) { return; }
-        
-        if (context.started) {
+        if (context.canceled) {
+            _horizontalDirection = 0;
+        } else if (context.started && CanMove()) {
             var faceRight = context.ReadValue<float>() > 0 ? 1 : -1;
             this._faceRight = faceRight == 1;
             _playerSprite.flipX = !this._faceRight;
             _horizontalDirection = faceRight;
         }
-        if (context.canceled) {
-            _horizontalDirection = 0;
-        }
     }
     
     public void OnVerticalMoveAction(InputAction.CallbackContext context) {
-        if (!CanMove()) { return; }
-
-        if (context.started) {
-            var faceTop = context.ReadValue<float>() > 0 ? 1 : -1;
-            _verticalDirection = faceTop;
-        }
         if (context.canceled) {
             _verticalDirection = 0;
+        } else if (context.started && CanMove()) {
+            var faceTop = context.ReadValue<float>() > 0 ? 1 : -1;
+            _verticalDirection = faceTop;
         }
     }
 
@@ -377,7 +373,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
-        var enemyController = other.gameObject.GetComponent<EnemyController>();
+        var enemyController = other.gameObject.GetComponent<IBaseEnemyControllerable>();
         if (enemyController == null) {
             return;
         }
@@ -389,18 +385,18 @@ public class PlayerController : MonoBehaviour {
             ApplyChargeAttack(enemyController);
         } else if (enemyHealth == 0) {
             // increase health after collecting dead slime
-            health.Increment(14, _maxHealth);
+            health.Increment(gameConstants.slimeBallHealth, _maxHealth);
             gameScore.Increment();
             playerHealthUpdate.Invoke();
             scoreUpdate.Invoke();
         } else {
-            // slime deals 5 damage to player
-            ReceiveSlimeDamage(5);
+            // Debug.Log("ATTACK_DAMAGE: " + enemyController.GetAttackDamage());
+            ReceiveSlimeDamage(enemyController.GetAttackDamage());
         }
     }
 
-    private void ApplyChargeAttack(EnemyController enemyController) {
-        var enemyBody = enemyController.enemyBody;
+    private void ApplyChargeAttack(IBaseEnemyControllerable slimeController) {
+        var enemyBody = slimeController.enemyBody;
         var chargeAlignment = Vector2.Dot(_playerBody.velocity, enemyBody.velocity);
         // whether or not player and enemy are moving towards each other
         var velocitiesColliding = chargeAlignment < 0.0f;
@@ -420,16 +416,16 @@ public class PlayerController : MonoBehaviour {
         if (!velocitiesColliding && !chargingInEnemyDirection) { return; }
         
         // charging the enemy increases player health by 1
-        enemyController.Damage(2);
+        slimeController.Damage(2);
         gameScore.Increment();
         health.Increment(1, _maxHealth);
                 
-        var newEnemyHealth = enemyController.GetEnemyHealth();
+        var newEnemyHealth = slimeController.GetEnemyHealth();
 
         if (newEnemyHealth == 0) {
             // if charging killed the slime,
             // automatically destroy its sprite also
-            enemyController.AttemptSelfDestruct();
+            slimeController.AttemptSelfDestruct();
             health.Increment(14, _maxHealth);
         }
                 

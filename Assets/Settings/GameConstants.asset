@@ -13,4 +13,9 @@ MonoBehaviour:
   m_Name: GameConstants
   m_EditorClassIdentifier: 
   startMaxHealth: 100
+  startWaveNumber: 0
   gravityScale: 3
+  minYCameraPosition: -100
+  startBombSlimeWaveNo: 4
+  bombSlimeSpawnProb: 0.07
+  slimeBallHealth: 14

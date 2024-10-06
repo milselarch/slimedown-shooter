@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 2809649549374917642}
   m_Layer: 0
   m_Name: slime
-  m_TagString: Enemy
+  m_TagString: Slime
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  glowMaterial: {fileID: -876546973899608171, guid: f9a744a0054066f6dab6053582757c3b, type: 3}
+  glowMaterialTemplate: {fileID: -876546973899608171, guid: f9a744a0054066f6dab6053582757c3b, type: 3}
   jumpForce: 7
   jumpInterval: 1
   attackForce: 11
@@ -133,6 +133,7 @@ MonoBehaviour:
   attackDistance: 3
   smallestScale: 0.75
   maxHealth: 4
+  attackDamage: 5
   gameScore: {fileID: 11400000, guid: 7c7e34272961c8bc0b33cd338ee279ba, type: 2}
   scoreUpdate:
     m_PersistentCalls:
