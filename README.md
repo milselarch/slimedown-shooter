@@ -1,11 +1,15 @@
 # `SLIMEDOWN SHOOTER`
-## `Introduction`
 
+## `Introduction`
 ### `Game Summary Pitch`
 Your life depends on slimes, and so does your death...  
 
-![slimedown-screenshot](https://github.com/milselarch/slimedown-shooter/assets/11241733/a1443a5d-43cd-4763-97d0-88403ebc4067)
 ![islands-2](https://github.com/milselarch/slimedown-shooter/assets/11241733/17ed31dd-e6ee-49dc-8534-a29fe806df95)
+
+
+https://github.com/user-attachments/assets/fcb4c4d7-cc55-44b8-915a-da4a8135ecc8
+
+
 
 Slimedown shooter is a top down 2D shooter game where the main objective 
 is to survive the endless waves of slimes that spawn in and collect the slime 
