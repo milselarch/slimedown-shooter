@@ -21,7 +21,7 @@
 }
 
 Label {
-    -unity-font-definition: url("/Assets/Fonts/pixel-unicode.ttf");
+    -unity-font-definition: url("/Assets/assets/Fonts/pixel-unicode.ttf");
     font-size: 50px;
     color: white;
 }
