@@ -1,0 +1,3 @@
+[submodule "Assets/assets"]
+	path = Assets/assets
+	url = https://github.com/milselarch/slimedown-assets
