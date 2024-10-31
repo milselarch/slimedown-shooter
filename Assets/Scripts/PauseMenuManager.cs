@@ -17,6 +17,11 @@ public class PauseMenuManager : MonoBehaviour {
     private Button _restartButton;
 
     private void OnEnable() {
+        AttachHandlers();
+        Hide();
+    }
+
+    private void AttachHandlers() {
         var root = pauseUI.rootVisualElement;
         this._playButton = root.Q<Button>("PlayButton");
         this._manuMenuButton = root.Q<Button>("MainMenuButton");
@@ -27,9 +32,8 @@ public class PauseMenuManager : MonoBehaviour {
         this._playButton.clickable.clicked += OnPlayButtonClicked;
         this._manuMenuButton.clickable.clicked += OnMainMenuButtonClicked;
         this._restartButton.clickable.clicked += OnRestartButtonClicked;
-        Hide();
     }
-    
+
     private void OnRestartButtonClicked() {
         restartEvent.Invoke();
         // Hide();
@@ -39,6 +43,11 @@ public class PauseMenuManager : MonoBehaviour {
         pauseCanvas.SetActive(true);
         pauseUI.rootVisualElement.style.visibility = Visibility.Visible;
         Cursor.visible = true;
+        /* so it turns out that disabling the UI document will disconnect 
+         * all event handlers and the buttons will not work anymore, so we
+         * need to reattach the handlers every time the UI is enabled
+         */
+        AttachHandlers();
     }
 
     private void Hide() {
