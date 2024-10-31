@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
@@ -19,26 +16,28 @@ public class PauseMenuManager : MonoBehaviour {
     private Button _manuMenuButton;
     private Button _restartButton;
 
-    private void Initialize() {
+    private void OnEnable() {
         var root = pauseUI.rootVisualElement;
         this._playButton = root.Q<Button>("PlayButton");
         this._manuMenuButton = root.Q<Button>("MainMenuButton");
         this._restartButton = root.Q<Button>("RestartButton");
             
         Assert.IsNotNull(this._playButton);
+        // Debug.Log("PLAY_BUTTON" + this._playButton);
         this._playButton.clickable.clicked += OnPlayButtonClicked;
         this._manuMenuButton.clickable.clicked += OnMainMenuButtonClicked;
         this._restartButton.clickable.clicked += OnRestartButtonClicked;
+        Hide();
     }
     
     private void OnRestartButtonClicked() {
         restartEvent.Invoke();
-        Hide();
+        // Hide();
     }
     
     private void Show() {
-        pauseUI.rootVisualElement.style.visibility = Visibility.Visible;
         pauseCanvas.SetActive(true);
+        pauseUI.rootVisualElement.style.visibility = Visibility.Visible;
         Cursor.visible = true;
     }
 
@@ -49,6 +48,7 @@ public class PauseMenuManager : MonoBehaviour {
     }
     
     private void OnPlayButtonClicked() {
+        Debug.Log("Play button clicked");
         GameState.paused = false;
         Hide();
     }
@@ -57,19 +57,13 @@ public class PauseMenuManager : MonoBehaviour {
         SceneManager.LoadSceneAsync("Menu", LoadSceneMode.Single);
     }
     
-    private IEnumerator LaunchInitializer() {
-        // wait for UI document to render
-        yield return new WaitForEndOfFrame();
-        Initialize();
-    }
-    
     private void Start() {
-        Hide();
         // wait for UI document to render
-        StartCoroutine(LaunchInitializer());
+        // StartCoroutine(LaunchInitializer());
     }
     
     public void TogglePause(InputAction.CallbackContext context) {
+        // Debug.Log("Play button clicked 2");
         if (GameState.dead) {
             // don't pause game if game over
             return;

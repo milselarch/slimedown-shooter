@@ -1,8 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/PauseStyles.uss?fileID=7433441132597879392&amp;guid=3e5b148ae86bb1ed597b2cf1940979c4&amp;type=3#PauseStyles" />
     <ui:VisualElement name="root" style="flex-grow: 1;">
+        <!-- <ui:VisualElement name="Background" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; background-color: rgb(255, 255, 255); border-left-color: rgba(44, 44, 44, 0); border-right-color: rgba(44, 44, 44, 0); border-top-color: rgba(44, 44, 44, 0); border-bottom-color: rgba(44, 44, 44, 0); opacity: 0.4;" /> -->
         <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="PlayButton" />
-        <ui:Button class="menu-button" text="MAIN MENU" parse-escape-sequences="true" display-tooltip-when-elided="true" name="MainMenuButton" />
-        <ui:Button class="menu-button" text="RESTART" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RestartButton" />
+        <ui:Button text="MAIN MENU" parse-escape-sequences="true" display-tooltip-when-elided="true" name="MainMenuButton" class="menu-button" />
+        <ui:Button text="RESTART" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RestartButton" class="menu-button" />
     </ui:VisualElement>
 </ui:UXML>

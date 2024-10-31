@@ -42,7 +42,7 @@ Button {
     background-color: rgb(99, 171, 63);
     color: rgb(34, 34, 34);
     border-color: rgb(99, 171, 63);
-    border-width: 8px;
+    border-width: 3px;
     align-self: center;
     border-radius: 5px;
     -unity-font-definition: url("/Assets/assets/Fonts/pixel-unicode.ttf");
