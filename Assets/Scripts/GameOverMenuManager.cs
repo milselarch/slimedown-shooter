@@ -11,12 +11,17 @@ public class GameOverMenuManager : MonoBehaviour {
     public CanvasGroup gameOverCanvas;
     public GameObject gameOverScreen;
     public UnityEvent restartEvent;
+    public IntVariable health;
 
     private Button _mainMenuButton;
     private Button _restartButton;
     private bool _exiting = false;
     
     private void Start() {
+        GameRestart();
+    }
+
+    private void AttachHandlers() {
         Assert.IsNotNull(gameOverOverlay);
         var root = gameOverOverlay.rootVisualElement;
         this._mainMenuButton = root.Q<Button>("MainMenuButton");
@@ -27,7 +32,33 @@ public class GameOverMenuManager : MonoBehaviour {
         Assert.IsNotNull(this._mainMenuButton);
         _mainMenuButton.clicked += OnMainMenuButtonClicked;
         _restartButton.clicked += OnRestartButtonClicked;
-        GameRestart();
+    }
+    
+    private void OnEnable() {
+        AttachHandlers();
+        Hide();
+    }
+
+    private void Show() {
+        gameOverScreen.SetActive(true);
+        gameOverOverlay.rootVisualElement.style.visibility = Visibility.Visible;
+        Cursor.visible = true;
+        /* so it turns out that disabling the UI document will disconnect
+         * all event handlers and the buttons will not work anymore, so we
+         * need to reattach the handlers every time the UI is enabled
+         */
+    }
+
+    public void OnPlayerHealthUpdate() {
+        if (health.Value <= 0) {
+            Show();
+        }
+    }
+
+    private void Hide() {
+        gameOverOverlay.rootVisualElement.style.visibility = Visibility.Hidden;
+        gameOverScreen.SetActive(false);
+        Cursor.visible = false;
     }
 
     public void GameRestart() {

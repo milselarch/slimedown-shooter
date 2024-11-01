@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Events;
 
-
 internal class StatsOverlay {
     private readonly UIDocument _statsUI;
 

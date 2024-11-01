@@ -16,11 +16,6 @@ public class PauseMenuManager : MonoBehaviour {
     private Button _manuMenuButton;
     private Button _restartButton;
 
-    private void OnEnable() {
-        AttachHandlers();
-        Hide();
-    }
-
     private void AttachHandlers() {
         var root = pauseUI.rootVisualElement;
         this._playButton = root.Q<Button>("PlayButton");
@@ -37,6 +32,11 @@ public class PauseMenuManager : MonoBehaviour {
     private void OnRestartButtonClicked() {
         restartEvent.Invoke();
         // Hide();
+    }
+    
+    private void OnEnable() {
+        AttachHandlers();
+        Hide();
     }
     
     private void Show() {
