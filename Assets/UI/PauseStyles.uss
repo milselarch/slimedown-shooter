@@ -5,8 +5,6 @@
 }
 
 .menu-button {
-    /* padding-left: 60px; */
-    /* padding-right: 60px; */
     width: 250px;
     font-size: 40px;
     -unity-font-style: normal;
@@ -45,10 +43,11 @@ Button {
     border-width: 3px;
     align-self: center;
     border-radius: 5px;
-    -unity-font-definition: url("/Assets/assets/Fonts/pixel-unicode.ttf");
+    -unity-font-definition: url('project://database/Assets/assets/Fonts/pixel-unicode.ttf?fileID=12800000&guid=556bde64632b655ba9060ba448798705&type=3#pixel-unicode');
 }
+
 Label {
-    -unity-font-definition: url("/Assets/assets/Fonts/pixel-unicode.ttf");
+    -unity-font-definition: url('project://database/Assets/assets/Fonts/pixel-unicode.ttf?fileID=12800000&guid=556bde64632b655ba9060ba448798705&type=3#pixel-unicode');
 }
 
 Button:hover {
@@ -61,4 +60,17 @@ Button:active {
 }
 
 .menuButton {
+}
+
+.background {
+    flex-grow: 1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(255, 255, 255);
+    border-left-color: rgba(44, 44, 44, 0);
+    border-right-color: rgba(44, 44, 44, 0);
+    border-top-color: rgba(44, 44, 44, 0);
+    border-bottom-color: rgba(44, 44, 44, 0);
+    opacity: 0.3;
 }
