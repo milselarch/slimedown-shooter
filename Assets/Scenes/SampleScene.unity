@@ -1354,6 +1354,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   health: {fileID: 11400000, guid: b3f477ac3352f96838e6461ac054baae, type: 2}
+  gameConstants: {fileID: 11400000, guid: f76dec997938d0dc887637dca792eb88, type: 2}
 --- !u!114 &543150725
 MonoBehaviour:
   m_ObjectHideFlags: 0

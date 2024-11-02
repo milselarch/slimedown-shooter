@@ -16,4 +16,5 @@ public class GameConstants : ScriptableObject {
     public float bombSlimeSpawnProb = 0.05f;
 
     public int slimeBallHealth = 14;
+    public float uiScreenOpacity = 0.3f;
 }
