@@ -78,7 +78,6 @@ public class GameOverMenuManager : MonoBehaviour {
     public void GameRestart() {
         Debug.Log("Initiating restart...");
         gameOverScreen.SetActive(false);
-        restartEvent.Invoke();
     }
     
     private void OnMainMenuButtonClicked() {
@@ -88,7 +87,8 @@ public class GameOverMenuManager : MonoBehaviour {
 
     private void OnRestartButtonClicked() {
         Debug.Log("Restart button clicked");
-        GameRestart();
+        gameOverScreen.SetActive(false);
+        restartEvent.Invoke();
     }
     
     private IEnumerator FadeAndExit() {

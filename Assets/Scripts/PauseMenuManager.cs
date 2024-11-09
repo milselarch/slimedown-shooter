@@ -31,7 +31,7 @@ public class PauseMenuManager : MonoBehaviour {
 
     private void OnRestartButtonClicked() {
         restartEvent.Invoke();
-        // Hide();
+        Hide();
     }
     
     private void OnEnable() {
