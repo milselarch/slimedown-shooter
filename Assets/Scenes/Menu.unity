@@ -386,6 +386,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 811360502}
   - {fileID: 1091800352}
   - {fileID: 93394854}
   m_Father: {fileID: 0}
@@ -425,7 +426,7 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!21 &664260249
+--- !u!21 &216348985
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 0
@@ -464,6 +465,72 @@ Material:
     m_Colors:
     - _WidthHeightRadius: {r: 500, g: 200, b: 200, a: 0}
   m_BuildTextureStacks: []
+--- !u!1001 &811360501
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 193171025}
+    m_Modifications:
+    - target: {fileID: 176982787488613416, guid: 902a014a90367739bb7f1e81de9f1c77, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 1981579745}
+    - target: {fileID: 1792927926452887928, guid: 902a014a90367739bb7f1e81de9f1c77, type: 3}
+      propertyPath: m_Name
+      value: parallax
+      objectReference: {fileID: 0}
+    - target: {fileID: 4505511762881802320, guid: 902a014a90367739bb7f1e81de9f1c77, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4505511762881802320, guid: 902a014a90367739bb7f1e81de9f1c77, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4505511762881802320, guid: 902a014a90367739bb7f1e81de9f1c77, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4505511762881802320, guid: 902a014a90367739bb7f1e81de9f1c77, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4505511762881802320, guid: 902a014a90367739bb7f1e81de9f1c77, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4505511762881802320, guid: 902a014a90367739bb7f1e81de9f1c77, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4505511762881802320, guid: 902a014a90367739bb7f1e81de9f1c77, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4505511762881802320, guid: 902a014a90367739bb7f1e81de9f1c77, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4505511762881802320, guid: 902a014a90367739bb7f1e81de9f1c77, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4505511762881802320, guid: 902a014a90367739bb7f1e81de9f1c77, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 902a014a90367739bb7f1e81de9f1c77, type: 3}
+--- !u!4 &811360502 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4505511762881802320, guid: 902a014a90367739bb7f1e81de9f1c77, type: 3}
+  m_PrefabInstance: {fileID: 811360501}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &871350833
 GameObject:
   m_ObjectHideFlags: 0
@@ -614,7 +681,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1091800351}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -1350,7 +1417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 664260249}
+  m_Material: {fileID: 216348985}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -1528,7 +1595,7 @@ Camera:
   field of view: 60
   orthographic: 1
   orthographic size: 5
-  m_Depth: -1
+  m_Depth: -100
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
