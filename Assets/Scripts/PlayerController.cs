@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour {
     private static readonly int SPEED = Animator.StringToHash("speed");
     private static readonly int BOUNDARY_Y = Shader.PropertyToID("_boundaryY");
     
+    // whether player input controls are disabled
+    public bool disableInputs = false;
+    
     public float maxSpeed = 20;
     public float impulseForce = 5.0f;
     public float speed = 10;
@@ -244,7 +247,9 @@ public class PlayerController : MonoBehaviour {
             }
 
             var movement = new Vector2(xMovement, yMovement);
-            _playerBody.AddForce(movement);
+            if (!disableInputs) {
+                _playerBody.AddForce(movement);
+            }
         }
 
         var bounds = _playerSprite.bounds;
@@ -259,11 +264,9 @@ public class PlayerController : MonoBehaviour {
 
         // Debug.Log("POS " + transform.position);
         var inTileMap = InTileMap(bottomLeft) || InTileMap(bottomRight);
-        if (inTileMap || _charging) {
-            return;
+        if (!inTileMap && !_charging) {
+            StartFalling();
         }
-        
-        StartFalling();
     }
 
     private void StartFalling() {
@@ -284,6 +287,7 @@ public class PlayerController : MonoBehaviour {
     }
     
     public void OnMouseClick(InputAction.CallbackContext context) {
+        if (disableInputs) { return; }
         if (!GameState.allowPlayerAction) { return; }
         // Check if the mouse button was pressed
         if (!context.started) { return; }
@@ -396,6 +400,8 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void ApplyChargeAttack(IBaseEnemyControllerable slimeController) {
+        if (disableInputs) { return; }
+        
         var enemyBody = slimeController.enemyBody;
         var chargeAlignment = Vector2.Dot(_playerBody.velocity, enemyBody.velocity);
         // whether or not player and enemy are moving towards each other
