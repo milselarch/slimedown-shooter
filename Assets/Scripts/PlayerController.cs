@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -99,6 +100,11 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void MarkTileMapPositions() {
+        /*
+         * Draw a wireframe cube around each tile in the tilemap
+         * in the unity editor
+         */
+        #if UNITY_EDITOR
         if (tileMap == null) { return; }
         
         Gizmos.color = Color.red;
@@ -125,11 +131,13 @@ public class PlayerController : MonoBehaviour {
                 Gizmos.DrawWireCube(centerPos, new Vector3(
                     length, length, length
                 ));
+                Handles.Label(centerPos, $"({localPlace.x}, {localPlace.y})");
             }
         }
         
         Gizmos.color = Color.green;
         Gizmos.DrawLine(_bottomLeft, _bottomRight);
+        #endif
     }
 
     private void SetColliderEnabled(bool enable) {
@@ -467,6 +475,7 @@ public class PlayerController : MonoBehaviour {
         
         // check if the spawn position is in spawnable tile area
         var cellPosition = tileMap.WorldToCell(position);
+        Debug.Log("CELL-POS " + cellPosition);
         var inTileMap = tileMap.HasTile(cellPosition);
         return inTileMap;
     }
