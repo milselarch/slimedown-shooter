@@ -285,11 +285,19 @@ public class PlayerController : MonoBehaviour {
         SetColliderEnabled(false);
     }
 
-    private static Vector2 GetMouseDirection() {
+    private Vector2 GetMouseDirection() {
         // Get the position of the mouse click relative to the center of the screen
         var mousePosition = Mouse.current.position.ReadValue();
-        var center = new Vector2(Screen.width / 2f, Screen.height / 2f);
-        var mouseOffset = mousePosition - center;
+        var playerScreenPos = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        
+        if (Camera.main != null) {
+            var playerScreenPos3D = Camera.main.WorldToScreenPoint(
+                _playerSprite.transform.position
+            );
+            playerScreenPos = new Vector2(playerScreenPos3D.x, playerScreenPos3D.y);
+        }
+        
+        var mouseOffset = mousePosition - playerScreenPos;
         var mouseDirection = mouseOffset.normalized;
         return mouseDirection;
     }
@@ -475,7 +483,7 @@ public class PlayerController : MonoBehaviour {
         
         // check if the spawn position is in spawnable tile area
         var cellPosition = tileMap.WorldToCell(position);
-        Debug.Log("CELL-POS " + cellPosition);
+        // Debug.Log("CELL-POS " + cellPosition);
         var inTileMap = tileMap.HasTile(cellPosition);
         return inTileMap;
     }
