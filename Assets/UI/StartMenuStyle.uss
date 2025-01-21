@@ -4,9 +4,28 @@
     justify-content: center;
 }
 
+#highscore {
+    color: rgba(213, 213, 213, 0.5);
+    -unity-text-outline-color: rgb(61, 61, 61);
+    -unity-text-outline-width: 4px;
+    justify-content: center;
+    align-self: center;
+    -unity-font-definition: url('project://database/Assets/assets/Fonts/pixel-unicode.ttf?fileID=12800000&guid=556bde64632b655ba9060ba448798705&type=3#pixel-unicode');
+    font-size: 70px;
+}
+
 #title {
     -unity-font-definition: url('project://database/Assets/assets/Fonts/pixel-unicode.ttf?fileID=12800000&guid=556bde64632b655ba9060ba448798705&type=3#pixel-unicode');
     justify-content: center;
     align-self: center;
     font-size: 120px;
+    color: rgba(61, 61, 61, 0.6);
+    -unity-text-outline-color: rgb(42, 42, 42);
+    -unity-text-outline-width: 4px;
+}
+
+#anchor {
+    margin-bottom: 300px;
+    justify-content: center;
+    align-self: center;
 }

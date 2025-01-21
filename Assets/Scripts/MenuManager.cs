@@ -26,7 +26,7 @@ public class MenuManager: MonoBehaviour {
     }
 
     private void LoadMenu() {
-        menuUI.SetActive(true);
+        // menuUI.SetActive(true);
         loadingUI.SetActive(false);
         this._loadGame = false;
     }
