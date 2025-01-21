@@ -1,0 +1,12 @@
+#root {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#title {
+    -unity-font-definition: url('project://database/Assets/assets/Fonts/pixel-unicode.ttf?fileID=12800000&guid=556bde64632b655ba9060ba448798705&type=3#pixel-unicode');
+    justify-content: center;
+    align-self: center;
+    font-size: 120px;
+}
