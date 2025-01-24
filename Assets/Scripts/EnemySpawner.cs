@@ -1,12 +1,9 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
@@ -37,9 +34,11 @@ public class EnemySpawner : MonoBehaviour {
     }
 
     public void GameRestart() {
+        GameState.StopSpawning();
         _enemiesKilled = 0;
         waveCounter.SetValue(gameConstants.startWaveNumber);
         waveTimestamp.SetValue(0);
+        // GameState.ResetWaveSpawnFlags();
 
         if (_spawnCoroutine != null) {
             StopCoroutine(_spawnCoroutine);

@@ -2,15 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Assertions;
+using UnityEngine.UIElements;
+using Slider = UnityEngine.UI.Slider;
 
-public class MenuManager: MonoBehaviour {
+public class StartMenuManager: MonoBehaviour {
+    public UIDocument startMenu;
+    private Button _startButton;
+    
     public GameObject highscoreText;
     public IntVariable gameScore;
 
     public Slider progressBar;
-    public GameObject menuUI;
+    // public GameObject menuUI;
     public GameObject loadingUI;
     public GameObject bouncingSlime;
 
@@ -26,13 +31,27 @@ public class MenuManager: MonoBehaviour {
     }
 
     private void LoadMenu() {
-        menuUI.SetActive(true);
+        // menuUI.SetActive(true);
+        startMenu.rootVisualElement.style.visibility = Visibility.Visible;
         loadingUI.SetActive(false);
         this._loadGame = false;
+        
+        this._startButton = startMenu.rootVisualElement.Q<Button>("start_game");
+        Assert.IsNotNull(this._startButton);
+        this._startButton.RegisterCallback<ClickEvent>(evt => {
+            if (evt.button == (int) MouseButton.LeftMouse) {
+                LoadLevel();
+            }
+        });
+        // this._startButton.clickable.clicked += LoadLevel;
+        Debug.Log("START_BUTTON_ATTACHED " + this._startButton);
     }
 
     public void LoadLevel() {
-        menuUI.SetActive(false);
+        Debug.Log("START_BUTTON_PRESSED");
+        if (this._loadGame) { return; }
+        // menuUI.SetActive(false);
+        startMenu.rootVisualElement.style.visibility = Visibility.Hidden;
         loadingUI.SetActive(true);
         
         this._loadGame = true;
@@ -46,13 +65,12 @@ public class MenuManager: MonoBehaviour {
         }
         
         bouncingSlime.GetComponent<UISpriteAnimation>().StartAnimation();
-        
         AsyncOperation loadOperation = SceneManager.LoadSceneAsync(
             "SampleScene", LoadSceneMode.Single
         );
 
         while (!loadOperation.isDone) {
-            float progress = Mathf.Clamp01(loadOperation.progress / .9f);
+            var progress = Mathf.Clamp01(loadOperation.progress / .9f);
             progressBar.value = progress;
             yield return null;
         }

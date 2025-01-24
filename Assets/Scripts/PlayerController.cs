@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -13,6 +14,9 @@ public class PlayerController : MonoBehaviour {
     private static readonly int CHARGING = Animator.StringToHash("charging");
     private static readonly int SPEED = Animator.StringToHash("speed");
     private static readonly int BOUNDARY_Y = Shader.PropertyToID("_boundaryY");
+    
+    // whether player input controls are disabled
+    public bool disableInputs = false;
     
     public float maxSpeed = 20;
     public float impulseForce = 5.0f;
@@ -96,6 +100,11 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void MarkTileMapPositions() {
+        /*
+         * Draw a wireframe cube around each tile in the tilemap
+         * in the unity editor
+         */
+        #if UNITY_EDITOR
         if (tileMap == null) { return; }
         
         Gizmos.color = Color.red;
@@ -122,11 +131,13 @@ public class PlayerController : MonoBehaviour {
                 Gizmos.DrawWireCube(centerPos, new Vector3(
                     length, length, length
                 ));
+                Handles.Label(centerPos, $"({localPlace.x}, {localPlace.y})");
             }
         }
         
         Gizmos.color = Color.green;
         Gizmos.DrawLine(_bottomLeft, _bottomRight);
+        #endif
     }
 
     private void SetColliderEnabled(bool enable) {
@@ -244,7 +255,9 @@ public class PlayerController : MonoBehaviour {
             }
 
             var movement = new Vector2(xMovement, yMovement);
-            _playerBody.AddForce(movement);
+            if (!disableInputs) {
+                _playerBody.AddForce(movement);
+            }
         }
 
         var bounds = _playerSprite.bounds;
@@ -259,11 +272,9 @@ public class PlayerController : MonoBehaviour {
 
         // Debug.Log("POS " + transform.position);
         var inTileMap = InTileMap(bottomLeft) || InTileMap(bottomRight);
-        if (inTileMap || _charging) {
-            return;
+        if (!inTileMap && !_charging) {
+            StartFalling();
         }
-        
-        StartFalling();
     }
 
     private void StartFalling() {
@@ -274,16 +285,25 @@ public class PlayerController : MonoBehaviour {
         SetColliderEnabled(false);
     }
 
-    private static Vector2 GetMouseDirection() {
+    private Vector2 GetMouseDirection() {
         // Get the position of the mouse click relative to the center of the screen
         var mousePosition = Mouse.current.position.ReadValue();
-        var center = new Vector2(Screen.width / 2f, Screen.height / 2f);
-        var mouseOffset = mousePosition - center;
+        var playerScreenPos = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        
+        if (Camera.main != null) {
+            var playerScreenPos3D = Camera.main.WorldToScreenPoint(
+                _playerSprite.transform.position
+            );
+            playerScreenPos = new Vector2(playerScreenPos3D.x, playerScreenPos3D.y);
+        }
+        
+        var mouseOffset = mousePosition - playerScreenPos;
         var mouseDirection = mouseOffset.normalized;
         return mouseDirection;
     }
     
     public void OnMouseClick(InputAction.CallbackContext context) {
+        if (disableInputs) { return; }
         if (!GameState.allowPlayerAction) { return; }
         // Check if the mouse button was pressed
         if (!context.started) { return; }
@@ -396,6 +416,8 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void ApplyChargeAttack(IBaseEnemyControllerable slimeController) {
+        if (disableInputs) { return; }
+        
         var enemyBody = slimeController.enemyBody;
         var chargeAlignment = Vector2.Dot(_playerBody.velocity, enemyBody.velocity);
         // whether or not player and enemy are moving towards each other
@@ -461,6 +483,7 @@ public class PlayerController : MonoBehaviour {
         
         // check if the spawn position is in spawnable tile area
         var cellPosition = tileMap.WorldToCell(position);
+        // Debug.Log("CELL-POS " + cellPosition);
         var inTileMap = tileMap.HasTile(cellPosition);
         return inTileMap;
     }

@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/PauseStyles.uss?fileID=7433441132597879392&amp;guid=3e5b148ae86bb1ed597b2cf1940979c4&amp;type=3#PauseStyles" />
+    <ui:VisualElement name="root" style="flex-grow: 1;">
+        <ui:VisualElement name="Background" class="background" style="flex-grow: 1;" />
+        <ui:GroupBox name="Content">
+            <ui:Label tabindex="-1" text="YOU DIED" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DeathLabel" />
+            <ui:Button text="RETURN TO MENU" parse-escape-sequences="true" display-tooltip-when-elided="true" name="MainMenuButton" class="menu-button" />
+            <ui:Button text="PLAY AGAIN" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RestartButton" class="menu-button" />
+        </ui:GroupBox>
+    </ui:VisualElement>
+</ui:UXML>

@@ -5,13 +5,17 @@
 }
 
 .menu-button {
-    padding: 10px;
-    /* padding-left: 60px; */
-    /* padding-right: 60px; */
     width: 250px;
     font-size: 40px;
     -unity-font-style: normal;
-    
+}
+
+#DeathLabel {
+    justify-content: center;
+    align-self: center;
+    font-size: 120px;
+    color: rgb(0, 0, 0);
+    -unity-font-style: normal;
 }
 
 #PlayButton {
@@ -36,10 +40,14 @@ Button {
     background-color: rgb(99, 171, 63);
     color: rgb(34, 34, 34);
     border-color: rgb(99, 171, 63);
-    border-width: 4px;
+    border-width: 3px;
     align-self: center;
     border-radius: 5px;
-    -unity-font-definition: url('project://database/Assets/Fonts/pixel-unicode.ttf?fileID=12800000&guid=556bde64632b655ba9060ba448798705&type=3#pixel-unicode');
+    -unity-font-definition: url('project://database/Assets/assets/Fonts/pixel-unicode.ttf?fileID=12800000&guid=556bde64632b655ba9060ba448798705&type=3#pixel-unicode');
+}
+
+Label {
+    -unity-font-definition: url('project://database/Assets/assets/Fonts/pixel-unicode.ttf?fileID=12800000&guid=556bde64632b655ba9060ba448798705&type=3#pixel-unicode');
 }
 
 Button:hover {
@@ -52,4 +60,17 @@ Button:active {
 }
 
 .menuButton {
+}
+
+.background {
+    flex-grow: 1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(255, 255, 255);
+    border-left-color: rgba(44, 44, 44, 0);
+    border-right-color: rgba(44, 44, 44, 0);
+    border-top-color: rgba(44, 44, 44, 0);
+    border-bottom-color: rgba(44, 44, 44, 0);
+    opacity: 0.3;
 }

@@ -2,14 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
-using TMPro;
-using UnityEngine.Assertions;
 using UnityEngine.Events;
-using UnityEngine.PlayerLoop;
-using Cursor = UnityEngine.Cursor;
-
 
 internal class StatsOverlay {
     private readonly UIDocument _statsUI;
@@ -93,22 +87,18 @@ internal class MultipleStatsOverlay {
     }
 }
 
-
 public class UIManager : MonoBehaviour {
     public IntVariable gameScore;
     public IntVariable health;
     public IntVariable waveCounter;
     // timestamp for start of attack wave
-    public IntVariable waveTimestamp;
-    public CanvasGroup gameOverCanvas;
+    public IntVariable waveTimestamp; 
     public UnityEvent restartEvent;
 
     public UIDocument statsUI;
     public UIDocument outlineStatsUI;
-    public GameObject gameOverScreen;
     
     private bool _destroyed = false;
-	private bool _exiting = false;
     private MultipleStatsOverlay _statsOverlays;
     
     // Start is called before the first frame update
@@ -127,14 +117,7 @@ public class UIManager : MonoBehaviour {
          * EnemySpawner script execution order. That is the only thing
          * guaranteeing that the wave count is reset before the UI
          */
-        gameOverScreen.SetActive(false);
         UpdateUI();
-    }
-
-    public void OnPlayerHealthUpdate() {
-        if (!GameState.dead) return;
-        gameOverScreen.SetActive(true);
-        Cursor.visible = true;
     }
 
     public void InitiateRestart() {
@@ -142,25 +125,6 @@ public class UIManager : MonoBehaviour {
         restartEvent.Invoke();
     }
 
-    public void ReturnToMainMenu() {
-        if (this._exiting) {
-            return;
-        }
-
-        this._exiting = true;
-        StartCoroutine(FadeAndExit());
-    }
-    
-    IEnumerator FadeAndExit() {
-        for (var alpha = 1f; alpha >= -0.05f; alpha -= 0.05f) {
-            gameOverCanvas.alpha = alpha;
-            yield return new WaitForSecondsRealtime(0.1f);
-        }
-
-        // once done, go to next scene
-        SceneManager.LoadSceneAsync("Menu", LoadSceneMode.Single);
-    }
-    
     private void OnDestroy() {
         _destroyed = true;
     }
