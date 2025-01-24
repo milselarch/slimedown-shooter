@@ -66,11 +66,6 @@ public class PauseMenuManager : MonoBehaviour {
         SceneManager.LoadSceneAsync("Menu", LoadSceneMode.Single);
     }
     
-    private void Start() {
-        // wait for UI document to render
-        // StartCoroutine(LaunchInitializer());
-    }
-    
     public void TogglePause(InputAction.CallbackContext context) {
         // Debug.Log("Play button clicked 2");
         if (GameState.dead) {
