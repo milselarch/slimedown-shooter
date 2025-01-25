@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ScriptableObjects {
     [CreateAssetMenu(fileName = "BoolVariable", menuName = "ScriptableObjects/BoolVariable", order = 3)]
     public class BoolVariable: Variable<bool> {
-        public bool previousValue;
+        public bool previousValue = false;
         public delegate void ValueChangeCallback(bool prevValue, bool newValue);
         private readonly List<ValueChangeCallback> _callbacks = new();
 
@@ -45,7 +45,7 @@ namespace ScriptableObjects {
         }
     
         public void SetFalse() {
-            previousValue = false;
+            SetValue(false);
         }
     }
 }
