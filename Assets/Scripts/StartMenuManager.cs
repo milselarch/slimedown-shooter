@@ -10,7 +10,9 @@ using Slider = UnityEngine.UI.Slider;
 public class StartMenuManager: MonoBehaviour {
     public UIDocument startMenu;
     private Button _startButton;
+    private Label _highscoreLabel;
     
+    // TODO: remove deprecated high score text
     public GameObject highscoreText;
     public IntVariable gameScore;
 
@@ -43,6 +45,8 @@ public class StartMenuManager: MonoBehaviour {
                 LoadLevel();
             }
         });
+        this._highscoreLabel = startMenu.rootVisualElement.Q<Label>("highscore");
+        this.SetHighScore();
         // this._startButton.clickable.clicked += LoadLevel;
         Debug.Log("START_BUTTON_ATTACHED " + this._startButton);
     }
@@ -83,8 +87,8 @@ public class StartMenuManager: MonoBehaviour {
 
     private void SetHighScore() {
         // set highscore
-        highscoreText.GetComponent<TextMeshProUGUI>().text = (
-            "HIGHSCORE: " + gameScore.previousHighestValue.ToString("D6")
-        );
+        var scoreText = "HIGHSCORE: " + gameScore.previousHighestValue.ToString("D6");
+        highscoreText.GetComponent<TextMeshProUGUI>().text = scoreText;
+        _highscoreLabel.text = scoreText;
     }
 }
