@@ -163,17 +163,17 @@ vector aligns with player velocity vector)
 33. add restart button in pause menu
 34. (bugfix) stop player movement being carried over on restart
 35. add bomb slime enemy type
+36. menu: overhaul start menu to use ui toolkit
 
 ### `Features todo`
 1. Add URP shader for charge attack
-2. Make the main menu look good + more features
-   1. Add windowed mode, full screen mode
-   2. Exit game option
-   3. master and music audio sliders
-3. Add instructions page 
-4. Add initial instructions overlay 
-5. have slime ball shine timings be relative to time of slime ball degeneration
-6. Create a nice starter menu screen
+2. menu: Add windowed mode, full screen mode
+3. menu: Exit game option
+4. menu: master and music audio sliders
+5. Add instructions page 
+6. Add initial instructions overlay 
+7. have slime ball shine timings be relative to time of slime ball degeneration
+8. Create a nice starter menu screen
 
 ### `Future Potential Features todo`
 1. refactor game over menu using UIDocument
