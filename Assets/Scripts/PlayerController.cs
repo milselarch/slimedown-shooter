@@ -211,7 +211,7 @@ public class PlayerController : MonoBehaviour {
         _verticalDirection = 0;
         
         transform.position = _startPosition;
-        _playerBody.velocity = Vector2.zero;
+        _playerBody.linearVelocity = Vector2.zero;
         _playerBody.gravityScale = 0.0f;
         
         // reset sprite direction
@@ -248,10 +248,10 @@ public class PlayerController : MonoBehaviour {
             var xMovement = 0.0f;
             var yMovement = 0.0f;
 
-            if (Math.Abs(_playerBody.velocity.x) < maxSpeed) {
+            if (Math.Abs(_playerBody.linearVelocity.x) < maxSpeed) {
                 xMovement = speed * _horizontalDirection;
             }
-            if (Math.Abs(_playerBody.velocity.y) < maxSpeed) {
+            if (Math.Abs(_playerBody.linearVelocity.y) < maxSpeed) {
                 yMovement = speed * _verticalDirection;
             }
 
@@ -383,7 +383,7 @@ public class PlayerController : MonoBehaviour {
 
     // Update is called once per frame
     private void Update() {
-        var velocity = Mathf.Abs(_playerBody.velocity.magnitude);
+        var velocity = Mathf.Abs(_playerBody.linearVelocity.magnitude);
         playerAnimator.SetFloat(SPEED, velocity);
     }
 
@@ -420,7 +420,7 @@ public class PlayerController : MonoBehaviour {
         if (disableInputs) { return; }
         
         var enemyBody = slimeController.enemyBody;
-        var chargeAlignment = Vector2.Dot(_playerBody.velocity, enemyBody.velocity);
+        var chargeAlignment = Vector2.Dot(_playerBody.linearVelocity, enemyBody.linearVelocity);
         // whether or not player and enemy are moving towards each other
         var velocitiesColliding = chargeAlignment < 0.0f;
         
@@ -428,7 +428,7 @@ public class PlayerController : MonoBehaviour {
         var directionToEnemy = (enemyBody.position - _playerBody.position);
         // whether player is charging in the direction of the enemy
         var chargingInEnemyDirection = (Vector2.Dot(
-            directionToEnemy, _playerBody.velocity
+            directionToEnemy, _playerBody.linearVelocity
         ) > 0.0f);
 
         /*

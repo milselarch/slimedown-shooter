@@ -11,12 +11,13 @@ namespace ScriptableObjects {
     
         public override void SetValue(bool value) {
             var prevValue = this._value;
-            previousValue = value;
             _value = value;
             TriggerCallbacks(prevValue, _value);
+            previousValue = _value;
         }
         
         public void LoadFromPreviousValue() {
+            Debug.Log("PRELOAD " + previousValue);
             _value = previousValue;
         }
 

@@ -29,6 +29,7 @@ public class StartMenuManager: MonoBehaviour {
     void Start() {
         resetGame.LoadFromPreviousValue();
         if (resetGame.Value) {
+            Debug.Log("RESET_HIGHSCORE");
             ResetHighScore();
             resetGame.SetValue(false);
         }
