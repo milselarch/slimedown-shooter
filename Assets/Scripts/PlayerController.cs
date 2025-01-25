@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour {
         
         StartCoroutine(FadeDamageEffect());
         health.AttachCallback(OnHealthChange);
-        UpdateHealthBar(health.Value);
+        UpdateHealthBar(health.value);
         
         _playerBody = GetComponent<Rigidbody2D>();
         _originalColor = _playerSprite.color;

@@ -28,7 +28,7 @@ public class StartMenuManager: MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         resetGame.LoadFromPreviousValue();
-        if (resetGame.Value) {
+        if (resetGame.value) {
             Debug.Log("RESET_HIGHSCORE");
             ResetHighScore();
             resetGame.SetValue(false);
