@@ -4,7 +4,7 @@
 ### `Game Summary Pitch`
 Your life depends on slimes, and so does your death...  
 
-![islands-2](https://github.com/milselarch/slimedown-shooter/assets/11241733/17ed31dd-e6ee-49dc-8534-a29fe806df95)
+![title-screen](https://raw.githubusercontent.com/milselarch/slimedown-shooter/refs/heads/feat/menu_overhaul/screenshots/title-screen.png)
 
 
 https://github.com/user-attachments/assets/fcb4c4d7-cc55-44b8-915a-da4a8135ecc8
