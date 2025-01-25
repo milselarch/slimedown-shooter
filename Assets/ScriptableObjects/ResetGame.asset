@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4296bd90a7748d08906158721443d6e, type: 3}
   m_Name: ResetGame
   m_EditorClassIdentifier: 
-  DeveloperDescription: "whether to reset game stats at the \nstart of the game (turn
+  developerDescription: "whether to reset game stats at the \nstart of the game (turn
     on for builds)"
   previousValue: 1

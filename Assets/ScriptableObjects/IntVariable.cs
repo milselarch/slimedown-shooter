@@ -10,14 +10,14 @@ namespace ScriptableObjects {
         private readonly List<ValueChangeCallback> _callbacks = new();
 
     
-        public override void SetValue(int value) {
-            var prevValue = this._value;
-            if (value > previousHighestValue) {
-                previousHighestValue = value;
+        public override void SetValue(int targetValue) {
+            var prevValue = this.hiddenValue;
+            if (targetValue > previousHighestValue) {
+                previousHighestValue = targetValue;
             }
 
-            _value = value;
-            TriggerCallbacks(prevValue, _value);
+            hiddenValue = targetValue;
+            TriggerCallbacks(prevValue, hiddenValue);
         }
 
         public void ClearCallbacks() {
@@ -37,8 +37,8 @@ namespace ScriptableObjects {
         }
 
         // overload
-        public void SetValue(IntVariable value) {
-            SetValue(value.Value);
+        public void SetValue(IntVariable targetVar) {
+            SetValue(targetVar.value);
         }
 
         public void Increment() {
@@ -46,33 +46,33 @@ namespace ScriptableObjects {
         }
     
         public void Increment(int amount, int ceiling) {
-            var newValue = Math.Min(ceiling, this.Value + amount);
+            var newValue = Math.Min(ceiling, this.value + amount);
             this.SetValue(newValue);
         }
 
         public void Decrement(int amount, int floor) {
-            var newValue = Math.Max(floor, this.Value - amount);
+            var newValue = Math.Max(floor, this.value - amount);
             this.SetValue(newValue);
         }
 
         public void ApplyChange(int amount) {
-            var prevValue = this._value;
-            this.Value += amount;
-            TriggerCallbacks(prevValue, _value);
+            var prevValue = this.hiddenValue;
+            this.value += amount;
+            TriggerCallbacks(prevValue, hiddenValue);
         }
 
         public void ApplyChange(int amount, int ceilingValue) {
-            var newValue = Math.Min(ceilingValue, this.Value + amount);
+            var newValue = Math.Min(ceilingValue, this.value + amount);
             this.SetValue(newValue);
         }
 
         public void ApplyChange(IntVariable amount) {
-            ApplyChange(amount.Value);
+            ApplyChange(amount.value);
         }
 
         public void ResetHighestValue() {
             previousHighestValue = 0;
-            _value = previousHighestValue;
+            hiddenValue = previousHighestValue;
         }
     }
 }

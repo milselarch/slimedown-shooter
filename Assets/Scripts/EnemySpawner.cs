@@ -56,8 +56,8 @@ public class EnemySpawner : MonoBehaviour {
          */
         while (!_destroyed) {
             var timestampNow = (int) Time.time;
-            var allowedWaveDuration = 20 + 5 * waveCounter.Value;
-            var durationPassed = timestampNow - waveTimestamp.Value;
+            var allowedWaveDuration = 20 + 5 * waveCounter.value;
+            var durationPassed = timestampNow - waveTimestamp.value;
             var durationLeft = allowedWaveDuration - durationPassed;
 
             if (durationLeft <= -1) {
@@ -90,7 +90,7 @@ public class EnemySpawner : MonoBehaviour {
         
         _enemiesKilled = 0;
         waveCounter.Increment();
-        var currentWave = waveCounter.Value;
+        var currentWave = waveCounter.value;
         var slimesToSpawn = currentWave * 2;
         
         GameState.ResetWaveSpawnFlags();

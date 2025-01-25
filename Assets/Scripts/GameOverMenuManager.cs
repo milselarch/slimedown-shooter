@@ -65,7 +65,7 @@ public class GameOverMenuManager : MonoBehaviour {
     }
 
     public void OnPlayerHealthUpdate() {
-        if (health.Value <= 0) {
+        if (health.value <= 0) {
             Show();
         }
     }
