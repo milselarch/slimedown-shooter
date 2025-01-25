@@ -164,6 +164,8 @@ vector aligns with player velocity vector)
 34. (bugfix) stop player movement being carried over on restart
 35. add bomb slime enemy type
 36. menu: overhaul start menu to use ui toolkit
+37. add reset game flag for builds
+38. refactor game over menu using UIDocument
 
 ### `Features todo`
 1. Add URP shader for charge attack
@@ -176,11 +178,14 @@ vector aligns with player velocity vector)
 8. Create a nice starter menu screen
 
 ### `Future Potential Features todo`
-1. refactor game over menu using UIDocument
-2. dynamic tile map rules-based generation
-3. day / night cycle
-4. more weapon types
-5. make slimes be able to fall off the map too
+1. dynamic tile map rules-based generation
+2. add explosion ability to player
+3. make player / bomb slime explosion destroy terrain?
+4. add ability to extend island
+5. paint terrain on death
+6. day / night cycle
+7. more weapon types
+8. make slimes be able to fall off the map too
 
 ## `Asset Used & Credits`
 
