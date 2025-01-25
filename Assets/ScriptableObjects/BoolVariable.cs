@@ -10,8 +10,14 @@ namespace ScriptableObjects {
 
     
         public override void SetValue(bool value) {
+            var prevValue = this._value;
+            previousValue = value;
             _value = value;
-            TriggerCallbacks(previousValue, _value);
+            TriggerCallbacks(prevValue, _value);
+        }
+        
+        public void LoadFromPreviousValue() {
+            _value = previousValue;
         }
 
         public void ClearCallbacks() {

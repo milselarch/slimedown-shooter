@@ -72,7 +72,7 @@ namespace ScriptableObjects {
 
         public void ResetHighestValue() {
             previousHighestValue = 0;
+            _value = previousHighestValue;
         }
-
     }
 }

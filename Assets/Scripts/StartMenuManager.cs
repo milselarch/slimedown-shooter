@@ -16,16 +16,22 @@ public class StartMenuManager: MonoBehaviour {
     // TODO: remove deprecated high score text
     public GameObject highscoreText;
     public IntVariable gameScore;
+    public BoolVariable resetGame;
 
     public Slider progressBar;
     // public GameObject menuUI;
     public GameObject loadingUI;
     public GameObject bouncingSlime;
 
-    private bool _loadGame = false;
+    private bool _loadingGame = false;
 
     // Start is called before the first frame update
     void Start() {
+        resetGame.LoadFromPreviousValue();
+        if (resetGame.Value) {
+            ResetHighScore();
+            resetGame.SetValue(false);
+        }
         SetHighScore();
     }
 
@@ -37,7 +43,7 @@ public class StartMenuManager: MonoBehaviour {
         // menuUI.SetActive(true);
         startMenu.rootVisualElement.style.visibility = Visibility.Visible;
         loadingUI.SetActive(false);
-        this._loadGame = false;
+        this._loadingGame = false;
         
         this._startButton = startMenu.rootVisualElement.Q<Button>("start_game");
         Assert.IsNotNull(this._startButton);
@@ -54,18 +60,18 @@ public class StartMenuManager: MonoBehaviour {
 
     public void LoadLevel() {
         Debug.Log("START_BUTTON_PRESSED");
-        if (this._loadGame) { return; }
+        if (this._loadingGame) { return; }
         // menuUI.SetActive(false);
         startMenu.rootVisualElement.style.visibility = Visibility.Hidden;
         loadingUI.SetActive(true);
         
-        this._loadGame = true;
+        this._loadingGame = true;
         StartCoroutine(LaunchLoadSequence());
         Debug.Log("TEST");
     }
 
     IEnumerator LaunchLoadSequence() {
-        if (!this._loadGame) {
+        if (!this._loadingGame) {
             yield return null;
         }
         
