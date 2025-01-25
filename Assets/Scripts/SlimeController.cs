@@ -5,6 +5,7 @@ using UnityEngine.AI;
 using UnityEngine.Events;
 using System;
 using JetBrains.Annotations;
+using ScriptableObjects;
 using UnityEngine.Assertions;
 using UnityEngine.Serialization;
 using UnityEngine.TextCore;

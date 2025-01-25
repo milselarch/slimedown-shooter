@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using JetBrains.Annotations;
+using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
