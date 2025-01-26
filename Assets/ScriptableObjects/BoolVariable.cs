@@ -5,7 +5,7 @@ namespace ScriptableObjects {
     [CreateAssetMenu(fileName = "BoolVariable", menuName = "ScriptableObjects/BoolVariable", order = 3)]
     public class BoolVariable: Variable<bool> {
         [SerializeField]
-        public bool previousValue = false;
+        public bool previousValue;
         public delegate void ValueChangeCallback(bool prevValue, bool newValue);
         private readonly List<ValueChangeCallback> _callbacks = new();
 

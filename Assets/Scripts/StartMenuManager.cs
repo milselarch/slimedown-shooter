@@ -24,20 +24,17 @@ public class StartMenuManager: MonoBehaviour {
     public GameObject bouncingSlime;
 
     private bool _loadingGame = false;
-
-    // Start is called before the first frame update
-    void Start() {
+    
+    void OnEnable() {
+        this.LoadMenu();
         resetGame.LoadFromPreviousValue();
         if (resetGame.value) {
             Debug.Log("RESET_HIGHSCORE");
             ResetHighScore();
             resetGame.SetValue(false);
         }
+        resetGame.LoadFromPreviousValue();
         SetHighScore();
-    }
-
-    void Awake() {
-        this.LoadMenu();
     }
 
     private void LoadMenu() {

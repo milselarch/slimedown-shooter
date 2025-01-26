@@ -8,6 +8,7 @@ namespace ScriptableObjects {
         [FormerlySerializedAs("DeveloperDescription")] [Multiline]
         public string developerDescription = "";
 #endif
+        [SerializeField]
         protected T hiddenValue;
         public T value
         {

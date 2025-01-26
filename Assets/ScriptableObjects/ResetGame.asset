@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4296bd90a7748d08906158721443d6e, type: 3}
   m_Name: ResetGame
   m_EditorClassIdentifier: 
-  developerDescription: "whether to reset game stats at the \nstart of the game (turn
-    on for builds)"
-  previousValue: 1
+  developerDescription: Reset scriptable object game variables (turn on and run once
+    before builds)
+  hiddenValue: 0
+  previousValue: 0
