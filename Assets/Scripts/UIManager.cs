@@ -38,9 +38,9 @@ internal class StatsOverlay {
     }
 
     public void UpdateUI(UIManager uiManager, int timestampNow) {
-        _scoreText.text = "SCORE: " + uiManager.gameScore.Value;
-        _waveText.text = "WAVE: " + uiManager.waveCounter.Value;
-        _healthText.text = "HEALTH: " + uiManager.health.Value;
+        _scoreText.text = "SCORE: " + uiManager.gameScore.value;
+        _waveText.text = "WAVE: " + uiManager.waveCounter.value;
+        _healthText.text = "HEALTH: " + uiManager.health.value;
         UpdateTimer(uiManager, timestampNow);
     }
 
@@ -49,8 +49,8 @@ internal class StatsOverlay {
     }
     
     public void UpdateTimer(UIManager uiManager, int timestampNow) {
-        var allowedWaveDuration = 20 + 5 * uiManager.waveCounter.Value;
-        var durationPassed = timestampNow - uiManager.waveTimestamp.Value; 
+        var allowedWaveDuration = 20 + 5 * uiManager.waveCounter.value;
+        var durationPassed = timestampNow - uiManager.waveTimestamp.value; 
         var durationLeft = Math.Max(
             allowedWaveDuration - durationPassed, 0
         );

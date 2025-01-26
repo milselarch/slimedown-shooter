@@ -166,6 +166,7 @@ vector aligns with player velocity vector)
 36. menu: overhaul start menu to use ui toolkit
 37. add reset game flag for builds
 38. refactor game over menu using UIDocument
+39. removed splash screen (upgraded to unity 6 to enable option)
 
 ### `Features todo`
 1. Add URP shader for charge attack

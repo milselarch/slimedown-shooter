@@ -1,29 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-
-public abstract class Variable<T> : ScriptableObject
-{
+namespace ScriptableObjects {
+    public abstract class Variable<T> : ScriptableObject
+    {
 #if UNITY_EDITOR
-    [Multiline]
-    public string DeveloperDescription = "";
+        [FormerlySerializedAs("DeveloperDescription")] [Multiline]
+        public string developerDescription = "";
 #endif
 
-    protected T _value;
-    public T Value
-    {
-        get
+        protected T hiddenValue;
+        public T value
         {
-            return _value;
+            get => hiddenValue;
+            set => SetValue(value);
         }
-        set
-        {
-            SetValue(value);
 
-        }
+        public abstract void SetValue(T value);
+
     }
-
-    public abstract void SetValue(T value);
-
 }

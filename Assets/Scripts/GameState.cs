@@ -48,7 +48,7 @@ public class GameState: MonoBehaviour {
     public static bool dead {
         get {
             if (!health) { return false; }
-            return health.Value <= 0;
+            return health.value <= 0;
         }
     }
 

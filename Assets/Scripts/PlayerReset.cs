@@ -14,7 +14,7 @@ public class PlayerReset : MonoBehaviour {
         // the player's health is zero
         // Debug.Log("RESET_PLAYER");
         if (_resetting) { return; }
-        if (playerHealth.Value > 0) { return; }
+        if (playerHealth.value > 0) { return; }
         
         _resetting = true;
         StartCoroutine(WaitThenRestart());

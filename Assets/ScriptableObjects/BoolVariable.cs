@@ -4,20 +4,23 @@ using UnityEngine;
 namespace ScriptableObjects {
     [CreateAssetMenu(fileName = "BoolVariable", menuName = "ScriptableObjects/BoolVariable", order = 3)]
     public class BoolVariable: Variable<bool> {
-        public bool previousValue;
+        public bool previousValue = false;
         public delegate void ValueChangeCallback(bool prevValue, bool newValue);
         private readonly List<ValueChangeCallback> _callbacks = new();
 
     
-        public override void SetValue(bool value) {
-            var prevValue = this._value;
-            previousValue = value;
-            _value = value;
-            TriggerCallbacks(prevValue, _value);
+        public override void SetValue(bool targetValue) {
+            var prevValue = hiddenValue;
+            hiddenValue = targetValue;
+            TriggerCallbacks(prevValue, targetValue);
+            previousValue = hiddenValue;
+            // Debug.Log("POST+SET[1] " + previousValue);
+            // Debug.Log("POST+SET[2] " + hiddenValue);
         }
         
         public void LoadFromPreviousValue() {
-            _value = previousValue;
+            // Debug.Log("PRELOAD " + previousValue);
+            hiddenValue = previousValue;
         }
 
         public void ClearCallbacks() {
@@ -32,17 +35,17 @@ namespace ScriptableObjects {
         }
 
         public void AttachCallback(ValueChangeCallback callback) {
-            Debug.Log("ATTACHED");
+            // Debug.Log("ATTACHED");
             _callbacks.Add(callback);
         }
 
         // overload
         public void SetValue(BoolVariable value) {
-            SetValue(value.Value);
+            SetValue(value.value);
         }
     
         public void SetFalse() {
-            previousValue = false;
+            SetValue(false);
         }
     }
 }
