@@ -4,6 +4,7 @@ using UnityEngine;
 namespace ScriptableObjects {
     [CreateAssetMenu(fileName = "BoolVariable", menuName = "ScriptableObjects/BoolVariable", order = 3)]
     public class BoolVariable: Variable<bool> {
+        [SerializeField]
         public bool previousValue = false;
         public delegate void ValueChangeCallback(bool prevValue, bool newValue);
         private readonly List<ValueChangeCallback> _callbacks = new();
@@ -12,14 +13,14 @@ namespace ScriptableObjects {
         public override void SetValue(bool targetValue) {
             var prevValue = hiddenValue;
             hiddenValue = targetValue;
+            previousValue = targetValue;
             TriggerCallbacks(prevValue, targetValue);
-            previousValue = hiddenValue;
-            // Debug.Log("POST+SET[1] " + previousValue);
-            // Debug.Log("POST+SET[2] " + hiddenValue);
+            Debug.Log("POST+SET[1] " + previousValue);
+            Debug.Log("POST+SET[2] " + hiddenValue);
         }
         
         public void LoadFromPreviousValue() {
-            // Debug.Log("PRELOAD " + previousValue);
+            Debug.Log("PRELOAD " + previousValue);
             hiddenValue = previousValue;
         }
 

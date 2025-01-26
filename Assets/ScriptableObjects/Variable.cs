@@ -8,7 +8,6 @@ namespace ScriptableObjects {
         [FormerlySerializedAs("DeveloperDescription")] [Multiline]
         public string developerDescription = "";
 #endif
-
         protected T hiddenValue;
         public T value
         {
@@ -17,6 +16,5 @@ namespace ScriptableObjects {
         }
 
         public abstract void SetValue(T value);
-
     }
 }
