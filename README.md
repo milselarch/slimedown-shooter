@@ -167,6 +167,7 @@ vector aligns with player velocity vector)
 37. add reset game flag for builds
 38. refactor game over menu using UIDocument
 39. removed splash screen (upgraded to unity 6 to enable option)
+40. added sounds for explosions, slime movements
 
 ### `Features todo`
 1. Add URP shader for charge attack
@@ -205,6 +206,6 @@ Preview/AUDIO/EXPLDsgn_Implode_15.wav`
 4. Parallax pixel art clouds background is from 
 [Free Sky Backgrounds](https://free-game-assets.itch.io/free-sky-with-clouds-background-pixel-art-set)
 5. Background music is [Chiptronical by Patrick De Arteaga](https://patrickdearteaga.com/arcade-music/)
-
-
+6. [slime squish sound effect](https://pixabay.com/sound-effects/squish-pop-256410/)
+7. [Medium explosion sound](https://pixabay.com/sound-effects/medium-explosion-40472/)
 

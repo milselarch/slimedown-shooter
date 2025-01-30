@@ -1,14 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 using System;
-using JetBrains.Annotations;
 using ScriptableObjects;
 using UnityEngine.Assertions;
-using UnityEngine.Serialization;
-using UnityEngine.TextCore;
 
 
 public class BaseEnemyController {
@@ -63,6 +58,7 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
     internal Material glowMaterial;
     internal SpriteRenderer spriteRenderer;
     private BoxCollider2D _boxCollider;
+    private AudioSource _squishSound;
     internal readonly BaseEnemyController baseController = new(); 
     private PlayerController _playerController;
     private NavMeshAgent _agent;
@@ -86,6 +82,7 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
         _playerController = _player.GetComponent<PlayerController>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         glowMaterial = new Material(glowMaterialTemplate);
+        _squishSound = GetComponent<AudioSource>();
         Respawn();
     }
 
@@ -142,7 +139,7 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 		
 		// adjust enemy size based on their current health
 		var newScale = smallestScale + (
-			(1.0f - smallestScale) * ((float) _health) / maxHealth
+			(1.0f - smallestScale) * _health / maxHealth
 		);
 		transform.localScale = Vector3.one * newScale;
 		UpdateCollider();
@@ -258,11 +255,13 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
             }
 
             _lastAttack = timestampNow;
+            _squishSound.Play();
             enemyBody.AddForce(playerDirection * attackForce, ForceMode2D.Impulse);
             enemyAnimator.SetTrigger(ATTACK);
         } else if (jumpDurationPassed > jumpInterval) {
 			// jump towards the player
             _lastJump = timestampNow;
+            _squishSound.Play();
             enemyBody.AddForce(playerDirection * jumpForce, ForceMode2D.Impulse);
             enemyAnimator.SetTrigger(BOUNCE);
         }
