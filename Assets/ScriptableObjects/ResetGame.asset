@@ -15,4 +15,4 @@ MonoBehaviour:
   developerDescription: Reset scriptable object game variables (turn on and run once
     before builds)
   hiddenValue: 0
-  previousValue: 0
+  previousValue: 1

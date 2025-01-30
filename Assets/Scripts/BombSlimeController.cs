@@ -7,7 +7,8 @@ public class BombSlimeController : SlimeController {
     // duration between slime detonation and slime explosion
     public float detonationWait = 1.0f;
     public int explosionDamage = 10;
-    
+    public AudioSource explosionSound;
+
     private bool _exploding = false;
     private float _explosionArmingStamp = GameState.DEFAULT_STAMP;
 
@@ -58,6 +59,7 @@ public class BombSlimeController : SlimeController {
     private bool StartExplosion() {
         if (_exploding) { return false; }
         _exploding = true;
+        explosionSound.Play();
         // make the explosion unmovable
         this.enemyBody.bodyType = RigidbodyType2D.Static;
         GameState.KillEnemy(baseController.id);
