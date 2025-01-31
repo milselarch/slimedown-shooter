@@ -4,17 +4,27 @@
     justify-content: center;
 }
 
-#highscore {
+#root > Label {
+    justify-content: center;
+    align-self: center;
+    font-size: 40px;
+    color: rgb(0, 0, 0);
+    -unity-font-style: normal;
+    -unity-font-definition: url('project://database/Assets/assets/Fonts/pixel-unicode.ttf?fileID=12800000&guid=556bde64632b655ba9060ba448798705&type=3#pixel-unicode');
+    -unity-text-align: middle-center;
+}
+
+Button#highscore {
     color: rgba(213, 213, 213, 0.5);
     -unity-text-outline-color: rgb(61, 61, 61);
     -unity-text-outline-width: 4px;
     justify-content: center;
     align-self: center;
     -unity-font-definition: url('project://database/Assets/assets/Fonts/pixel-unicode.ttf?fileID=12800000&guid=556bde64632b655ba9060ba448798705&type=3#pixel-unicode');
-    font-size: 70px;
+    font-size: 50px;
 }
 
-.start {
+Button {
     background-color: rgb(99, 171, 63);
     color: rgb(34, 34, 34);
     border-color: rgb(99, 171, 63);
@@ -26,15 +36,31 @@
     padding-right: 40px;
     font-size: 40px;
 }
-.start:hover {
+Button:hover {
     color: rgb(255, 238, 131);
 }
-.start:active {
+Button:active {
     border-color: rgb(47, 87, 83);
     color: white;
 }
 
-#title {
+Button.subtle {
+    background-color: transparent;
+    border-color: transparent;
+    color: rgba(61, 61, 61, 0.7);
+}
+Button.subtle:hover {
+    color: rgba(61, 61, 61, 0.9);
+}
+Button.subtle:active {
+    color: rgba(61, 61, 61, 1.0);
+}
+
+Button#back {
+    margin-bottom: 300px;
+}
+
+Label#title {
     -unity-font-definition: url('project://database/Assets/assets/Fonts/pixel-unicode.ttf?fileID=12800000&guid=556bde64632b655ba9060ba448798705&type=3#pixel-unicode');
     justify-content: center;
     align-self: center;
@@ -42,11 +68,15 @@
     color: rgba(61, 61, 61, 0.6);
     -unity-text-outline-color: rgb(42, 42, 42);
     -unity-text-outline-width: 4px;
-    margin-bottom: 50px;
+    margin-bottom: 10px;
+}
+
+Label#highscore {
+    font-size: 70px;
 }
 
 #anchor {
-    margin-bottom: 300px;
+    margin-bottom: 250px;
     justify-content: center;
     align-self: center;
 }

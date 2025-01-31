@@ -4,6 +4,7 @@
         <ui:Label tabindex="-1" text="HIGHSCORE: 00012" parse-escape-sequences="true" display-tooltip-when-elided="true" name="highscore" />
         <ui:Label tabindex="-1" text="SLIMEDOWN SHOOTER" parse-escape-sequences="true" display-tooltip-when-elided="true" name="title" class="title" style="width: auto;" />
         <ui:Button text="START GAME" parse-escape-sequences="true" display-tooltip-when-elided="true" name="start_game" class="start" />
-        <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="anchor" />
+        <ui:Button text="instructions" parse-escape-sequences="true" display-tooltip-when-elided="true" name="instructions" class="start subtle" />
+        <ui:Label name="anchor" />
     </ui:VisualElement>
 </ui:UXML>
