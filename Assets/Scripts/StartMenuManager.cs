@@ -10,7 +10,11 @@ using Slider = UnityEngine.UI.Slider;
 
 public class StartMenuManager: MonoBehaviour {
     public UIDocument startMenu;
+    public UIDocument controlsMenu;
+
+    private Button _backButton;
     private Button _startButton;
+    private Button _controlsButton;
     private Label _highscoreLabel;
     
     // TODO: remove deprecated high score text
@@ -52,8 +56,33 @@ public class StartMenuManager: MonoBehaviour {
         });
         this._highscoreLabel = startMenu.rootVisualElement.Q<Label>("highscore");
         this.SetHighScore();
+        
+        this._controlsButton = startMenu.rootVisualElement.Q<Button>("instructions");
+        this._controlsButton.RegisterCallback<ClickEvent>(evt => {
+            if (evt.button == (int) MouseButton.LeftMouse) {
+                ShowControlsMenu();
+            }
+        });
+        
+        this._backButton = controlsMenu.rootVisualElement.Q<Button>("back");
+        this._backButton.RegisterCallback<ClickEvent>(evt => {
+            if (evt.button == (int) MouseButton.LeftMouse) {
+                HideControlsMenu();
+            }
+        });
         // this._startButton.clickable.clicked += LoadLevel;
         Debug.Log("START_BUTTON_ATTACHED " + this._startButton);
+        HideControlsMenu();
+    }
+    
+    public void ShowControlsMenu() {
+        startMenu.rootVisualElement.style.visibility = Visibility.Hidden;
+        controlsMenu.rootVisualElement.style.visibility = Visibility.Visible;
+    }
+    
+    public void HideControlsMenu() {
+        startMenu.rootVisualElement.style.visibility = Visibility.Visible;
+        controlsMenu.rootVisualElement.style.visibility = Visibility.Hidden;
     }
 
     public void LoadLevel() {

@@ -1,0 +1,8 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/StartMenuStyle.uss?fileID=7433441132597879392&amp;guid=75f686e85c2569445a087d4265078d48&amp;type=3#StartMenuStyle" />
+    <engine:VisualElement name="root" style="flex-grow: 1;">
+        <engine:Label text="WASD - movement &#10;space - charge attack&#10;left click - shoot&#10;ESC - open game menu" name="controls" />
+        <engine:Label text="kill slimes to make them drop slime balls&#10;collect slime balls to gain health&#10;attacks will drain your health" name="instructions" />
+        <engine:Button text="BACK" name="back" />
+    </engine:VisualElement>
+</engine:UXML>

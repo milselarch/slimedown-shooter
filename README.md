@@ -168,6 +168,7 @@ vector aligns with player velocity vector)
 38. refactor game over menu using UIDocument
 39. removed splash screen (upgraded to unity 6 to enable option)
 40. added sounds for explosions, slime movements
+41. added a simple instructions menu UI
 
 ### `Features todo`
 1. Add URP shader for charge attack
