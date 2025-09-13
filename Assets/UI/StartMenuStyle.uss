@@ -7,10 +7,10 @@
 #root > Label {
     justify-content: center;
     align-self: center;
-    font-size: 40px;
+    font-size: 34px;
     color: rgb(0, 0, 0);
     -unity-font-style: normal;
-    -unity-font-definition: url('project://database/Assets/assets/Fonts/pixel-unicode.ttf?fileID=12800000&guid=556bde64632b655ba9060ba448798705&type=3#pixel-unicode');
+    -unity-font-definition: url('project://database/Assets/assets/Fonts/dead-revolver-game.ttf');
     -unity-text-align: middle-center;
 }
 
@@ -20,8 +20,7 @@ Button#highscore {
     -unity-text-outline-width: 4px;
     justify-content: center;
     align-self: center;
-    -unity-font-definition: url('project://database/Assets/assets/Fonts/pixel-unicode.ttf?fileID=12800000&guid=556bde64632b655ba9060ba448798705&type=3#pixel-unicode');
-    font-size: 50px;
+    font-size: 30px;
 }
 
 Button {
@@ -31,7 +30,7 @@ Button {
     border-width: 3px;
     align-self: center;
     border-radius: 5px;
-    -unity-font-definition: url('project://database/Assets/assets/Fonts/pixel-unicode.ttf?fileID=12800000&guid=556bde64632b655ba9060ba448798705&type=3#pixel-unicode');
+    -unity-font-definition: url('project://database/Assets/assets/Fonts/dead-revolver-game.ttf');
     padding-left: 40px;
     padding-right: 40px;
     font-size: 40px;
@@ -58,13 +57,13 @@ Button.subtle:active {
 
 Button#back {
     margin-bottom: 300px;
+    margin-top: 30px;
 }
 
 Label#title {
-    -unity-font-definition: url('project://database/Assets/assets/Fonts/pixel-unicode.ttf?fileID=12800000&guid=556bde64632b655ba9060ba448798705&type=3#pixel-unicode');
     justify-content: center;
     align-self: center;
-    font-size: 120px;
+    font-size: 90px;
     color: rgba(61, 61, 61, 0.6);
     -unity-text-outline-color: rgb(42, 42, 42);
     -unity-text-outline-width: 4px;
@@ -72,7 +71,7 @@ Label#title {
 }
 
 Label#highscore {
-    font-size: 70px;
+    font-size: 50px;
 }
 
 #anchor {
