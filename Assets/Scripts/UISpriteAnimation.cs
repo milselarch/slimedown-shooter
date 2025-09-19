@@ -3,6 +3,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UISpriteAnimation : MonoBehaviour {
+    /*
+     * Used to play a series of sprite images as an animation
+     * in a Canvas Renderer UI component
+     * Currently only used to show the slime bouncing in the loading
+     * screen lol
+     */
     public Image image;
     public Sprite[] spriteArray;
     public float speed = .02f;

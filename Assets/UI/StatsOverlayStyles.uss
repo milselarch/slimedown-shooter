@@ -21,13 +21,13 @@
 }
 
 Label {
-    -unity-font-definition: url("/Assets/assets/Fonts/pixel-unicode.ttf");
-    font-size: 50px;
+    -unity-font-definition: url("/Assets/assets/Fonts/dead-revolver-game.ttf");
+    font-size: 40px;
     color: white;
 }
 Label.outlined {
-    -unity-text-outline-color: rgba(0, 0, 0, 255);
-    -unity-text-outline-width: 20px;
+    -unity-text-outline-color: rgb(42, 42, 42);
+    -unity-text-outline-width: 10px;
 }
 
 Label#Health, Label#Score {
