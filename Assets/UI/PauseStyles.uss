@@ -5,8 +5,11 @@
 }
 
 .menu-button {
-    width: 250px;
-    font-size: 40px;
+    /* things like the return to menu and restart buttons */
+    width: 330px;
+    font-size: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     -unity-font-style: normal;
 }
 
@@ -43,11 +46,11 @@ Button {
     border-width: 3px;
     align-self: center;
     border-radius: 5px;
-    -unity-font-definition: url('project://database/Assets/assets/Fonts/pixel-unicode.ttf?fileID=12800000&guid=556bde64632b655ba9060ba448798705&type=3#pixel-unicode');
+    -unity-font-definition: url('project://database/Assets/assets/Fonts/dead-revolver-game.ttf');
 }
 
 Label {
-    -unity-font-definition: url('project://database/Assets/assets/Fonts/pixel-unicode.ttf?fileID=12800000&guid=556bde64632b655ba9060ba448798705&type=3#pixel-unicode');
+    -unity-font-definition: url('project://database/Assets/assets/Fonts/dead-revolver-game.ttf');
 }
 
 Button:hover {
