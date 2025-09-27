@@ -4,8 +4,8 @@
 ### `Game Summary Pitch`
 Your life depends on slimes, and so does your death...  
 
-![title-screen](https://raw.githubusercontent.com/milselarch/slimedown-shooter/refs/heads/feat/menu_overhaul/screenshots/title-screen.png)
 
+<img width="1850" height="1082" alt="Screenshot from 2025-09-26 21-14-31" src="https://github.com/user-attachments/assets/8f86cb87-9f31-41dc-b2a3-62284e08fab6" />
 
 https://github.com/user-attachments/assets/fcb4c4d7-cc55-44b8-915a-da4a8135ecc8
 
