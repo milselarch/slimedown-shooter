@@ -13,6 +13,11 @@
     -unity-font-definition: url('project://database/Assets/assets/Fonts/dead-revolver-game.ttf');
     -unity-text-align: middle-center;
 }
+#root > #sub-settings > Button {
+    font-size: 34px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
 
 Button#highscore {
     color: rgba(213, 213, 213, 0.5);
