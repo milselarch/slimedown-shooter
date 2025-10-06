@@ -11,7 +11,7 @@ https://github.com/user-attachments/assets/fcb4c4d7-cc55-44b8-915a-da4a8135ecc8
 
 
 
-Slimedown shooter is a top down 2D shooter game where the main objective 
+Slimedown shooter is a top-down 2D shooter game where the main objective 
 is to survive the endless waves of slimes that spawn in and collect the slime 
 particles they leave behind to replenish your health. The catch is that you also consume 
 health when shooting them, getting attacked by slimes, or when charging them 
