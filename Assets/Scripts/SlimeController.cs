@@ -209,10 +209,10 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
 	}
 
     private void FixedUpdate() {
-        DoUpdate();
+        DoMovementUpdate();
     }
 
-    private Vector3 GetMovementVector(Vector3 playerVectorDist) {
+    private Vector3 GetMovementVectorToPlayer(Vector3 playerVectorDist) {
         var playerPosition = _playerController.GetPosition2D();
         
         var path = new NavMeshPath();
@@ -231,15 +231,22 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
         return _player.transform.position - transform.position;
     }
 
-    internal bool DoUpdate() {
+    internal bool DoMovementUpdate() {
 		if (_dead) { return false; }
-        
-        var playerVectorDist = GetPlayerOffset();
-		var movementDirection = GetMovementVector(playerVectorDist);
-		
-		var timestampNow = GetTimestamp();
+
+        var timestampNow = GetTimestamp();
         var jumpDurationPassed = timestampNow - _lastJump;
         var attackDurationPassed = timestampNow - _lastAttack;
+        var attackOnCooldown = attackDurationPassed < attackInterval;
+        var jumpOnCooldown = jumpDurationPassed < jumpInterval;
+
+        if (attackOnCooldown || jumpOnCooldown) {
+            return false;
+        }
+        
+        var playerVectorDist = GetPlayerOffset();
+		var movementDirection = GetMovementVectorToPlayer(playerVectorDist);
+        
         var alignment = Vector3.Dot(
 	        playerVectorDist.normalized, movementDirection.normalized
 	    );
@@ -250,15 +257,11 @@ public class SlimeController: MonoBehaviour, IBaseEnemyControllerable {
         // Debug.Log("PLAYER_DISTANCE= " + playerDistance);
 
         if (hasLineOfSight && (playerDistance < this.attackDistance)) {
-            if (!(attackDurationPassed > attackInterval)) {
-                return true;
-            }
-
             _lastAttack = timestampNow;
             _squishSound.Play();
             enemyBody.AddForce(playerDirection * attackForce, ForceMode2D.Impulse);
             enemyAnimator.SetTrigger(ATTACK);
-        } else if (jumpDurationPassed > jumpInterval) {
+        } else {
 			// jump towards the player
             _lastJump = timestampNow;
             _squishSound.Play();

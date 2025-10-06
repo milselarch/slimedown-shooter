@@ -31,7 +31,7 @@ public class BombSlimeController : SlimeController {
     }
 
     private void FixedUpdate() {
-        var updated = DoUpdate();
+        var updated = DoMovementUpdate();
         if (!updated) { return; }
 
         var distanceToPlayer = GetPlayerOffset().magnitude;

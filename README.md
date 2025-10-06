@@ -11,7 +11,7 @@ https://github.com/user-attachments/assets/fcb4c4d7-cc55-44b8-915a-da4a8135ecc8
 
 
 
-Slimedown shooter is a top down 2D shooter game where the main objective 
+Slimedown shooter is a top-down 2D shooter game where the main objective 
 is to survive the endless waves of slimes that spawn in and collect the slime 
 particles they leave behind to replenish your health. The catch is that you also consume 
 health when shooting them, getting attacked by slimes, or when charging them 
@@ -120,6 +120,29 @@ the current attack wave.
 
 ## `Features Implementation`
 
+### `Features todo`
+1. Add URP shader for charge attack
+2. menu: Add windowed mode, full screen mode
+3. menu: Exit game option
+4. menu: master and music audio sliders
+5. have slime ball shine timings be relative to time of slime ball degeneration
+6. instructions menu from pause menu
+
+### `Future Potential Features todo`
+1. dynamic tile map rules-based generation
+2. add explosion ability to player
+3. make player / bomb slime explosion destroy terrain?
+4. add ability to extend island
+5. paint terrain on death
+6. day / night cycle
+7. more weapon types
+8. make slimes be able to fall off the map too
+9. abilities upgrade skill tree
+10. profiling + optimization
+11. fancier instructions page
+12. check game scaling in 4K resolution
+13. fancy whole screen shader effect
+
 ### `Features Implemented`
 1. create game world tile map
 2. create collider tile map with house
@@ -169,26 +192,6 @@ vector aligns with player velocity vector)
 39. removed splash screen (upgraded to unity 6 to enable option)
 40. added sounds for explosions, slime movements
 41. added a simple instructions menu UI
-
-### `Features todo`
-1. Add URP shader for charge attack
-2. menu: Add windowed mode, full screen mode
-3. menu: Exit game option
-4. menu: master and music audio sliders
-5. Add instructions page 
-6. Add initial instructions overlay 
-7. have slime ball shine timings be relative to time of slime ball degeneration
-8. Create a nice starter menu screen
-
-### `Future Potential Features todo`
-1. dynamic tile map rules-based generation
-2. add explosion ability to player
-3. make player / bomb slime explosion destroy terrain?
-4. add ability to extend island
-5. paint terrain on death
-6. day / night cycle
-7. more weapon types
-8. make slimes be able to fall off the map too
 
 ## `Asset Used & Credits`
 
